@@ -27,13 +27,17 @@ public:
 	void Set_Target(CObj* _pTarget) { m_pTarget = _pTarget; }
 	void Set_PosX(float _x) { m_tInfo.fX += _x; }
 	void Set_PosY(float _y) { m_tInfo.fY += _y; }
+	void Set_FrameKey(TCHAR* _key) { m_pFrameKey = _key; }
+	void Set_Size(int _iCX, int _iCY) { m_tInfo.iCX = _iCX; m_tInfo.iCY = _iCY; }
+public:
 	void Move_Frame();
+	
 
 public:
 	const RECT& Get_Rect() const { return m_tRect; }
 	const INFO& Get_INFO() const { return m_tInfo; }
 	const bool& Get_Dead() const { return m_bDead; }
-
+	const TCHAR* Get_pFrameKey() const { return m_pFrameKey; }
 protected:
 	INFO	m_tInfo;
 	RECT	m_tRect;

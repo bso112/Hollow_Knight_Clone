@@ -19,6 +19,8 @@ public:
 	const float& Get_Scroll_Y() const { return m_fScrollY; }
 		
 public:
+	void Scroll_Lock();
+public:
 	static CScrollMgr* Get_Instance()
 	{
 		if (!m_pInstance)

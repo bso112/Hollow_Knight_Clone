@@ -3,6 +3,7 @@
 #include "Logo.h"
 #include "MyMenu.h"
 #include "Stage.h"
+#include "Editor.h"
 
 CSceneMgr* CSceneMgr::m_pInstance = nullptr;
 
@@ -37,12 +38,13 @@ void CSceneMgr::Scene_Change(SCENEID _eID)
 			m_pScene = new CStage;
 			break;
 		case SCENE_EDIT:
+			m_pScene = new CEditor;
 			break;
 		}
 		m_pScene->Initialize();
 		m_ePreScene = m_eCurScene;
 	}
-}
+}	
 
 void CSceneMgr::Update()
 {

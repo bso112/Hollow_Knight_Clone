@@ -1,75 +1,24 @@
 #include "stdafx.h"
 #include "Monster.h"
 #include "ObjMgr.h"
-
+#include "CollisionMgr.h"
 
 CMonster::CMonster()
+	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f)
 {
+	m_tStat = {};
+	//몬스터의 타깃은 항상 플레이어
+	m_pTarget = CObjMgr::Get_Instance()->Get_Player();
 }
 
+bool CMonster::IsAlert()
+{
+	//인식범위
+	RECT rc = { (LONG)(m_tInfo.fX - m_fRadius), (LONG)(m_tInfo.fY - m_fRadius), (LONG)(m_tInfo.fX + m_fRadius), (LONG)(m_tInfo.fY + m_fRadius) };
+	return CCollisionMgr::Check_Sphere(m_pTarget->Get_Rect(), rc);
+}
 
 CMonster::~CMonster()
 {
-	Release();
 }
 
-void CMonster::Initialize()
-{
-	m_tInfo.fX = 400.f;
-	m_tInfo.fY = 200.f;
-	m_tInfo.iCX = 50;
-	m_tInfo.iCY = 50;
-
-	m_fSpeed = 1.f;
-}
-
-int CMonster::Update()
-{
-	if(m_bDead)
-		return OBJ_DEAD;
-
-	//m_pTarget = CObjMgr::Get_Instance()->Get_Player();
-
-	//float	fX = 0.f, fY = 0.f, fDia = 0.f;
-	//float	fRadian = 0.f;
-
-	//// 목적지 - 출발지
-	//fX = m_pTarget->Get_INFO().fX - m_tInfo.fX;
-	//fY = m_pTarget->Get_INFO().fY - m_tInfo.fY;
-	//fDia = sqrtf(fX * fX + fY * fY);
-	//fRadian = acosf(fX / fDia);
-
-	////// 라디안을 통한 각도 수정
-	////if(m_pTarget->Get_INFO().fY > m_tInfo.fY)
-	////	fRadian = (2 * PI) - fRadian;
-
-	//m_fAngle = fRadian * 180.f / PI;
-
-	//// 디그리를 통한 각도 수정
-	//if(m_pTarget->Get_INFO().fY > m_tInfo.fY)
-	//	m_fAngle *= -1.f;
-
-	//m_tInfo.fX += cosf(m_fAngle * PI / 180.f) * m_fSpeed;
-	//m_tInfo.fY -= sinf(m_fAngle * PI / 180.f) * m_fSpeed;
-
-
-	Update_Rect();
-
-	return OBJ_NOEVENT;
-}
-
-void CMonster::Late_Update()
-{
-}
-
-void CMonster::Render(HDC _DC)
-{
-	Update_Rect();
-
-	//Rectangle(_DC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
-	Ellipse(_DC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
-}
-
-void CMonster::Release()
-{
-}

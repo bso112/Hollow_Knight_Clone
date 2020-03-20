@@ -59,7 +59,8 @@ void CMyButton::Late_Update()
 			//현재 프레임키가 Button_Edit이면
 			else if (!lstrcmp(m_pFrameKey, L"Button_Edit"))
 			{
-
+				CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_EDIT);
+				return;
 			}
 			//현재 프레임키가 Button_Exit이면
 			else if (!lstrcmp(m_pFrameKey, L"Button_Exit"))

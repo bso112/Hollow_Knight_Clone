@@ -94,11 +94,20 @@
     <Filter Include="소스 파일\01.Obj\06.Tile">
       <UniqueIdentifier>{65e1f702-4a99-403d-9214-c69bdf47a45d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\98.Manager\07. TileMgr">
-      <UniqueIdentifier>{1beae40e-c888-4e1d-ada5-e67789ac7b3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\01.Obj\07.MenuPointer">
       <UniqueIdentifier>{3650772d-bef7-4343-b164-24c67903905d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\00.PillBug">
+      <UniqueIdentifier>{e2c424bb-a7ea-4f07-9297-319cde5c9735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Obj\08.Image">
+      <UniqueIdentifier>{67ab52a4-076b-40f0-87dc-ce3eb15b1d18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\98.Manager\08.ImageMgr">
+      <UniqueIdentifier>{1d40ba3d-1d64-4934-91cf-e8ff7c4028c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\98.Manager\07.TileMgr">
+      <UniqueIdentifier>{1beae40e-c888-4e1d-ada5-e67789ac7b3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +190,7 @@
       <Filter>소스 파일\01.Obj\06.Tile</Filter>
     </ClInclude>
     <ClInclude Include="TileMgr.h">
-      <Filter>소스 파일\98.Manager\07. TileMgr</Filter>
+      <Filter>소스 파일\98.Manager\07.TileMgr</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>소스 파일\04.Scene\02.Stage</Filter>
@@ -191,6 +200,15 @@
     </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>소스 파일\04.Scene\03.Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="PillBug.h">
+      <Filter>소스 파일\01.Obj\02.Monster\00.PillBug</Filter>
+    </ClInclude>
+    <ClInclude Include="MyImage.h">
+      <Filter>소스 파일\01.Obj\08.Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageMgr.h">
+      <Filter>소스 파일\98.Manager\08.ImageMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +285,7 @@
       <Filter>소스 파일\01.Obj\06.Tile</Filter>
     </ClCompile>
     <ClCompile Include="TileMgr.cpp">
-      <Filter>소스 파일\98.Manager\07. TileMgr</Filter>
+      <Filter>소스 파일\98.Manager\07.TileMgr</Filter>
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>소스 파일\04.Scene\02.Stage</Filter>
@@ -277,6 +295,15 @@
     </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>소스 파일\04.Scene\03.Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="PillBug.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\00.PillBug</Filter>
+    </ClCompile>
+    <ClCompile Include="MyImage.cpp">
+      <Filter>소스 파일\01.Obj\08.Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageMgr.cpp">
+      <Filter>소스 파일\98.Manager\08.ImageMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

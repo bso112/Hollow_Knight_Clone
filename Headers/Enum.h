@@ -10,8 +10,16 @@ namespace BULLET
 
 namespace OBJID
 {
-	enum ID { PLAYER, MONSTER, BULLET, UI, MOUSE, SHIELD, END };
+	enum ID { PLAYER, MONSTER, BULLET, UI, MOUSE, END };
 }
+
+
+namespace SAVEDATA
+{	
+	//세이브시 타입을 알기 위함
+	enum TAG {PILLBUG, TERRAIN, END};
+}
+
 
 namespace TILE
 {

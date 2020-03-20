@@ -20,7 +20,7 @@ public:
 
 public:
 	//마우스로 클릭했을때, 해당 타일을 그린다.
-	void Picking_Tile(POINT& _pt, int _iDrawID);
+	void Picking_Tile(POINT& _pt);
 
 	//그린 타일을 저장한다.
 	void Save_Tile();

@@ -47,4 +47,19 @@ typedef struct tagFrame
 
 
 }FRAME;
+
+typedef struct tagStat
+{
+	float m_fMaxHp;
+	float m_fHp;
+
+	tagStat() {};
+	tagStat(float _fMaxHp)
+	{
+		m_fMaxHp = _fMaxHp;
+		m_fHp = _fMaxHp;
+	}
+
+}STAT;
+
 #endif // !__STRUCT_H__

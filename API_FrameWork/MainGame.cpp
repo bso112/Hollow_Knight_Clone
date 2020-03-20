@@ -10,6 +10,8 @@
 #include "BmpMgr.h"
 #include "SceneMgr.h"
 #include "ScrollMgr.h"
+#include "TileMgr.h"
+#include "ImageMgr.h"
 
 
 CMainGame::CMainGame()
@@ -42,6 +44,7 @@ void CMainGame::Late_Update()
 {
 	CSceneMgr::Get_Instance()->Late_Update();
 	CKeyMgr::Get_Instance()->Key_Update();
+	CScrollMgr::Get_Instance()->Scroll_Lock();
 }
 
 void CMainGame::Render()
@@ -53,7 +56,16 @@ void CMainGame::Render()
 
 	CSceneMgr::Get_Instance()->Render(hBackBuffer);
 
-	BitBlt(m_DC, 0, 0, WINCX, WINCY, hBackBuffer, 0, 0, SRCCOPY);
+#pragma region 출력
+	// 스크롤 출력
+	int iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
+	int iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	TCHAR		szBuff[32] = L"";
+	swprintf_s(szBuff, L"ScrollX: %d", iScrollX);
+	TextOut(hBackBuffer, 50, 50, szBuff, lstrlen(szBuff));
+	swprintf_s(szBuff, L"ScrollY: %d", iScrollY);
+	TextOut(hBackBuffer, 50, 100, szBuff, lstrlen(szBuff));
+
 
 	// FPS 출력
 	++m_iFPS;
@@ -65,16 +77,22 @@ void CMainGame::Render()
 		m_iFPS = 0;
 		m_dwTime = GetTickCount();
 	}
+
+#pragma endregion
+
+	BitBlt(m_DC, 0, 0, WINCX, WINCY, hBackBuffer, 0, 0, SRCCOPY);
 }
 
 void CMainGame::Release()
 {
 	CSceneMgr::Destroy_Instance();
 	CScrollMgr::Destroy_Instance();
+	CTileMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance();
 	CLineMgr::Destroy_Instance();
 	CKeyMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
+	CImageMgr::Destroy_Instance();
 
 	ReleaseDC(g_hWnd, m_DC);
 }

@@ -46,7 +46,8 @@ void CTileMgr::Late_Update()
 void CTileMgr::Render(HDC _DC)
 {
 	for (auto& pTile : m_vecTile)
-		pTile->Render(_DC);
+		if (((CTile*)pTile)->Get_isColider())
+			pTile->Render(_DC);
 }
 
 void CTileMgr::Release()
@@ -56,7 +57,7 @@ void CTileMgr::Release()
 }
 
 //마우스 클릭으로 타일을 그린다.
-void CTileMgr::Picking_Tile(POINT& _pt, int _iDrawID)
+void CTileMgr::Picking_Tile(POINT& _pt)
 {
 	//마우스포인트를 받아 타일의 인덱스로 변환한다.
 	int x = _pt.x / TILECX;
@@ -69,8 +70,7 @@ void CTileMgr::Picking_Tile(POINT& _pt, int _iDrawID)
 	if (0 > iIndex || m_vecTile.size() <= (size_t)iIndex)
 		return;
 
-	//해당 타일을 어떤 모양으로 그릴 것인지 정해준다. 
-	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_DrawID(_iDrawID);
+	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider();
 }
 
 //그린 타일을 저장한다.
@@ -87,12 +87,13 @@ void CTileMgr::Save_Tile()
 
 	for (auto& pTile : m_vecTile)
 	{
-		iDrawID = dynamic_cast<CTile*>(pTile)->Get_DrawID();
+		CTile* tile = dynamic_cast<CTile*>(pTile);
 
 		//타일의 위치, 크기를 저장한다.
 		WriteFile(hFile, &pTile->Get_INFO(), sizeof(INFO), &dwByte, NULL);
-		//어떤 종류의 타일인지 저장한다.
-		WriteFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
+		WriteFile(hFile, &dynamic_cast<CTile*>(pTile)->Get_isColider(), sizeof(bool), &dwByte, NULL);
+
+
 	}
 	CloseHandle(hFile);
 	MessageBox(g_hWnd, L"Tile Save", L"Success", MB_OK);
@@ -106,25 +107,24 @@ void CTileMgr::Load_Tile()
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
 
+	//현재 타일을 모두 지운다.
 	Release();
 
 	DWORD dwByte = 0;
 	INFO tTemp = {};
-	int iDrawID = 0;
+	bool bColider = false;
 
 	while (true)
 	{
 		ReadFile(hFile, &tTemp, sizeof(INFO), &dwByte, NULL);
-		ReadFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
-
+		ReadFile(hFile, &bColider, sizeof(bool), &dwByte, NULL);
 		if (0 == dwByte)
 			break;
 
 		//타일을 생성하고 위치를 셋팅해준다.
 		CObj* pObj = CAbstractFactory<CTile>::Create(tTemp.fX, tTemp.fY);
-		//어떤 타일인지 셋팅해준다.
-		dynamic_cast<CTile*>(pObj)->Set_DrawID(iDrawID);
-
+		if (bColider)
+			dynamic_cast<CTile*>(pObj)->Set_isColider();
 		m_vecTile.emplace_back(pObj);
 	}
 	CloseHandle(hFile);

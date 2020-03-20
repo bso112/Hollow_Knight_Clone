@@ -153,6 +153,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="GuideBullet.h" />
+    <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="LineMgr.h" />
@@ -166,9 +167,11 @@
     <ClInclude Include="MyBitmap.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="MyImage.h" />
     <ClInclude Include="MyMenu.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjMgr.h" />
+    <ClInclude Include="PillBug.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -189,6 +192,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="GuideBullet.cpp" />
+    <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LineMgr.cpp" />
@@ -202,9 +206,11 @@
     <ClCompile Include="MyBitmap.cpp" />
     <ClCompile Include="MyButton.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="MyImage.cpp" />
     <ClCompile Include="MyMenu.cpp" />
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="ObjMgr.cpp" />
+    <ClCompile Include="PillBug.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />

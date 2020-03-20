@@ -15,10 +15,12 @@
 
 #define PI 3.141592f
 
-#define TILEX 30
-#define TILEY 20
-#define TILECX 64
-#define TILECY 64
+#define TILEX 40
+#define TILEY 30
+#define TILECX 25
+#define TILECY 25
+
+#define DIR_LEN 100
 
 
 

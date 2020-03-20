@@ -93,6 +93,29 @@ bool CCollisionMgr::Check_Sphere(CObj * _Dst, CObj * _Src)
 	return fDis < fRad;
 }
 
+bool CCollisionMgr::Check_Sphere(const RECT& _Dst, const RECT& _Src)
+{
+	// abs()
+	// 절대값. 음수가 나오지 않는다.
+
+	// sqrtf()
+	// 제곱근을 구해주는 함수이다.
+
+	float radius_Dst = (float)((_Dst.right - _Dst.left) >> 1);
+	float radius_Src = (float)((_Src.right - _Src.left) >> 1);
+
+
+	float fX = abs((_Dst.left + radius_Dst) - (_Src.left + radius_Src));
+	float fY = abs((_Dst.bottom - radius_Dst) - (_Src.bottom - radius_Src));
+	//두 원 사이의 거리
+	float fDis = sqrtf(fX * fX + fY * fY);
+
+	//지름이자 최단거리
+	float fDiameter = radius_Dst + radius_Src;
+
+	return fDis < fDiameter;
+}
+
 bool CCollisionMgr::Check_Rect(CObj* _Dst, CObj* _Src, float* _x, float* _y)
 {
 	// 중점 간의 길이
