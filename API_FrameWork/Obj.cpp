@@ -3,7 +3,7 @@
 
 
 CObj::CObj()
-	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f)
+	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_pFrameKey(L"")
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(m_tRect));

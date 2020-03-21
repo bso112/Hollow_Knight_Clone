@@ -58,8 +58,8 @@ void CMainGame::Render()
 
 #pragma region 출력
 	// 스크롤 출력
-	int iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 	TCHAR		szBuff[32] = L"";
 	swprintf_s(szBuff, L"ScrollX: %d", iScrollX);
 	TextOut(hBackBuffer, 50, 50, szBuff, lstrlen(szBuff));

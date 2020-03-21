@@ -5,9 +5,10 @@
 #include "BmpMgr.h"
 #include "TileMgr.h"
 #include "ImageMgr.h"
-
+#include "Obj.h"
 
 CEditor::CEditor()
+	:m_iSelected(0)
 {
 }
 
@@ -42,13 +43,18 @@ void CEditor::Late_Update()
 
 void CEditor::Render(HDC _DC)
 {
-	int iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background");
 	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, -iScrollX, -iScrollY, SRCCOPY);
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
+
+	TCHAR		szBuff[32] = L"";
+	swprintf_s(szBuff, CImageMgr::Get_Instance()->Get_ImageName(m_iSelected));
+	TextOut(_DC, 800, 500, szBuff, lstrlen(szBuff));
+
 
 
 }
@@ -71,7 +77,41 @@ void CEditor::Key_Check()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(-5.f);
 
-	//만약 왼쪽 마우스클릭이면
+	//이미지피킹
+	if (CKeyMgr::Get_Instance()->Key_Down('F'))
+	{
+		++m_iSelected;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Down('G'))
+	{
+		--m_iSelected;
+	}
+
+	if (m_iSelected < 0)
+		m_iSelected = 0;
+	if (m_iSelected >= CImageMgr::Get_Instance()->Get_VecImageSize())
+		m_iSelected = CImageMgr::Get_Instance()->Get_VecImageSize() - 1;
+
+	if (CKeyMgr::Get_Instance()->Key_Down('D'))
+	{
+		//깊은 복사로 이미지를 하나 생성한다.
+		CObj* pImage = CImageMgr::Get_Instance()->Get_Image(m_iSelected);
+		if (pImage)
+		{
+			POINT pt = {};
+			GetCursorPos(&pt);
+			ScreenToClient(g_hWnd, &pt);
+
+			//마우스포인트는 스크롤된 반대방향만큼 보정해준다. (왜냐하면 배경이 그 반대방향으로 움직였기 때문에)
+			pt.x -= (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+			pt.y -= (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+
+			pImage->Set_Pos((float)pt.x, (float)pt.y);
+			CImageMgr::Get_Instance()->Add_Image(pImage);
+		}
+	}
+
+	//만약 오른쪽 마우스클릭이면
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
 	{
 		POINT pt = {};
@@ -99,7 +139,15 @@ void CEditor::Key_Check()
 
 	//타일맵 세이브, 로드
 	if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+	{
 		CTileMgr::Get_Instance()->Save_Tile();
+		CImageMgr::Get_Instance()->Save_Image();
+	}
 	if (CKeyMgr::Get_Instance()->Key_Down('X'))
+	{
 		CTileMgr::Get_Instance()->Load_Tile();
+		CImageMgr::Get_Instance()->Load_Image();
+
+	
+	}
 }

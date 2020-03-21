@@ -3,7 +3,7 @@
 #include "MyImage.h"
 #include "BmpMgr.h"
 #include "PillBug.h"
-
+#include "ScrollMgr.h"
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
 {
@@ -20,8 +20,6 @@ void CImageMgr::Initialize()
 	//맵 작성에 쓰일 이미지들
 
 	CObj* pObj;
-
-
 
 	//지형지물
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/flatform1.bmp", L"flatform1");
@@ -41,6 +39,7 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::PILLBUG);
 	m_vecImage.push_back(pObj);
 
+	m_ivecImageSize = m_vecImage.size();
 
 }
 
@@ -54,8 +53,12 @@ void CImageMgr::Late_Update()
 
 void CImageMgr::Render(HDC _DC)
 {
-	for (auto& pImage : m_vecImage)
-		pImage->Render(_DC);
+	//에디터에서 만든 인스턴스만 렌더한다.
+	if (m_ivecImageSize < m_vecImage.size())
+	{
+		for (int i = m_ivecImageSize; i < m_vecImage.size(); ++i)
+			m_vecImage[i]->Render(_DC);
+	}
 }
 
 void CImageMgr::Release()
@@ -64,11 +67,27 @@ void CImageMgr::Release()
 	m_vecImage.clear();
 }
 
-
-void CImageMgr::Picking_Image(POINT & _pt)
+CObj* CImageMgr::Get_Image(int _iIndex)
 {
-//	m_vecImage(CAbstractFactory<CMyImage>::Create(_pt.x, _pt.y, L"", ));
+	//유효성검사
+	if (_iIndex < 0 || _iIndex >= m_ivecImageSize)
+		return nullptr;
+
+	CMyImage* newImage = new CMyImage(*dynamic_cast<CMyImage*>(m_vecImage[_iIndex]));
+
+	return newImage;
 }
+
+const TCHAR * CImageMgr::Get_ImageName(int _iIndex)
+{
+	//유효성검사
+	if (_iIndex < 0 || _iIndex >= m_ivecImageSize)
+		return nullptr;
+
+	return m_vecImage[_iIndex]->Get_pFrameKey();
+}
+
+
 
 void CImageMgr::Drag_Image(POINT & _pt)
 {
@@ -83,7 +102,7 @@ void CImageMgr::Drag_Image(POINT & _pt)
 
 void CImageMgr::Save_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Background.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -92,58 +111,68 @@ void CImageMgr::Save_Image()
 	DWORD dwByte = 0;
 	int iDrawID = 0;
 
-	for (auto& pImage : m_vecImage)
+	//에디터에서 만든 인스턴스만 저장한다.
+	if (m_ivecImageSize < m_vecImage.size())
 	{
-		//이미지의 위치, 크기를 저장한다.
-		WriteFile(hFile, &pImage->Get_INFO(), sizeof(INFO), &dwByte, NULL);
-		//이미지의 태그 저장.
-		WriteFile(hFile, &dynamic_cast<CMyImage*>(pImage)->Get_Tag(), sizeof(SAVEDATA::TAG), &dwByte, NULL);
-		//프레임 키 저장
-		WriteFile(hFile, pImage->Get_pFrameKey(), sizeof(DIR_LEN), &dwByte, NULL);
-
+		for (int i = m_ivecImageSize; i < m_vecImage.size(); ++i)
+		{
+			//이미지의 위치, 크기를 저장한다.
+			WriteFile(hFile, &m_vecImage[i]->Get_INFO(), sizeof(INFO), &dwByte, NULL);
+			//이미지의 태그 저장.
+			WriteFile(hFile, &dynamic_cast<CMyImage*>(m_vecImage[i])->Get_Tag(), sizeof(SAVEDATA::TAG), &dwByte, NULL);
+			//프레임 키 저장
+			WriteFile(hFile, m_vecImage[i]->Get_pFrameKey(), sizeof(TCHAR) *DIR_LEN, &dwByte, NULL);
+		}
 	}
+
+
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Tile Save", L"Success", MB_OK);
+	MessageBox(g_hWnd, L"Image Save", L"Success", MB_OK);
 }
 
 void CImageMgr::Load_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Background.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
 
-	Release();
 
 	DWORD dwByte = 0;
-	INFO tTemp = {};
+	INFO tInfo = {};
 	TCHAR pFrameKey[DIR_LEN] = L"";
 	SAVEDATA::TAG eTag = SAVEDATA::END;
 	int iDrawID = 0;
 
+
 	while (true)
 	{
-		ReadFile(hFile, &tTemp, sizeof(INFO), &dwByte, NULL);
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
 		ReadFile(hFile, &eTag, sizeof(SAVEDATA::TAG), &dwByte, NULL);
-		ReadFile(hFile, pFrameKey, sizeof(DIR_LEN), &dwByte, NULL);
+		ReadFile(hFile, pFrameKey, sizeof(TCHAR) * DIR_LEN, &dwByte, NULL);
 
 		if (0 == dwByte)
 			break;
-
+		//태그로 구분한다.
 		switch (eTag)
 		{
 		case SAVEDATA::PILLBUG:
 		{
-			CAbstractFactory<CPillBug>::Create(tTemp.fX, tTemp.fY);
+			CObj* pObj = CAbstractFactory<CMyImage>::Create(tInfo.fX, tInfo.fY);
+			pObj->Set_FrameKey(pFrameKey);
+			pObj->Set_Size(tInfo.iCX, tInfo.iCY);
+			m_vecImage.push_back(pObj);
+			//CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY);
 			break;
 
 		}
 		case SAVEDATA::TERRAIN:
 		{
 
-			CObj* pObj = CAbstractFactory<CMyImage>::Create(tTemp.fX, tTemp.fY);
+			CObj* pObj = CAbstractFactory<CMyImage>::Create(tInfo.fX, tInfo.fY);
 			pObj->Set_FrameKey(pFrameKey);
+			pObj->Set_Size(tInfo.iCX, tInfo.iCY);
 			m_vecImage.push_back(pObj);
 			break;
 		}
@@ -155,6 +184,6 @@ void CImageMgr::Load_Image()
 
 	}
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Tile Load", L"Success", MB_OK);
+	MessageBox(g_hWnd, L"Image Load", L"Success", MB_OK);
 
 }

@@ -27,7 +27,7 @@ public:
 	void Set_Target(CObj* _pTarget) { m_pTarget = _pTarget; }
 	void Set_PosX(float _x) { m_tInfo.fX += _x; }
 	void Set_PosY(float _y) { m_tInfo.fY += _y; }
-	void Set_FrameKey(TCHAR* _key) { m_pFrameKey = _key; }
+	void Set_FrameKey(TCHAR* _key) { memcpy(m_pFrameKey, _key, sizeof(TCHAR) * DIR_LEN); }
 	void Set_Size(int _iCX, int _iCY) { m_tInfo.iCX = _iCX; m_tInfo.iCY = _iCY; }
 public:
 	void Move_Frame();
@@ -50,7 +50,7 @@ protected:
 	CObj*	m_pTarget;
 
 	FRAME	m_tFrame;
-	TCHAR*	m_pFrameKey;
+	TCHAR	m_pFrameKey[DIR_LEN];
 
 
 

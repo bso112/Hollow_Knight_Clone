@@ -9,6 +9,8 @@ public:
 	CMyImage();
 	~CMyImage();
 	
+	CMyImage(CMyImage& _obj);
+
 public:
 	// CObj을(를) 통해 상속됨
 	virtual void Initialize() override;
@@ -20,7 +22,7 @@ public:
 
 public:
 	void Set_Tag(SAVEDATA::TAG _eTag) { m_eTag = _eTag; }
-	SAVEDATA::TAG& Get_Tag() { return m_eTag; }
+	const SAVEDATA::TAG& Get_Tag() { return m_eTag; }
 private:
 	SAVEDATA::TAG m_eTag;
 

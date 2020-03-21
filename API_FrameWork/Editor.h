@@ -3,8 +3,10 @@
 #ifndef __EDITOR_H__
 #define __EDITOR_H__
 
-
 #include "Scene.h"
+
+class CMyImage;
+
 class CEditor : public CScene
 {
 public:
@@ -21,6 +23,10 @@ public:
 public:
 	void Key_Check();
 	
+private:
+	//이미지 피킹을 위한 이미지 선택 인덱스
+	int m_iSelected;
+
 };
 
 

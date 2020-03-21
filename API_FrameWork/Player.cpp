@@ -45,7 +45,7 @@ void CPlayer::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_left.bmp", L"player_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_right.bmp", L"player_right");
 
-	m_pFrameKey = L"player_right";
+	memcpy(m_pFrameKey, L"player_right", DIR_LEN);
 
 }
 
@@ -101,13 +101,13 @@ void CPlayer::Key_Check()
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
-		m_pFrameKey = L"player_left";
+		memcpy(m_pFrameKey, L"player_left", DIR_LEN);
 		m_eCurState = STATE::WALK;
 		m_tInfo.fX -= m_fSpeed;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
-		m_pFrameKey = L"player_right";
+		memcpy(m_pFrameKey, L"player_right", DIR_LEN);
 		m_eCurState = STATE::WALK;
 		m_tInfo.fX += m_fSpeed;
 	}
