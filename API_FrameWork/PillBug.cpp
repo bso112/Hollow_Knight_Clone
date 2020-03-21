@@ -25,6 +25,8 @@ void CPillBug::Initialize()
 	m_PartolSpot.x = (LONG)m_tInfo.fX;
 	m_PartolSpot.y = (LONG)m_tInfo.fY;
 
+	m_eTag = OBJTAG::MONSTER;
+
 	m_fPatrol = 100;
 
 	m_fSpeed = 3.f;

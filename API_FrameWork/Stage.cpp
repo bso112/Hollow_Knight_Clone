@@ -5,6 +5,9 @@
 #include "ObjMgr.h"
 #include "ScrollMgr.h"
 #include "PillBug.h"
+#include "TileMgr.h"
+#include "ImageMgr.h"
+
 CStage::CStage()
 {
 }
@@ -16,12 +19,19 @@ CStage::~CStage()
 
 void CStage::Initialize()
 {
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"BackGround");
+	//백그라운드 이미지
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/background1.bmp", L"background");
 
 	CObj* player = CAbstractFactory<CPlayer>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, player);
 
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CPillBug>::Create(300,300));
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CPillBug>::Create(300,300));
+	
+	//배경 로드
+	CTileMgr::Get_Instance()->Initialize();
+	CImageMgr::Get_Instance()->Initialize();
+	CTileMgr::Get_Instance()->Load_Tile();
+	CImageMgr::Get_Instance()->Load_Image();
 
 	
 }
@@ -29,11 +39,15 @@ void CStage::Initialize()
 void CStage::Update()
 {
 	CObjMgr::Get_Instance()->Update();
+	CTileMgr::Get_Instance()->Update();
+	CImageMgr::Get_Instance()->Update();
 }
 
 void CStage::Late_Update()
 {
 	CObjMgr::Get_Instance()->Late_Update();
+	CTileMgr::Get_Instance()->Late_Update();
+	CImageMgr::Get_Instance()->Late_Update();
 }
 
 void CStage::Render(HDC _DC)
@@ -48,15 +62,19 @@ void CStage::Render(HDC _DC)
 	//예를들어 iScrollX가 차감되서 30에서 20이됬다고 쳤을때(플레이어 왼쪽으로 이동) 
 	//출력할 X좌표는 -30에서 -20이 된다
 	//즉, 배경이 오른쪽으로 이동한다.
-	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"BackGround");
+	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background");
+	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, -iScrollX, -iScrollY, SRCCOPY);
 
-
-
-	BitBlt(_DC, 0, 0, WINCX, WINCY, hMemDC, -iScrollX, -iScrollY, SRCCOPY);
-
+	CTileMgr::Get_Instance()->Render(_DC);
+	CImageMgr::Get_Instance()->Render(_DC);
 	CObjMgr::Get_Instance()->Render(_DC);
+
+
 }
 
 void CStage::Release()
 {
+	CTileMgr::Destroy_Instance();
+	CImageMgr::Destroy_Instance();
+
 }

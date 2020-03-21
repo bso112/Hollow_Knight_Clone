@@ -8,6 +8,7 @@
 #include "KeyMgr.h"
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
+#include "TileMgr.h"
 
 
 CPlayer::CPlayer()
@@ -35,11 +36,14 @@ void CPlayer::Initialize()
 	m_fSpeed = 5.f;
 
 	m_bJump = false;
-	m_fJumpPower = 20.f;
+	//이 이상이면 너무빨리 떨어짐.
+	m_fJumpPower = 10.f;
 	m_fJumpAccel = 0.f;
 
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
+
+	m_eTag = OBJTAG::PLAYER;
 
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_left.bmp", L"player_left");
@@ -51,8 +55,13 @@ void CPlayer::Initialize()
 
 int CPlayer::Update()
 {
-	if(m_bDead)
+	if (m_bDead)
 		return OBJ_DEAD;
+
+
+	static float fAccel = 0;
+
+
 
 	Key_Check();
 	OffSet();
@@ -84,12 +93,51 @@ void CPlayer::Render(HDC _DC)
 		, m_tInfo.iCX, m_tInfo.iCY, hMemDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY *m_tFrame.iFrameScene, m_tInfo.iCX, m_tInfo.iCY
 		, RGB(30, 30, 30));
 
-	
+
 }
 
 void CPlayer::Release()
 {
 }
+
+
+void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
+{
+	float fX = _fX;
+	float fY = _fY;
+	CObj* tile = _pOther;
+
+	//타일과 부딪혔을때는 더이상 나아가지 못한다.
+	if (_pOther->Get_Tag() == OBJTAG::TILE)
+	{
+		//X축 충돌영역이 더 많으면 상하로 충돌한 것이다.
+		if (fX > fY)
+		{
+			//만약 타일이 위에 있다면
+			if (tile->Get_INFO().fY > m_tInfo.fY)
+				m_tInfo.fY = tile->Get_Rect().bottom + (m_tInfo.iCY >> 1);
+			//만약 타일이 아래 있다면
+			else
+			{
+				//땅에 있다. 따라서 점프 초기화(이거 점프에 두면 안됨..)
+				m_bJump = false;
+				m_fJumpAccel = 0.f;
+				m_tInfo.fY = tile->Get_Rect().top - (m_tInfo.iCY >> 1);
+			}
+		}
+		else
+		{
+			//만약 타일이 왼쪽에 있다면
+			if (tile->Get_INFO().fX < m_tInfo.fX)
+				m_tInfo.fX = tile->Get_Rect().right + (m_tInfo.iCX >> 1);
+			else
+				//만약 타일이 오른쪽에 있다면
+				m_tInfo.fX = tile->Get_Rect().left - (m_tInfo.iCX >> 1);
+		}
+	}
+}
+
+
 
 void CPlayer::Key_Check()
 {
@@ -120,7 +168,7 @@ void CPlayer::Key_Check()
 	if (CKeyMgr::Get_Instance()->Key_Pressing('X'))
 		m_eCurState = STATE::ATTACK;
 
-	//점프
+	//점프상태면 state는 계속 점프
 	if (m_bJump)
 	{
 		m_eCurState = STATE::JUMP;
@@ -185,24 +233,14 @@ void CPlayer::Scene_Change()
 
 void CPlayer::Jumping()
 {
-	float fY = 0.f;
-	bool bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &fY);
 
 	if (m_bJump)
 	{
 		m_tInfo.fY -= m_fJumpPower * m_fJumpAccel
 			- 9.8f * m_fJumpAccel * m_fJumpAccel * 0.5f;
 		m_fJumpAccel += 0.2f;
-
-		if (bLineCol && m_tInfo.fY > fY)
-		{
-			m_bJump = false;
-			m_fJumpAccel = 0.f;
-			m_tInfo.fY = fY - (m_tInfo.iCY >> 1);
-		}
 	}
-	else if (bLineCol)
-		m_tInfo.fY = fY - (m_tInfo.iCY >> 1);
+
 }
 
 void CPlayer::OffSet()

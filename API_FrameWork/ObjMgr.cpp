@@ -45,9 +45,8 @@ int CObjMgr::Update()
 		}
 	}
 
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::MONSTER], m_listObj[OBJID::PLAYER]);
-	CCollisionMgr::Collision_Rect(m_listObj[OBJID::BULLET], m_listObj[OBJID::MONSTER]);
-
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::TILE]);
+	
 	return 0;
 }
 

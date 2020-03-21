@@ -19,7 +19,14 @@ public:
 	void Release();
 
 public:
-	CObj* Get_Player() { return m_listObj[OBJID::PLAYER].front(); }
+	CObj* Get_Player() 
+	{ 
+		if (m_listObj[OBJID::PLAYER].empty())
+			return nullptr; 
+		else 
+			return m_listObj[OBJID::PLAYER].front(); 
+	}
+
 	CObj* Get_Target(CObj* _Dst, OBJID::ID _eID);
 
 

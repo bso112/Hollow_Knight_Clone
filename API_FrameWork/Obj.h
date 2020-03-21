@@ -38,6 +38,12 @@ public:
 	const INFO& Get_INFO() const { return m_tInfo; }
 	const bool& Get_Dead() const { return m_bDead; }
 	const TCHAR* Get_pFrameKey() const { return m_pFrameKey; }
+	const OBJTAG::TAG Get_Tag() const { return m_eTag; }
+
+public:
+	virtual void OnCollisionEnter(CObj* _pOther);
+	//충돌영역을 전달하는 콜리전엔터
+	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
 protected:
 	INFO	m_tInfo;
 	RECT	m_tRect;
@@ -52,6 +58,7 @@ protected:
 	FRAME	m_tFrame;
 	TCHAR	m_pFrameKey[DIR_LEN];
 
+	OBJTAG::TAG m_eTag;
 
 
 };

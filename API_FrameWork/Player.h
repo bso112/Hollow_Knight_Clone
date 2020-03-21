@@ -26,6 +26,10 @@ public:
 	void Set_Bullet(list<CObj*>* _pBullet) { m_pBullet = _pBullet; }
 	void Set_Shield(list<CObj*>* _pShield) { m_pShield = _pShield; }
 
+public:
+	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
+
+
 
 
 private:

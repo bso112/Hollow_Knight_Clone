@@ -21,7 +21,10 @@ public:
 public:
 	//마우스로 클릭했을때, 해당 타일을 그린다.
 	void Picking_Tile(POINT& _pt);
+	//타일을 밟고 있는가?
+	bool IsStepOnTile(CObj* _pObj, float& _fY);
 
+public:
 	//그린 타일을 저장한다.
 	void Save_Tile();
 	//그린 타일을 로드한다.

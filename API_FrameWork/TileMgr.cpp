@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "TileMgr.h"
 #include "Tile.h"
+#include "SceneMgr.h"
+#include "ObjMgr.h"
+#include "CollisionMgr.h"
 
 CTileMgr* CTileMgr::m_pInstance = nullptr;
 CTileMgr::CTileMgr()
@@ -37,6 +40,7 @@ void CTileMgr::Initialize()
 
 void CTileMgr::Update()
 {
+
 }
 
 void CTileMgr::Late_Update()
@@ -45,13 +49,12 @@ void CTileMgr::Late_Update()
 
 void CTileMgr::Render(HDC _DC)
 {
-	for (auto& pTile : m_vecTile)
-		if (((CTile*)pTile)->Get_isColider())
-			pTile->Render(_DC);
+
 }
 
 void CTileMgr::Release()
 {
+	//오브젝트 매니저에서 딜리트함
 	for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<CObj*>);
 	m_vecTile.clear();
 }
@@ -71,6 +74,32 @@ void CTileMgr::Picking_Tile(POINT& _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider();
+
+}
+
+bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
+{
+	float fX;
+	float fY;
+	for (auto& tile : m_vecTile)
+	{
+		//콜라이더 타일이면
+		if (((CTile*)tile)->Get_isColider())
+		{
+			//충돌했고
+			if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
+				//상하충돌이고
+				if (fX > fY)
+					//만약 타일이 아래에 있으면 밟고 있는것이다.
+					if (tile->Get_INFO().fY > _pObj->Get_INFO().fY)
+					{
+						_fY = tile->Get_Rect().top - (_pObj->Get_INFO().iCY >> 1);
+						return true;
+					}
+		}
+		
+	}
+	return false;
 }
 
 //그린 타일을 저장한다.
@@ -123,9 +152,17 @@ void CTileMgr::Load_Tile()
 
 		//타일을 생성하고 위치를 셋팅해준다.
 		CObj* pObj = CAbstractFactory<CTile>::Create(tTemp.fX, tTemp.fY);
+		//콜라이더 타일이면
 		if (bColider)
+		{
+			//콜라이더로 셋팅해준다.
 			dynamic_cast<CTile*>(pObj)->Set_isColider();
+			CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, pObj);
+
+		}
 		m_vecTile.emplace_back(pObj);
+
+
 	}
 	CloseHandle(hFile);
 	MessageBox(g_hWnd, L"Tile Load", L"Success", MB_OK);

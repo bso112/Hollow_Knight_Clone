@@ -6,6 +6,7 @@
 #include "TileMgr.h"
 #include "ImageMgr.h"
 #include "Obj.h"
+#include "ObjMgr.h"
 
 CEditor::CEditor()
 	:m_iSelected(0)
@@ -33,12 +34,16 @@ void CEditor::Update()
 	Key_Check();
 	CTileMgr::Get_Instance()->Update();
 	CImageMgr::Get_Instance()->Update();
+	CObjMgr::Get_Instance()->Update();
+
+
 }
 
 void CEditor::Late_Update()
 {
 	CTileMgr::Get_Instance()->Late_Update();
 	CImageMgr::Get_Instance()->Late_Update();
+	CObjMgr::Get_Instance()->Late_Update();
 }
 
 void CEditor::Render(HDC _DC)
@@ -50,6 +55,7 @@ void CEditor::Render(HDC _DC)
 	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, -iScrollX, -iScrollY, SRCCOPY);
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
+	CObjMgr::Get_Instance()->Render(_DC);
 
 	const TCHAR* szBuff = CImageMgr::Get_Instance()->Get_ImageName(m_iSelected);
 	if (szBuff)
@@ -63,6 +69,8 @@ void CEditor::Release()
 {
 	CImageMgr::Destroy_Instance();
 	CTileMgr::Destroy_Instance();
+	CObjMgr::Destroy_Instance();
+	
 }
 
 void CEditor::Key_Check()

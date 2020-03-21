@@ -19,6 +19,8 @@ void CTile::Initialize()
 {
 	m_tInfo.iCX = TILECX;
 	m_tInfo.iCY = TILECY;
+
+	m_eTag = OBJTAG::TILE;
 }
 
 int CTile::Update()
@@ -33,6 +35,10 @@ void CTile::Late_Update()
 void CTile::Render(HDC _DC)
 {
 	Update_Rect();
+
+	//콜라이더인 타일만 그린다.
+	if (!m_bColider)
+		return;
 
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();

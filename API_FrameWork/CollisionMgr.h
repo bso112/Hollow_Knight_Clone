@@ -12,12 +12,15 @@ public:
 	~CCollisionMgr();
 
 public:
-	// static 함수로 구현한 이유는 객체를 생성하지 않아도 스코프연산자를 통해 호출이 가능하다!
-	static void Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src);
+	//일반적인 사각형 충돌함수
+	static bool Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src);
+	//onCollisionEnter에 충돌영역을 전달하는 충돌함수 
 	static void Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src);
+	//구충돌 함수
 	static void Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src);
-	static bool Check_Sphere(const RECT& _Dst, const RECT& _Src);
 
+public:
+	static bool Check_Sphere(const RECT& _Dst, const RECT& _Src);
 	static bool Check_Sphere(CObj* _Dst, CObj* _Src);
 	static bool Check_Rect(CObj* _Dst, CObj* _Src, float* _x, float* _y);
 };

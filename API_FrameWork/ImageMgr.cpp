@@ -28,10 +28,26 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1.bmp", L"wall1");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1", 187, 281);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_left.bmp", L"wall1_left");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_left", 187, 281);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_right.bmp", L"wall1_right");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_right", 187, 281);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_bottom.bmp", L"wall1_bottom");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_bottom", 281, 187);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/ground1.bmp", L"ground1");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"ground1", 175, 159);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
 
 
 	//몬스터 (위치랑 몬스터 종류만 저장하면 된다)

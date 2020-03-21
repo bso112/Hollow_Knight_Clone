@@ -15,6 +15,8 @@ bool CMonster::IsAlert()
 {
 	//인식범위
 	RECT rc = { (LONG)(m_tInfo.fX - m_fRadius), (LONG)(m_tInfo.fY - m_fRadius), (LONG)(m_tInfo.fX + m_fRadius), (LONG)(m_tInfo.fY + m_fRadius) };
+	if (m_pTarget == nullptr)
+		return false;
 	return CCollisionMgr::Check_Sphere(m_pTarget->Get_Rect(), rc);
 }
 

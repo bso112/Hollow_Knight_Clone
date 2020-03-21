@@ -15,21 +15,22 @@ CCollisionMgr::~CCollisionMgr()
 {
 }
 
-void CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
+bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 {
 	RECT rc = {};
-
 	for(auto& Dst : _Dst)
 	{
 		for(auto& Src : _Src)
 		{
-			if(IntersectRect(&rc, &(Dst->Get_Rect()), &(Src->Get_Rect())))
+			if (IntersectRect(&rc, &Dst->Get_Rect(), &Src->Get_Rect()))
 			{
-				Dst->Set_Dead();
-				Src->Set_Dead();
+				Dst->OnCollisionEnter(Src);
+				Src->OnCollisionEnter(Dst);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
@@ -42,20 +43,9 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 
 			if(Check_Rect(Dst, Src, &fX, &fY))
 			{
-				if(fX > fY)	// »óÇÏ
-				{
-					if(Dst->Get_INFO().fY < Src->Get_INFO().fY)
-						Src->Set_PosY(fY);
-					else
-						Src->Set_PosY(-fY);
-				}
-				else // ÁÂ¿ì
-				{
-					if(Dst->Get_INFO().fX < Src->Get_INFO().fX)
-						Src->Set_PosX(fX);
-					else
-						Src->Set_PosX(-fX);
-				}
+				Dst->OnCollisionEnter(Src, fX, fY);
+				Src->OnCollisionEnter(Dst, fX, fY);
+
 			}
 		}
 	}
@@ -69,12 +59,14 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 		{
 			if(Check_Sphere(Dst, Src))
 			{
-				Dst->Set_Dead();
-				Src->Set_Dead();
+				Dst->OnCollisionEnter(Dst);
+				Src->OnCollisionEnter(Src);
 			}
 		}
 	}
 }
+
+
 
 bool CCollisionMgr::Check_Sphere(CObj * _Dst, CObj * _Src)
 {
