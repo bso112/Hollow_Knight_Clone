@@ -19,6 +19,8 @@ public:
 	void Late_Update();
 	void Render(HDC _DC);
 	void Release();
+	SCENEID Get_CurrentScene() { return m_eCurScene; }
+
 
 
 public:

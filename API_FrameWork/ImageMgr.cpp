@@ -4,6 +4,7 @@
 #include "BmpMgr.h"
 #include "PillBug.h"
 #include "ScrollMgr.h"
+#include "SceneMgr.h"
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
 {
@@ -109,7 +110,6 @@ void CImageMgr::Save_Image()
 		return;
 
 	DWORD dwByte = 0;
-	int iDrawID = 0;
 
 	for (auto& img : m_vecImageInstance)
 	{
@@ -152,32 +152,43 @@ void CImageMgr::Load_Image()
 
 		if (0 == dwByte)
 			break;
-		//태그로 구분한다.
-		switch (eTag)
+
+			
+		//만약 스테이지 씬이면
+		if (CSceneMgr::Get_Instance()->Get_CurrentScene() == CSceneMgr::SCENEID::SCENE_STAGE)
 		{
-		case SAVEDATA::PILLBUG:
+			//태그로 구분한다.
+			switch (eTag)
+			{
+			case SAVEDATA::PILLBUG:
+			{
+				CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY);
+				break;
+
+			}
+			case SAVEDATA::TERRAIN:
+			{
+				CObj* pObj = CAbstractFactory<CMyImage>::Create(tInfo.fX, tInfo.fY);
+				pObj->Set_FrameKey(pFrameKey);
+				pObj->Set_Size(tInfo.iCX, tInfo.iCY);
+				dynamic_cast<CMyImage*>(pObj)->Set_Tag(eTag);
+				m_vecImageInstance.push_back(pObj);
+				break;
+			}
+			case SAVEDATA::END:
+				break;
+			default:
+				break;
+			}
+		}
+		else
 		{
+			//만약 에디터 모드일 경우
 			CObj* pObj = CAbstractFactory<CMyImage>::Create(tInfo.fX, tInfo.fY);
 			pObj->Set_FrameKey(pFrameKey);
 			pObj->Set_Size(tInfo.iCX, tInfo.iCY);
+			dynamic_cast<CMyImage*>(pObj)->Set_Tag(eTag);
 			m_vecImageInstance.push_back(pObj);
-			//CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY);
-			break;
-
-		}
-		case SAVEDATA::TERRAIN:
-		{
-
-			CObj* pObj = CAbstractFactory<CMyImage>::Create(tInfo.fX, tInfo.fY);
-			pObj->Set_FrameKey(pFrameKey);
-			pObj->Set_Size(tInfo.iCX, tInfo.iCY);
-			m_vecImageInstance.push_back(pObj);
-			break;
-		}
-		case SAVEDATA::END:
-			break;
-		default:
-			break;
 		}
 
 	}

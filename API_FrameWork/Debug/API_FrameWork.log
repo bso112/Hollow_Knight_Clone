@@ -1,5 +1,12 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   ImageMgr.cpp
-c:\users\bso11\desktop\jusin\my_hollowknight\api_framework\imagemgr.cpp(84): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\bso11\desktop\jusin\my_hollowknight\api_framework\imagemgr.cpp(85): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  SceneMgr.cpp
+  MyButton.cpp
+  MainGame.cpp
+  Logo.cpp
+  코드를 생성하고 있습니다...
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_HollowKnight\Debug\HollowKnight.exe
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_HollowKnight\Debug\HollowKnight.pdb (Full PDB)
