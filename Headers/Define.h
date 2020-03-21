@@ -15,8 +15,8 @@
 
 #define PI 3.141592f
 
-#define TILEX 40
-#define TILEY 30
+#define TILEX 160
+#define TILEY 68
 #define TILECX 25
 #define TILECY 25
 

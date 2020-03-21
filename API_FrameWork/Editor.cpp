@@ -51,9 +51,9 @@ void CEditor::Render(HDC _DC)
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
 
-	TCHAR		szBuff[32] = L"";
-	swprintf_s(szBuff, CImageMgr::Get_Instance()->Get_ImageName(m_iSelected));
-	TextOut(_DC, 800, 500, szBuff, lstrlen(szBuff));
+	const TCHAR* szBuff = CImageMgr::Get_Instance()->Get_ImageName(m_iSelected);
+	if (szBuff)
+		TextOut(_DC, 800, 500, szBuff, lstrlen(szBuff));
 
 
 
@@ -137,17 +137,20 @@ void CEditor::Key_Check()
 		CImageMgr::Get_Instance()->Drag_Image(pt);
 	}
 
-	//타일맵 세이브, 로드
+	//되돌리기
 	if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+		CImageMgr::Get_Instance()->Pop_back();
+
+	//타일맵 세이브, 로드
+	if (CKeyMgr::Get_Instance()->Key_Down('S'))
 	{
 		CTileMgr::Get_Instance()->Save_Tile();
 		CImageMgr::Get_Instance()->Save_Image();
 	}
-	if (CKeyMgr::Get_Instance()->Key_Down('X'))
+	if (CKeyMgr::Get_Instance()->Key_Down('A'))
 	{
 		CTileMgr::Get_Instance()->Load_Tile();
 		CImageMgr::Get_Instance()->Load_Image();
 
-	
 	}
 }
