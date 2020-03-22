@@ -21,7 +21,8 @@ public:
 public:
 	//이 예제에서 타일은 스프라이트 시트 하나 안에 두종류이므로 Set_DrawID로 그릴 타일의 종류를 구분한다.
 	void Set_DrawID(int _iDrawID) { m_iDrawID = _iDrawID; }
-	void Set_isColider() { m_bColider = !m_bColider; }
+	void Reverse_isCollider() { m_bColider = !m_bColider; }
+	void Set_isColider(bool _bColider) { m_bColider = _bColider; }
 	bool& Get_isColider() { return m_bColider; }
 public:
 	int Get_DrawID() const { return m_iDrawID; }

@@ -58,8 +58,7 @@ void CTileMgr::Release()
 	m_vecTile.clear();
 }
 
-//마우스 클릭으로 타일을 그린다.
-void CTileMgr::Picking_Tile(POINT& _pt)
+void CTileMgr::Picking_Tile(POINT & _pt)
 {
 	//마우스포인트를 받아 타일의 인덱스로 변환한다.
 	int x = _pt.x / TILECX;
@@ -72,8 +71,27 @@ void CTileMgr::Picking_Tile(POINT& _pt)
 	if (0 > iIndex || m_vecTile.size() <= (size_t)iIndex)
 		return;
 
-	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider();
+	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(true);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, m_vecTile[iIndex]);
+
+}
+
+//타일을 콜라이더가 아닌것으로 만든다.
+void CTileMgr::Delete_Tile(POINT& _pt)
+{
+	//마우스포인트를 받아 타일의 인덱스로 변환한다.
+	int x = _pt.x / TILECX;
+	int y = _pt.y / TILECY;
+
+	//현재 선택된 타일의 인덱스이다. (2차원 배열이 아닌 vector에 일렬로 저장했으므로 이렇게 계산한다)
+	int iIndex = x + y * TILEX;
+
+	//유효성 검사
+	if (0 > iIndex || m_vecTile.size() <= (size_t)iIndex)
+		return;
+
+	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(false);
+	//오브젝트 매니저에서 지워야할텐데?
 
 }
 
@@ -105,7 +123,7 @@ bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
 //그린 타일을 저장한다.
 void CTileMgr::Save_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Tile2.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -130,7 +148,7 @@ void CTileMgr::Save_Tile()
 
 void CTileMgr::Load_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Tile2.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -156,7 +174,7 @@ void CTileMgr::Load_Tile()
 		if (bColider)
 		{
 			//콜라이더로 셋팅해준다.
-			dynamic_cast<CTile*>(pObj)->Set_isColider();
+			dynamic_cast<CTile*>(pObj)->Reverse_isCollider();
 			CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, pObj);
 
 		}

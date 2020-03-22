@@ -9,7 +9,6 @@ public:
 	~CImageMgr();
 
 public:
-	//타일을 그린다
 	void Initialize();
 	void Update();
 	void Late_Update();

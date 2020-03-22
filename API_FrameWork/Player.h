@@ -28,6 +28,7 @@ public:
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
+	virtual void OnCollisionEnter(CObj* _pOther);
 
 
 
@@ -55,12 +56,16 @@ private:
 
 	// มกวม
 	bool			m_bJump;
+	bool			m_bGround;
 	float			m_fJumpPower;
 	float			m_fJumpAccel;
 	
 
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
+
+	STAT			m_tStat;
+	FRAME			m_tHealthUI;
 
 };
 

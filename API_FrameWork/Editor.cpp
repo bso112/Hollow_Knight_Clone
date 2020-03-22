@@ -21,7 +21,7 @@ CEditor::~CEditor()
 void CEditor::Initialize()
 {
 	//백그라운드 이미지
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/background1.bmp", L"background");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/background_editor.bmp", L"background_editor");
 	//타일을 TileX * TileY만큼 미리 생성해둔다.
 	CTileMgr::Get_Instance()->Initialize();
 	//맵을 제작할때 쓸 이미지를 불러온다.
@@ -51,7 +51,7 @@ void CEditor::Render(HDC _DC)
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
-	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background");
+	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background_editor");
 	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, -iScrollX, -iScrollY, SRCCOPY);
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
@@ -134,8 +134,7 @@ void CEditor::Key_Check()
 
 	}
 
-	//만약 오른쪽 마우스클릭이면
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON))
 	{
 		POINT pt = {};
 		GetCursorPos(&pt);
@@ -147,6 +146,19 @@ void CEditor::Key_Check()
 
 		//해당 위치에 타일을 그려준다. 그리는 건 타일매니저에 위임한다.
 		CTileMgr::Get_Instance()->Picking_Tile(pt);
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing('K'))
+	{
+		POINT pt = {};
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		//마우스포인트는 스크롤된 반대방향만큼 보정해준다. (왜냐하면 배경이 그 반대방향으로 움직였기 때문에)
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+
+		//해당 위치에 타일의 상태를 뒤집는다.
+		CTileMgr::Get_Instance()->Delete_Tile(pt);
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
 	{

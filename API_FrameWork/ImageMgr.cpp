@@ -31,6 +31,16 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Flatform/flatform2.bmp", L"flatform2");
+	pObj = CAbstractFactory<CMyImage>::Create(100, 100, L"flatform2", 120, 66);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Flatform/flatform3.bmp", L"flatform3");
+	pObj = CAbstractFactory<CMyImage>::Create(100, 100, L"flatform3", 93, 59);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif1.bmp", L"clif1");
 	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif1", 183, 282);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
@@ -43,6 +53,16 @@ void CImageMgr::Initialize()
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif3.bmp", L"clif3");
 	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif3", 282, 183);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/black.bmp", L"black");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"black", 100, 100);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/black2.bmp", L"black2");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"black2", 300, 300);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
@@ -62,6 +82,15 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Ground/ground.bmp", L"ground");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"ground", 450, 114);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Ground/spike.bmp", L"spike");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"spike", 256, 97);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Egg/egg1.bmp", L"egg1");
 	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"egg1", 258, 197);
@@ -79,26 +108,20 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof3.bmp", L"roof3");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof3", 734, 221);
-	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
-	m_vecImage.push_back(pObj);
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof4.bmp", L"roof4");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof4", 551, 224);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/root1.bmp", L"root3");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"root3", 259, 254);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
 
 	//몬스터 (위치랑 몬스터 종류만 저장하면 된다)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/pill_bug.bmp", L"pill_bug");
-	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"pill_bug", 70, 70);
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"pill_bug", 140, 70);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::PILLBUG);
 	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/chaser.bmp", L"chaser");
-	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"chaser", 80, 80);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/chaser_left.bmp", L"chaser_left");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"chaser_left", 100, 100);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::CHASER);
 	m_vecImage.push_back(pObj);
 }
@@ -183,7 +206,7 @@ void CImageMgr::Drag_Image(POINT & _pt)
 
 void CImageMgr::Save_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Background.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Background2.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -211,7 +234,7 @@ void CImageMgr::Save_Image()
 
 void CImageMgr::Load_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Background.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Background2.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)

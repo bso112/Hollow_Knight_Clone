@@ -22,6 +22,7 @@ public:
 
 public:
 	void Set_Tag(SAVEDATA::TAG _eTag) { m_eTag = _eTag; }
+	void Set_Frame(FRAME _frame) { m_tFrame = _frame; }
 	const SAVEDATA::TAG& Get_Tag() { return m_eTag; }
 private:
 	SAVEDATA::TAG m_eTag;

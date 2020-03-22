@@ -21,6 +21,7 @@ public:
 public:
 	//마우스로 클릭했을때, 해당 타일을 그린다.
 	void Picking_Tile(POINT& _pt);
+	void Delete_Tile(POINT& _pt);
 	//타일을 밟고 있는가?
 	bool IsStepOnTile(CObj* _pObj, float& _fY);
 
