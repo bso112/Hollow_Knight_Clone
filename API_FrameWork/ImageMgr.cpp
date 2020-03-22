@@ -5,6 +5,9 @@
 #include "PillBug.h"
 #include "ScrollMgr.h"
 #include "SceneMgr.h"
+#include "Chaser.h"
+#include "ObjMgr.h"
+
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
 {
@@ -35,6 +38,11 @@ void CImageMgr::Initialize()
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif2.bmp", L"clif2");
 	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif2", 183, 282);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif3.bmp", L"clif3");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif3", 282, 183);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
@@ -89,6 +97,10 @@ void CImageMgr::Initialize()
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::PILLBUG);
 	m_vecImage.push_back(pObj);
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/chaser.bmp", L"chaser");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"chaser", 80, 80);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::CHASER);
+	m_vecImage.push_back(pObj);
 }
 
 void CImageMgr::Update()
@@ -105,6 +117,24 @@ void CImageMgr::Render(HDC _DC)
 	for (auto& img : m_vecImageInstance)
 		img->Render(_DC);
 
+
+}
+
+void CImageMgr::Remove_Image(POINT _pt)
+{
+	auto& iter = m_vecImageInstance.begin();
+	auto& iter_end = m_vecImageInstance.end();
+	for (; iter != iter_end;)
+	{
+		if (PtInRect(&(*iter)->Get_Rect(), _pt))
+		{
+			iter = m_vecImageInstance.erase(iter);
+			iter_end = m_vecImageInstance.end();
+
+		}
+		else
+			++iter;
+	}
 
 }
 
@@ -212,9 +242,14 @@ void CImageMgr::Load_Image()
 			{
 			case SAVEDATA::PILLBUG:
 			{
-				CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY);
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,  CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY));
 				break;
 
+			}
+			case SAVEDATA::CHASER:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CChaser>::Create(tInfo.fX, tInfo.fY));
+				break;
 			}
 			case SAVEDATA::TERRAIN:
 			{

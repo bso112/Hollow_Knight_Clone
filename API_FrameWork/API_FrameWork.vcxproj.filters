@@ -109,6 +109,9 @@
     <Filter Include="소스 파일\98.Manager\07.TileMgr">
       <UniqueIdentifier>{1beae40e-c888-4e1d-ada5-e67789ac7b3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\01.Chaser">
+      <UniqueIdentifier>{89083198-94c9-4abc-94a8-4df1866caf9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="ImageMgr.h">
       <Filter>소스 파일\98.Manager\08.ImageMgr</Filter>
     </ClInclude>
+    <ClInclude Include="Chaser.h">
+      <Filter>소스 파일\01.Obj\02.Monster\01.Chaser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -304,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="ImageMgr.cpp">
       <Filter>소스 파일\98.Manager\08.ImageMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaser.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\01.Chaser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

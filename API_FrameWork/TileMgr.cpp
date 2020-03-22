@@ -54,7 +54,6 @@ void CTileMgr::Render(HDC _DC)
 
 void CTileMgr::Release()
 {
-	//오브젝트 매니저에서 딜리트함
 	for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<CObj*>);
 	m_vecTile.clear();
 }
@@ -74,6 +73,7 @@ void CTileMgr::Picking_Tile(POINT& _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider();
+	CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, m_vecTile[iIndex]);
 
 }
 

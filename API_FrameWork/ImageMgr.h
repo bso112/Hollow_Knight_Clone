@@ -28,6 +28,7 @@ public:
 public:
 	//이미지를 드래그한다.
 	void Drag_Image(POINT& _pt);
+	void Remove_Image(POINT _pt);
 
 public:
 	void Save_Image();

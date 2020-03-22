@@ -23,7 +23,7 @@ namespace OBJTAG
 
 namespace SAVEDATA
 {
-	enum TAG { PILLBUG, TERRAIN, END };
+	enum TAG { PILLBUG, CHASER, TERRAIN, END };
 }
 
 

@@ -151,6 +151,7 @@
     <ClInclude Include="API_FrameWork.h" />
     <ClInclude Include="BmpMgr.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Chaser.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="GuideBullet.h" />
     <ClInclude Include="ImageMgr.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="API_FrameWork.cpp" />
     <ClCompile Include="BmpMgr.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Chaser.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="GuideBullet.cpp" />
     <ClCompile Include="ImageMgr.cpp" />

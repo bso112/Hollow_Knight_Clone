@@ -9,6 +9,9 @@ CMonster::CMonster()
 	m_tStat = {};
 	//몬스터의 타깃은 항상 플레이어
 	m_pTarget = CObjMgr::Get_Instance()->Get_Player();
+	
+
+	m_eTag = OBJTAG::MONSTER;
 }
 
 bool CMonster::IsAlert()

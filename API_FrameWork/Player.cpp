@@ -37,7 +37,7 @@ void CPlayer::Initialize()
 
 	m_bJump = false;
 	//이 이상이면 너무빨리 떨어짐.
-	m_fJumpPower = 10.f;
+	m_fJumpPower = 15.f;
 	m_fJumpAccel = 0.f;
 
 	m_eCurState = STATE::IDLE;
@@ -107,14 +107,19 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 	float fY = _fY;
 	CObj* tile = _pOther;
 
+
+
 	//타일과 부딪혔을때는 더이상 나아가지 못한다.
 	if (_pOther->Get_Tag() == OBJTAG::TILE)
 	{
+
+		//땅에 있다. 따라서 점프 초기화(이거 점프에 두면 안됨..)
+		
 		//X축 충돌영역이 더 많으면 상하로 충돌한 것이다.
-		if (fX > fY)
+		if (fX < fY)
 		{
 			//만약 타일이 위에 있다면
-			if (tile->Get_INFO().fY > m_tInfo.fY)
+			if (tile->Get_INFO().fY < m_tInfo.fY)
 				m_tInfo.fY = tile->Get_Rect().bottom + (m_tInfo.iCY >> 1);
 			//만약 타일이 아래 있다면
 			else
@@ -122,17 +127,18 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 				//땅에 있다. 따라서 점프 초기화(이거 점프에 두면 안됨..)
 				m_bJump = false;
 				m_fJumpAccel = 0.f;
+
 				m_tInfo.fY = tile->Get_Rect().top - (m_tInfo.iCY >> 1);
 			}
 		}
 		else
 		{
-			//만약 타일이 왼쪽에 있다면
-			if (tile->Get_INFO().fX < m_tInfo.fX)
-				m_tInfo.fX = tile->Get_Rect().right + (m_tInfo.iCX >> 1);
-			else
-				//만약 타일이 오른쪽에 있다면
-				m_tInfo.fX = tile->Get_Rect().left - (m_tInfo.iCX >> 1);
+			////만약 타일이 왼쪽에 있다면
+			//if (tile->Get_INFO().fX < m_tInfo.fX)
+			//	m_tInfo.fX = tile->Get_Rect().right + (m_tInfo.iCX >> 1);
+			//else
+			//	//만약 타일이 오른쪽에 있다면
+			//	m_tInfo.fX = tile->Get_Rect().left - (m_tInfo.iCX >> 1);
 		}
 	}
 }

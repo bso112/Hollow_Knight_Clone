@@ -118,6 +118,21 @@ void CEditor::Key_Check()
 			CImageMgr::Get_Instance()->Add_Image(pImage);
 		}
 	}
+	
+
+	//해당 이미지 지우기
+	if (CKeyMgr::Get_Instance()->Key_Down('Q'))
+	{
+		POINT pt = {};
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+		//마우스포인트는 스크롤된 반대방향만큼 보정해준다. (왜냐하면 배경이 그 반대방향으로 움직였기 때문에)
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+		CImageMgr::Get_Instance()->Remove_Image(pt);
+
+
+	}
 
 	//만약 오른쪽 마우스클릭이면
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))

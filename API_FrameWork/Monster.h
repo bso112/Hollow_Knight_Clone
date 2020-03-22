@@ -21,6 +21,7 @@ public:
 protected:
 	virtual void Patrol() = 0;
 	virtual void Chase_Target() = 0;
+	//스프라이트 시트 체인지
 	virtual void Scene_Change() = 0;
 	
 protected:
