@@ -23,31 +23,64 @@ void CImageMgr::Initialize()
 	CObj* pObj;
 
 	//지형지물
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/flatform1.bmp", L"flatform1");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Flatform/flatform1.bmp", L"flatform1");
 	pObj = CAbstractFactory<CMyImage>::Create(100, 100, L"flatform1", 281, 145);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_left.bmp", L"wall1_left");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_left", 187, 281);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif1.bmp", L"clif1");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif1", 183, 282);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_right.bmp", L"wall1_right");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_right", 187, 281);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Wall/clif2.bmp", L"clif2");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"clif2", 183, 282);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/wall1_bottom.bmp", L"wall1_bottom");
-	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"wall1_bottom", 281, 187);
-	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
-	m_vecImage.push_back(pObj);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/ground1.bmp", L"ground1");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Ground/ground1.bmp", L"ground1");
 	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"ground1", 175, 159);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
 	m_vecImage.push_back(pObj);
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Ground/ground2.bmp", L"ground2");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"ground2", 396, 178);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Ground/ground3.bmp", L"ground3");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"ground3", 345, 176);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Egg/egg1.bmp", L"egg1");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"egg1", 258, 197);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof1.bmp", L"roof1");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof1", 777, 194);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof2.bmp", L"roof2");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof2", 709, 205);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof3.bmp", L"roof3");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof3", 734, 221);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/Roof/roof4.bmp", L"roof4");
+	pObj = CAbstractFactory<CMyImage>::Create(200, 200, L"roof4", 551, 224);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::TERRAIN);
+	m_vecImage.push_back(pObj);
 
 
 	//몬스터 (위치랑 몬스터 종류만 저장하면 된다)
@@ -113,6 +146,7 @@ void CImageMgr::Drag_Image(POINT & _pt)
 		if (PtInRect(&pImage->Get_Rect(), _pt))
 		{
 			pImage->Set_Pos((float)_pt.x, (float)_pt.y);
+			break;
 		}
 	}
 }
