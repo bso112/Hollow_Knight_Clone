@@ -17,8 +17,8 @@
 
 #define TILEX 160
 #define TILEY 68
-#define TILECX 25
-#define TILECY 25
+#define TILECX 50
+#define TILECY 50
 
 #define DIR_LEN 100
 

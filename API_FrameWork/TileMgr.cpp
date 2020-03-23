@@ -123,7 +123,7 @@ bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
 //그린 타일을 저장한다.
 void CTileMgr::Save_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile2.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Tile3.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -148,7 +148,7 @@ void CTileMgr::Save_Tile()
 
 void CTileMgr::Load_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile2.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Tile3.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)

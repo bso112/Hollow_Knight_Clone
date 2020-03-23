@@ -41,7 +41,7 @@ void CPlayer::Initialize()
 	m_fSpeed = 5.f;
 
 	m_bJump = false;
-	m_fJumpPower = 15.f;
+	m_fJumpPower = 20.f;
 	m_fJumpAccel = 0.f;
 
 	m_eCurState = STATE::IDLE;
@@ -109,9 +109,9 @@ int CPlayer::Update()
 	float fY = 0.f;
 	if (!m_bJump && !CTileMgr::Get_Instance()->IsStepOnTile(this, fY))
 	{
-		m_tInfo.fY -= .5 * fAccel
+		m_tInfo.fY -= 1 * fAccel
 			- 9.8f * fAccel * fAccel * 0.5f;
-		fAccel += 0.2f;
+		fAccel += 0.1f;
 	}
 	else
 		fAccel = 0.f;

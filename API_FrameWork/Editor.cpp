@@ -52,7 +52,7 @@ void CEditor::Render(HDC _DC)
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background_editor");
-	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, -iScrollX, -iScrollY, SRCCOPY);
+	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, 0, 0, SRCCOPY);
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
 	CObjMgr::Get_Instance()->Render(_DC);

@@ -206,7 +206,7 @@ void CImageMgr::Drag_Image(POINT & _pt)
 
 void CImageMgr::Save_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Background2.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Background3.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -234,7 +234,7 @@ void CImageMgr::Save_Image()
 
 void CImageMgr::Load_Image()
 {
-	HANDLE hFile = CreateFile(L"../Data/Background2.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Background3.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)

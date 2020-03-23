@@ -101,8 +101,7 @@ void CChaser::Patrol()
 			m_tInfo.fX += fX * m_fSpeed;
 		}
 	}
-	else
-		m_tInfo.fX += m_fSpeed;
+
 
 
 
