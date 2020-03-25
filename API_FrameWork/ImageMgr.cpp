@@ -7,6 +7,8 @@
 #include "SceneMgr.h"
 #include "Chaser.h"
 #include "ObjMgr.h"
+#include "Jumper.h"
+#include "Fly.h"
 
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
@@ -124,6 +126,28 @@ void CImageMgr::Initialize()
 	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"chaser_left", 100, 100);
 	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::CHASER);
 	m_vecImage.push_back(pObj);
+
+	
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/jumper_left.bmp", L"jumper_left");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"jumper_left", 200, 200);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::JUMPER);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/jumper_right.bmp", L"jumper_right");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"jumper_right", 200, 200);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::JUMPER);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/fly_left.bmp", L"fly_left");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"fly_left", 120, 115);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::FLY);
+	m_vecImage.push_back(pObj);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/fly_right.bmp", L"fly_right");
+	pObj = CAbstractFactory<CMyImage>::Create(300, 300, L"fly_right", 120, 115);
+	dynamic_cast<CMyImage*>(pObj)->Set_Tag(SAVEDATA::FLY);
+	m_vecImage.push_back(pObj);
+
 }
 
 void CImageMgr::Update()
@@ -281,6 +305,16 @@ void CImageMgr::Load_Image()
 				pObj->Set_Size(tInfo.iCX, tInfo.iCY);
 				dynamic_cast<CMyImage*>(pObj)->Set_Tag(eTag);
 				m_vecImageInstance.push_back(pObj);
+				break;
+			}
+			case SAVEDATA::JUMPER:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CJumper>::Create(tInfo.fX, tInfo.fY));
+				break;
+			}
+			case SAVEDATA::FLY:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CFly>::Create(tInfo.fX, tInfo.fY));
 				break;
 			}
 			case SAVEDATA::END:

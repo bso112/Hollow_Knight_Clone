@@ -112,6 +112,15 @@
     <Filter Include="소스 파일\01.Obj\02.Monster\01.Chaser">
       <UniqueIdentifier>{89083198-94c9-4abc-94a8-4df1866caf9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\02.Fly">
+      <UniqueIdentifier>{7a3e5362-e9d5-4446-ae54-05d22a9b0c14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\03.Jumper">
+      <UniqueIdentifier>{b6be9746-0ea6-42d1-8215-b1dc70d1a761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.TIme">
+      <UniqueIdentifier>{c8463b63-f360-49a9-a39e-be384345317d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -216,6 +225,15 @@
     <ClInclude Include="Chaser.h">
       <Filter>소스 파일\01.Obj\02.Monster\01.Chaser</Filter>
     </ClInclude>
+    <ClInclude Include="Fly.h">
+      <Filter>소스 파일\01.Obj\02.Monster\02.Fly</Filter>
+    </ClInclude>
+    <ClInclude Include="Jumper.h">
+      <Filter>소스 파일\01.Obj\02.Monster\03.Jumper</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTime.h">
+      <Filter>소스 파일\05.TIme</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -313,6 +331,15 @@
     </ClCompile>
     <ClCompile Include="Chaser.cpp">
       <Filter>소스 파일\01.Obj\02.Monster\01.Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="Fly.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\02.Fly</Filter>
+    </ClCompile>
+    <ClCompile Include="Jumper.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\03.Jumper</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTime.cpp">
+      <Filter>소스 파일\05.TIme</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

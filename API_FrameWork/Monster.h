@@ -37,6 +37,9 @@ protected:
 	float m_fPatrol;
 	//정찰 기준점
 	POINT m_PartolSpot;
+	//향하는 방향(x축) ..스프라이트 시트 구분을 위함
+	float m_fDir;
+	
 };
 
 

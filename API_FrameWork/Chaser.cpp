@@ -40,6 +40,8 @@ int CChaser::Update()
 
 	float target_fX = m_pTarget->Get_INFO().fX;
 
+	//타깃과의 거리측정
+	m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
 
 	//타겟이 인식범위안에 들어오면
 	if (m_tInfo.fX + m_fRadius >= target_fX
@@ -67,6 +69,11 @@ void CChaser::Render(HDC _DC)
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
+	(HPEN)SelectObject(_DC, (HPEN)GetStockObject(WHITE_PEN));
+
+	MoveToEx(_DC, m_tInfo.fX + iScrollX, m_tInfo.fY + iScrollY, nullptr);
+	LineTo(_DC, m_PartolSpot.x + iScrollX, m_PartolSpot.y + iScrollY);
+
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
 	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY,
@@ -81,34 +88,34 @@ void CChaser::Release()
 void CChaser::Patrol()
 {
 
-	//방향에 따라 스프라이트 시트 바꾸기.
-	if (m_fSpeed < 0)
-		memcpy(m_pFrameKey, L"chaser_left", sizeof(TCHAR) * DIR_LEN);
-	else
-		memcpy(m_pFrameKey, L"chaser_right", sizeof(TCHAR) * DIR_LEN);
-
 	m_eCurState = STATE::WALK;
 
 	//순찰범위를 벗어나면
-	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol)
+	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol
+		|| m_tInfo.fX > m_PartolSpot.x + m_fPatrol)
 	{
-		if (m_tInfo.fX > m_PartolSpot.x + m_fPatrol)
-		{
-			float fX = m_PartolSpot.x - m_tInfo.fX;
-			//부호만 구해서
-			fX /= fX;
-			//이동
-			m_tInfo.fX += fX * m_fSpeed;
-		}
+		float fX = m_PartolSpot.x - m_tInfo.fX;
+		//순찰장소에 도착하면 리턴
+		if (abs(fX) < 1)
+			return;
+		//왼쪽으로 가야하면 스피드를 -로하자.
+		if (fX < 0)
+			m_fSpeed = m_fSpeed < 0 ? m_fSpeed : m_fSpeed * -1;
+		//아니면 +로 하자.
+		else
+			m_fSpeed = m_fSpeed > 0 ? m_fSpeed : m_fSpeed * -1;
+		m_tInfo.fX += m_fSpeed;
 	}
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
 
 void CChaser::Chase_Target()
 {
@@ -148,6 +155,18 @@ void CChaser::Chase_Target()
 
 void CChaser::Scene_Change()
 {
+
+	//거리가 너무 가까워지면 정신없이 바뀜
+	if (m_distToTarget > 5.f)
+	{
+		//방향에 따라 스프라이트 시트 바꾸기.
+		if (m_fDir < 0)
+			memcpy(m_pFrameKey, L"chaser_left", sizeof(TCHAR) * DIR_LEN);
+		else
+			memcpy(m_pFrameKey, L"chaser_right", sizeof(TCHAR) * DIR_LEN);
+	}
+
+
 	if (m_eCurState != m_ePrvState)
 	{
 		switch (m_eCurState)

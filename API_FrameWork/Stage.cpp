@@ -67,9 +67,9 @@ void CStage::Render(HDC _DC)
 	GdiTransparentBlt(_DC, 0, 0, 172, 106, memDC, 0, 0, 172, 106, RGB(30, 30, 30));
 
 
-	CTileMgr::Get_Instance()->Render(_DC);
-	CImageMgr::Get_Instance()->Render(_DC);
 	CObjMgr::Get_Instance()->Render(_DC);
+	CImageMgr::Get_Instance()->Render(_DC);
+	CTileMgr::Get_Instance()->Render(_DC);
 
 
 }

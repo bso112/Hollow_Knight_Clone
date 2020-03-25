@@ -153,8 +153,10 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chaser.h" />
     <ClInclude Include="CollisionMgr.h" />
+    <ClInclude Include="Fly.h" />
     <ClInclude Include="GuideBullet.h" />
     <ClInclude Include="ImageMgr.h" />
+    <ClInclude Include="Jumper.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="LineMgr.h" />
@@ -170,6 +172,7 @@
     <ClInclude Include="Editor.h" />
     <ClInclude Include="MyImage.h" />
     <ClInclude Include="MyMenu.h" />
+    <ClInclude Include="MyTime.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjMgr.h" />
     <ClInclude Include="PillBug.h" />
@@ -193,8 +196,10 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chaser.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
+    <ClCompile Include="Fly.cpp" />
     <ClCompile Include="GuideBullet.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
+    <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LineMgr.cpp" />
@@ -210,6 +215,7 @@
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="MyImage.cpp" />
     <ClCompile Include="MyMenu.cpp" />
+    <ClCompile Include="MyTime.cpp" />
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="ObjMgr.cpp" />
     <ClCompile Include="PillBug.cpp" />

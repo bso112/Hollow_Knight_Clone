@@ -4,7 +4,7 @@
 #include "CollisionMgr.h"
 
 CMonster::CMonster()
-	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f)
+	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f)
 {
 	m_tStat = {};
 	//몬스터의 타깃은 항상 플레이어

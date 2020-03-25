@@ -51,8 +51,9 @@ int CObjMgr::Update()
 		}
 	}
 
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::TILE]);
+
 	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::MONSTER]);
+
 
 
 	return 0;

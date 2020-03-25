@@ -5,6 +5,7 @@
 
 
 #include "Obj.h"
+
 class CPlayer :	public CObj
 {
 public:
@@ -12,7 +13,7 @@ public:
 	virtual ~CPlayer();
 
 public:
-	enum STATE { IDLE, WALK, ATTACK, HIT, JUMP, DEAD, END };
+	enum STATE { IDLE, WALK, ATTACK, HIT, JUMP, FALL, DEAD, END };
 
 
 public:
@@ -28,7 +29,6 @@ public:
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
-	virtual void OnCollisionEnter(CObj* _pOther);
 
 
 
@@ -56,16 +56,26 @@ private:
 
 	// 점프
 	bool			m_bJump;
-	bool			m_bGround;
-	float			m_fJumpPower;
-	float			m_fJumpAccel;
-	
+
+	//점프 벡터
+	const Vector2	m_JumpVelo;
+	Vector2			m_curJumpVelo;
+	Vector2			m_Gravity;
+	float			m_fDeltaTime;
 
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
 
 	STAT			m_tStat;
 	FRAME			m_tHealthUI;
+
+	//플레이어 전 위치
+	Vector2			m_prvPos;
+	//플레이어 속도
+	Vector2			m_velocity;
+
+	TCHAR*			m_debug;
+
 
 };
 

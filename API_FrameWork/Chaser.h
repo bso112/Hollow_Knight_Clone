@@ -25,7 +25,8 @@ public:
 private:
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
-
+	//타깃과의 유지거리
+	float			m_distToTarget;
 
 };
 

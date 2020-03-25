@@ -42,13 +42,17 @@ void CTileMgr::Update()
 {
 
 }
-
 void CTileMgr::Late_Update()
 {
+
 }
 
 void CTileMgr::Render(HDC _DC)
 {
+	for (auto& tile : m_vecCollTile)
+	{
+		tile->Render(_DC);
+	}
 
 }
 
@@ -56,6 +60,7 @@ void CTileMgr::Release()
 {
 	for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<CObj*>);
 	m_vecTile.clear();
+	m_vecCollTile.clear();
 }
 
 void CTileMgr::Picking_Tile(POINT & _pt)
@@ -72,7 +77,7 @@ void CTileMgr::Picking_Tile(POINT & _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(true);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, m_vecTile[iIndex]);
+	m_vecCollTile.push_back(m_vecTile[iIndex]);
 
 }
 
@@ -95,28 +100,279 @@ void CTileMgr::Delete_Tile(POINT& _pt)
 
 }
 
-bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
+////타일을 밟고 있는가?
+//bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
+//{
+//	float fX;
+//	float fY;
+//	for (auto& tile : m_vecCollTile)
+//	{
+//		//콜라이더 타일이면
+//		if (((CTile*)tile)->Get_isColider())
+//		{
+//			//충돌했고
+//			if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
+//				//상하충돌이고
+//				if (fX > fY)
+//					//만약 타일이 아래에 있으면 밟고 있는것이다.
+//					if (tile->Get_Rect().top < _pObj->Get_Rect().bottom)
+//					{
+//						_fY = tile->Get_Rect().top - (_pObj->Get_INFO().iCY >> 1);
+//						return true;
+//					}
+//		}
+//
+//	}
+//	return false;
+//}
+//
+////아래에 타일이 있는가?
+//bool CTileMgr::RayCast_Down_Tile(CObj* _pObj, float & _fY, float _maxdist)
+//{
+//	//obj의 렉트를 가져와서 그 렉트의 bootom을 maxdist만큼 늘린 렉트(광선)을 만든다.
+//	RECT tmp = _pObj->Get_Rect();
+//	RECT rc = { tmp.left, tmp.top, tmp.right, tmp.bottom + _maxdist };
+//	RECT* pRay = &rc;
+//
+//	RECT tmp2 = {};
+//	float minDist = FLT_MAX;
+//	CObj* minTile = nullptr;
+//	for (auto& tile : m_vecCollTile)
+//	{
+//		//레이의 시작점의 아래에 있는 타일만 검사
+//		if (tile->Get_Rect().top > pRay->top)
+//		{
+//			//렉트와 충돌한 타일 중
+//			if (IntersectRect(&tmp2, pRay, &tile->Get_Rect()))
+//			{
+//				//렉트와 가장 거리가 가까운 타일을 구한다.
+//				float dist = (float)abs(tile->Get_Rect().top - pRay->top);
+//				if (minDist > dist)
+//				{
+//					minDist = dist;
+//					minTile = tile;
+//				}
+//			}
+//		}
+//
+//	}
+//	//예외처리
+//	if (minTile == nullptr)
+//		return false;
+//	//성공. mintile의 top을 넘겨준다.
+//	_fY = minTile->Get_Rect().top;
+//	return true;
+//}
+//
+//CTileMgr::COLLISION CTileMgr::Collision_Tile(CObj * _pObj, RECT& _rc)
+//{
+//	float fX;
+//	float fY;
+//	for (auto& tile : m_vecCollTile)
+//	{
+//
+//		//충돌하면
+//		if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
+//		{
+//			//인자 값에 충돌한 타일의 렉트를 넘겨준다.
+//			_rc = tile->Get_Rect();
+//
+//			//상하충돌이면
+//			if (fX > fY)
+//			{
+//				//만약 타일이 아래에 있으면 밟고 있는것이다.
+//				if (tile->Get_Rect().top <= _pObj->Get_Rect().bottom)
+//				{
+//					return COLLISION::BOTTOM;
+//				}
+//				else
+//				{
+//					return COLLISION::TOP;
+//				}
+//			}
+//			//좌우충돌이면
+//			else
+//			{
+//				//타일이 왼쪽에 있으면
+//				if (tile->Get_Rect().right <= _pObj->Get_Rect().left)
+//					return COLLISION::LEFT;
+//				//오른쪽에 있으면
+//				else
+//					return COLLISION::RIGHT;
+//			}
+//		}
+//
+//
+//
+//	}
+//	return COLLISION::END;
+//}
+
+CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO _info, RECT& _rc)
 {
-	float fX;
-	float fY;
-	for (auto& tile : m_vecTile)
+	//점을 움직일 속도(정확도)
+	float fSpeed = 2.f;
+
+	//dst로 가는 방향구하기
+	Vector2 dir = _dst - _origin;
+	//거리가 가깝거나 너무 멀면 리턴
+	if (dir.magnitude() < 1 || dir.magnitude() > 500)
+		return COLLISION::END;
+	dir = dir.Nomalize();
+
+
+	//점을 시작점으로 셋팅
+	INFO info = _info;
+	info.fX = _origin.fX;
+	info.fY = _origin.fY;
+
+	//충돌에 쓸 렉트
+	RECT rc = {};
+	rc.left = LONG(info.fX - (info.iCX >> 1));
+	rc.top = LONG(info.fY - (info.iCY >> 1));
+	rc.right = LONG(info.fX + (info.iCX >> 1));
+	rc.bottom = LONG(info.fY + (info.iCY >> 1));
+
+
+	Vector2 vec = _dst - Vector2(info.fX, info.fY);
+
+
+	//도착지에 도착할때까지
+	while (vec.magnitude() > 1)
 	{
-		//콜라이더 타일이면
-		if (((CTile*)tile)->Get_isColider())
+		vec = _dst - Vector2(info.fX, info.fY);
+
+		//혹여나 거리가 너무 멀어지면 리턴
+		if (vec.magnitude() > 500)
+			return COLLISION::END;
+
+		//렉트를 이동시킴
+		info.fX += dir.fX * fSpeed;
+		info.fY += dir.fY * fSpeed;
+
+		//렉트 업데이트
+		rc.left = LONG(info.fX - (info.iCX >> 1));
+		rc.top = LONG(info.fY - (info.iCY >> 1));
+		rc.right = LONG(info.fX + (info.iCX >> 1));
+		rc.bottom = LONG(info.fY + (info.iCY >> 1));
+
+		RECT collision;
+
+		float minDist = FLT_MAX;
+		CObj* minTile = nullptr;
+		//가장 거리가 가까운 타일을 구한다.
+		for (auto& tile : m_vecCollTile)
 		{
-			//충돌했고
-			if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
-				//상하충돌이고
-				if (fX > fY)
-					//만약 타일이 아래에 있으면 밟고 있는것이다.
-					if (tile->Get_INFO().fY > _pObj->Get_INFO().fY)
-					{
-						_fY = tile->Get_Rect().top - (_pObj->Get_INFO().iCY >> 1);
-						return true;
-					}
+			float distX = abs(tile->Get_INFO().fX - _dst.fX);
+			float distY = abs(tile->Get_INFO().fY - _dst.fY);
+			float dist = sqrtf(distX * distX + distY * distY);
+			if (minDist > dist)
+			{
+				minDist = dist;
+				minTile = tile;
+			}
+			
 		}
-		
+
+		//만약 충돌이면
+		if (IntersectRect(&collision, &rc, &minTile->Get_Rect()))
+		{
+			_rc = minTile->Get_Rect();
+
+			LONG iCX = collision.right - collision.left;
+			LONG iCY = collision.bottom - collision.top;
+
+			//상하충돌이면
+			if (iCX > iCY)
+			{
+				//만약 타일이 아래에 있으면 밟고 있는것이다.
+				if (minTile->Get_Rect().top <= rc.bottom)
+				{
+					return COLLISION::BOTTOM;
+				}
+				else
+				{
+					return COLLISION::TOP;
+				}
+			}
+			//좌우충돌이면
+			else
+			{
+				//타일이 왼쪽에 있으면
+				if (minTile->Get_Rect().right <= rc.left)
+					return COLLISION::LEFT;
+				//오른쪽에 있으면
+				else
+					return COLLISION::RIGHT;
+			}
+		}
 	}
+
+
+	return COLLISION::END;
+}
+
+bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
+{
+
+
+	float minDist = FLT_MAX;
+	CObj* minTile = nullptr;
+
+	/*
+	문제: 타일의 크기가 작다보니 한번에 여러개의 타일과 충돌한다.
+	해결: 거리가 가장가까운 하나의 타일과만 충돌하자.
+	
+	*/
+	//가장 거리가 가까운 타일을 구한다.
+	for (auto& tile : m_vecCollTile)
+	{
+		float distX = abs(tile->Get_INFO().fX - _pObj->Get_INFO().fX);
+		float distY = abs(tile->Get_INFO().fY - _pObj->Get_INFO().fY);
+		float dist = sqrtf(distX * distX + distY * distY);
+		if (minDist > dist)
+		{
+			minDist = dist;
+			minTile = tile;
+		}
+
+	}
+
+	float fX = 0.f;
+	float fY = 0.f;
+
+	if (CCollisionMgr::Check_Rect(minTile, _pObj, &fX, &fY))
+	{
+		if (fX > fY)
+		{
+			if (minTile->Get_INFO().fY > _pObj->Get_INFO().fY)
+			{
+				_pObj->Set_PosY(-fY);
+				_collision = COLLISION::BOTTOM;
+			}
+			else
+			{
+				_pObj->Set_PosY(fY);
+				_collision = COLLISION::TOP;
+			}
+		}
+		else
+		{
+			if (minTile->Get_INFO().fX > _pObj->Get_INFO().fX)
+			{
+				_pObj->Set_PosX(-fX);
+				_collision = COLLISION::RIGHT;
+			}
+			else
+			{
+				_pObj->Set_PosX(fX);
+				_collision = COLLISION::LEFT;
+			}
+
+		}
+	}
+	
+	
 	return false;
 }
 
@@ -175,7 +431,7 @@ void CTileMgr::Load_Tile()
 		{
 			//콜라이더로 셋팅해준다.
 			dynamic_cast<CTile*>(pObj)->Reverse_isCollider();
-			CObjMgr::Get_Instance()->Add_Object(OBJID::TILE, pObj);
+			m_vecCollTile.push_back(pObj);
 
 		}
 		m_vecTile.emplace_back(pObj);

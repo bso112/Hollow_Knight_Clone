@@ -11,9 +11,11 @@
 #include "TileMgr.h"
 #include "MyImage.h"
 #include "ImageMgr.h"
+#include "CollisionMgr.h"
+#include "MyTime.h"
 
 CPlayer::CPlayer()
-	: m_fDis(0.f), m_bGround(false)
+	: m_fDis(0.f), m_JumpVelo(0.f, -70)
 {
 	ZeroMemory(&m_tPosin, sizeof(m_tPosin));
 }
@@ -27,11 +29,14 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize()
 {
 
+	m_prvPos = Vector2(m_tInfo.fX, m_tInfo.fY);
+	m_velocity = Vector2();
+
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
 	m_tInfo.fX = 400.f;
-	m_tInfo.fY = 1500.f;
+	m_tInfo.fY = 1000.f;
 	m_tInfo.iCX = 75;
 	m_tInfo.iCY = 75;
 
@@ -40,9 +45,8 @@ void CPlayer::Initialize()
 
 	m_fSpeed = 5.f;
 
-	m_bJump = false;
-	m_fJumpPower = 20.f;
-	m_fJumpAccel = 0.f;
+	m_curJumpVelo = m_JumpVelo;
+	m_Gravity = Vector2(0, 5.f);
 
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
@@ -58,8 +62,8 @@ void CPlayer::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/healthUI_skull.bmp", L"healthUI_skull");
 	//CObj* healthUI = CAbstractFactory<CMyImage>::Create(500, 500, L"healthUI_skull", 50, 17);
 	//CImageMgr::Get_Instance()->Add_Image(healthUI);
-	
-	
+
+
 
 	memcpy(m_pFrameKey, L"player_right", DIR_LEN);
 
@@ -70,51 +74,36 @@ int CPlayer::Update()
 	if (m_bDead)
 		return OBJ_DEAD;
 
-#pragma region 체력바 설정
-
-	//float fill = m_tStat.m_fHp / m_tStat.m_fMaxHp;
-
-	//if (fill > 0.75)
-	//{
-	//	m_tHealthUI.iFrameStart = 0;
-	//	m_tHealthUI.iFrameEnd = 0;
-	//	m_tHealthUI.iFrameScene = 0;
-	//	m_tHealthUI.dwFrameTime = GetTickCount();
-	//	m_tHealthUI.dwFrameSpeed = 1000;
-	//}
-	//else if (fill > 0.5)
-	//{
-	//	m_tHealthUI.iFrameStart = 1;
-	//	m_tHealthUI.iFrameEnd = 1;
-	//}
-	//else if (fill > 0.25)
-	//{
-	//	m_tHealthUI.iFrameStart = 2;
-	//	m_tHealthUI.iFrameEnd = 2;
-	//}
-	//else
-	//{
-	//	m_tHealthUI.iFrameStart = 3;
-	//	m_tHealthUI.iFrameEnd = 3;
-	//}
+	//델타타임 구하기
+	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
+	//프레임사이의 간격이 너무 크면 안됨.
+	if (m_fDeltaTime > 0.15f)
+		m_fDeltaTime = 0.15f;
 
 
+	Vector2 currPos(m_tInfo.fX, m_tInfo.fY);
 
-#pragma endregion
+	////속도 구하기
+	m_velocity = currPos - m_prvPos;
 
-	
+	//이전 위치를 갱신
+	m_prvPos = currPos;
 
-	//상시중력
-	static float fAccel = 0;
-	float fY = 0.f;
-	if (!m_bJump && !CTileMgr::Get_Instance()->IsStepOnTile(this, fY))
+	if (!m_bJump)
 	{
-		m_tInfo.fY -= 1 * fAccel
-			- 9.8f * fAccel * fAccel * 0.5f;
-		fAccel += 0.1f;
+		//점프일때는 따로 콜리전 체크해줌
+		CTileMgr::COLLISION collision = CTileMgr::END;
+		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
+
+		//추락일때 애니메이션 실행
+		if (collision == CTileMgr::END)
+			m_eCurState = STATE::FALL;
+		else
+			m_eCurState = STATE::IDLE;
+		
+		//상시 중력적용
+		m_tInfo.fY += m_Gravity.fY;
 	}
-	else
-		fAccel = 0.f;
 
 
 	Key_Check();
@@ -147,9 +136,51 @@ void CPlayer::Render(HDC _DC)
 		, m_tInfo.iCX, m_tInfo.iCY, hMemDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY *m_tFrame.iFrameScene, m_tInfo.iCX, m_tInfo.iCY
 		, RGB(30, 30, 30));
 
-	hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"healthUI_skull");
-	
+#pragma region DEBUG
 
+	switch (m_eCurState)
+	{
+	case CPlayer::IDLE:
+		m_debug = L"휴식";
+		break;
+	case CPlayer::WALK:
+		m_debug = L"걷기";
+		break;
+	case CPlayer::ATTACK:
+		m_debug = L"공격";
+		break;
+	case CPlayer::HIT:
+		m_debug = L"피격";
+		break;
+	case CPlayer::JUMP:
+		m_debug = L"점프";
+		break;
+	case CPlayer::FALL:
+		m_debug = L"추락";
+		break;
+	case CPlayer::DEAD:
+		m_debug = L"죽음";
+		break;
+	case CPlayer::END:
+		m_debug = L"끝";
+		break;
+	default:
+		break;
+	}
+	TCHAR		szBuff[32] = L"상태 : ";
+	lstrcat(szBuff, m_debug);
+	TextOut(_DC, 500, 500, szBuff, lstrlen(szBuff));
+
+#pragma endregion
+	//SelectObject(_DC, GetStockObject(WHITE_PEN));
+	//Rectangle(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
+
+	TextOut(_DC, 500, 200, m_debug, lstrlen(m_debug));
+
+
+#pragma region UI
+
+	hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"healthUI_skull");
 	if (m_eCurState == STATE::HIT)
 	{
 		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"player_hit");
@@ -158,6 +189,9 @@ void CPlayer::Render(HDC _DC)
 			, 120, 70, hMemDC, 0, 0, 120, 70
 			, RGB(30, 30, 30));
 	}
+
+#pragma endregion
+
 
 
 }
@@ -170,51 +204,12 @@ void CPlayer::Release()
 
 void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 {
-	float fX = _fX;
-	float fY = _fY;
-	CObj* tile = _pOther;
 
-	//타일과 부딪혔을때는 더이상 나아가지 못한다.
-	if (_pOther->Get_Tag() == OBJTAG::TILE)
-	{
-
-		//땅에 있다. 따라서 점프 초기화(이거 점프에 두면 안됨..)
-
-		//X축 충돌영역이 더 많으면 상하로 충돌한 것이다.
-		if (fX < fY)
-		{
-			//만약 타일이 위에 있다면
-			if (tile->Get_INFO().fY < m_tInfo.fY)
-				m_tInfo.fY = tile->Get_Rect().bottom + (m_tInfo.iCY >> 1);
-			//만약 타일이 아래 있다면
-			else
-			{
-				//땅에 있다. 따라서 점프 초기화(이거 점프에 두면 안됨..)
-				m_bJump = false;
-				m_fJumpAccel = 0.f;
-
-				m_tInfo.fY = tile->Get_Rect().top - (m_tInfo.iCY >> 1);
-			}
-		}
-		else
-		{
-			////만약 타일이 왼쪽에 있다면
-			//if (tile->Get_INFO().fX < m_tInfo.fX)
-			//	m_tInfo.fX = tile->Get_Rect().right + (m_tInfo.iCX >> 1);
-			//else
-			//	//만약 타일이 오른쪽에 있다면
-			//	m_tInfo.fX = tile->Get_Rect().left - (m_tInfo.iCX >> 1);
-		}
-	}
-	else if (_pOther->Get_Tag() == OBJTAG::MONSTER)
+	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 	{
 		m_eCurState = STATE::HIT;
 	}
 
-}
-
-void CPlayer::OnCollisionEnter(CObj * _pOther)
-{
 
 }
 
@@ -222,22 +217,20 @@ void CPlayer::OnCollisionEnter(CObj * _pOther)
 
 void CPlayer::Key_Check()
 {
-	if (m_eCurState != STATE::HIT)
-		//기본 IDEL상태
-		m_eCurState = STATE::IDLE;
-
 
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
 		memcpy(m_pFrameKey, L"player_left", DIR_LEN);
-		m_eCurState = STATE::WALK;
+		if(m_eCurState != STATE::FALL)
+			m_eCurState = STATE::WALK;
 		m_tInfo.fX -= m_fSpeed;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
 		memcpy(m_pFrameKey, L"player_right", DIR_LEN);
-		m_eCurState = STATE::WALK;
+		if (m_eCurState != STATE::FALL)
+			m_eCurState = STATE::WALK;
 		m_tInfo.fX += m_fSpeed;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
@@ -249,11 +242,6 @@ void CPlayer::Key_Check()
 	if (CKeyMgr::Get_Instance()->Key_Pressing('X'))
 		m_eCurState = STATE::ATTACK;
 
-	//점프상태면 state는 계속 점프
-	if (m_bJump)
-	{
-		m_eCurState = STATE::JUMP;
-	}
 }
 
 void CPlayer::Scene_Change()
@@ -275,19 +263,14 @@ void CPlayer::Scene_Change()
 		{
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 3;
+			m_tFrame.iFrameScene = 4;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			break;
 		}
 		case CPlayer::ATTACK:
 		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 2;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 200;
-			break;
+
 		}
 		case CPlayer::HIT:
 		{
@@ -297,8 +280,18 @@ void CPlayer::Scene_Change()
 		case CPlayer::JUMP:
 		{
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameEnd = 1;
 			m_tFrame.iFrameScene = 1;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
+			break;
+		}
+		case CPlayer::FALL:
+		{
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			break;
@@ -320,10 +313,37 @@ void CPlayer::Jumping()
 
 	if (m_bJump)
 	{
-		m_tInfo.fY -= m_fJumpPower * m_fJumpAccel
-			- 9.8f * m_fJumpAccel * m_fJumpAccel * 0.5f;
-		m_fJumpAccel += 0.2f;
+		//스페이스 누르고있으면 더 높이 점프
+		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_SPACE))
+			m_curJumpVelo.fY -= 3.7f;
+		
+		//추락이면
+		if (m_curJumpVelo.fY > 0)
+		{
+			m_eCurState = STATE::FALL;
+		}
+		else
+			m_eCurState = STATE::JUMP;
+
+		//중력적용
+		m_curJumpVelo += m_Gravity;
+
+		m_tInfo.fX += m_curJumpVelo.fX * m_fDeltaTime;
+		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
+
+		//점프상태이고, 바닥과 충돌이면 점프해제
+		CTileMgr::COLLISION collision = CTileMgr::END;
+		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
+
+		if (collision == CTileMgr::BOTTOM)
+		{
+			//점프 초기화
+			m_curJumpVelo = m_JumpVelo;
+			m_bJump = false;
+		}
+
 	}
+
 
 }
 

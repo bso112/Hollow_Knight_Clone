@@ -12,6 +12,7 @@
 #include "ScrollMgr.h"
 #include "TileMgr.h"
 #include "ImageMgr.h"
+#include "MyTime.h"
 
 
 CMainGame::CMainGame()
@@ -31,13 +32,15 @@ void CMainGame::Initialize()
 	m_DC = GetDC(g_hWnd);
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BackBuffer.bmp", L"BackBuffer");
-
+	
+	CMyTime::Get_Instance()->Initalize();
 	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_LOGO);
 }
 
 void CMainGame::Update()
 {
 	CSceneMgr::Get_Instance()->Update();
+	CMyTime::Get_Instance()->Update();
 }
 
 void CMainGame::Late_Update()

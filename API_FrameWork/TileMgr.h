@@ -11,6 +11,8 @@ private:
 	~CTileMgr();
 
 public:
+	enum COLLISION { LEFT, RIGHT, TOP, BOTTOM, END};
+public:
 	//타일을 그린다
 	void Initialize();
 	void Update();
@@ -22,8 +24,15 @@ public:
 	//마우스로 클릭했을때, 해당 타일을 그린다.
 	void Picking_Tile(POINT& _pt);
 	void Delete_Tile(POINT& _pt);
-	//타일을 밟고 있는가?
-	bool IsStepOnTile(CObj* _pObj, float& _fY);
+	////타일을 밟고 있는가?
+	//bool IsStepOnTile(CObj* _pObj, float& _fY);
+	////밑에 타일이 있는가?
+	//bool RayCast_Down_Tile(CObj* _pObj, float & _fY, float _maxdist);
+	////타일과 충돌처리. 충돌한 타일의 렉트정보를 넘겨준다.
+	//COLLISION Collision_Tile(CObj* _pObj, RECT& _rc);
+	COLLISION Collision_Tile(Vector2 _origin, Vector2 _dst, INFO _info, RECT& _rc);
+
+	bool Collision_Ex(CObj* _pObj, CTileMgr::COLLISION& _collision);
 
 public:
 	//그린 타일을 저장한다.
@@ -47,6 +56,8 @@ private:
 	static CTileMgr*	m_pInstance;
 	//타일의 벡터
 	vector<CObj*>		m_vecTile;
+
+	vector<CObj*>		m_vecCollTile;
 };
 
 

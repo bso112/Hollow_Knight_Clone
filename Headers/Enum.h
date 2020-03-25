@@ -11,7 +11,7 @@ namespace BULLET
 namespace OBJID
 {
 
-	enum ID { PLAYER, MONSTER, BULLET, TILE, UI, MOUSE, END };
+	enum ID { UI, PLAYER, MONSTER, TILE, END };
 	
 
 }
@@ -23,7 +23,7 @@ namespace OBJTAG
 
 namespace SAVEDATA
 {
-	enum TAG { PILLBUG, CHASER, TERRAIN, END };
+	enum TAG { PILLBUG, CHASER, TERRAIN, FLY, JUMPER, END };
 }
 
 

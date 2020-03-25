@@ -44,6 +44,10 @@ typedef struct tagFrame
 	DWORD		dwFrameSpeed;
 	//프레임을 실행한 초를 세기 위한 타이머
 	DWORD		dwFrameTime;
+	//루프유무
+	bool		bLoop;
+
+	tagFrame() :bLoop(true) {};
 
 
 }FRAME;
@@ -61,5 +65,97 @@ typedef struct tagStat
 	}
 
 }STAT;
+
+
+typedef struct tagVector2
+{
+	float fX;
+	float fY;
+
+	tagVector2() { fX = 0; fY = 0; }
+
+	tagVector2(float _fX, float _fY)
+	{
+		fX = _fX;
+		fY = _fY;
+	}
+
+	tagVector2 operator+(tagVector2 _vec)
+	{
+		return tagVector2(fX + _vec.fX, fY + _vec.fY);
+	}
+
+	tagVector2 operator-(tagVector2 _vec)
+	{
+		return Vector2(fX - _vec.fX, fY - _vec.fY);
+	}
+	tagVector2& operator+=(tagVector2 _vec)
+	{
+		fX += _vec.fX;
+		fY += _vec.fY;
+		return *this;
+	}
+
+	tagVector2& operator-=(tagVector2 _vec)
+	{
+		fX -= _vec.fX;
+		fY -= _vec.fY;
+		return *this;
+	}
+
+	tagVector2& operator+=(int _scalar)
+	{
+		fX += _scalar;
+		fY += _scalar;
+		return *this;
+	}
+
+	tagVector2& operator-=(int _scalar)
+	{
+		fX -= _scalar;
+		fY -= _scalar;
+		return *this;
+	}
+
+	tagVector2 operator*(int _scalar)
+	{
+		return Vector2(fX * _scalar, fY * _scalar);
+	}
+	tagVector2 operator+(int _scalar)
+	{
+
+		return Vector2(fX  +_scalar, fY + _scalar);
+	}
+
+	tagVector2 operator-(int _scalar)
+	{
+		return Vector2(fX  -_scalar, fY - _scalar);
+	}
+
+
+
+	tagVector2 Nomalize()
+	{
+		tagVector2 vec = {};
+		float mag = magnitude();
+		// 0으로는 나눌 수 없다.
+		if (mag > 0)
+		{
+			vec.fX = fX / mag;
+			vec.fY = fY / mag;
+			return vec;
+		}
+		//벡터의 길이가 0 이면 빈 벡터를 출력 
+		return vec;
+	}
+
+	float magnitude()
+	{
+		return sqrtf(fX*fX + fY * fY);
+	}
+
+}Vector2;
+
+
 
 #endif // !__STRUCT_H__

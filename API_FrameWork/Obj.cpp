@@ -20,15 +20,27 @@ void CObj::Move_Frame()
 {
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
-		++m_tFrame.iFrameStart;
-		m_tFrame.dwFrameTime = GetTickCount();
 
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = 0;
+		if (m_tFrame.iFrameStart < m_tFrame.iFrameEnd)
+		{
+			++m_tFrame.iFrameStart;
+			m_tFrame.dwFrameTime = GetTickCount();
+
+		}
+		else
+		{
+			if (m_tFrame.bLoop)
+				m_tFrame.iFrameStart = 0;
+			else
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+		}
 	}
-
-
 }
+
+
+
+
+
 
 void CObj::OnCollisionEnter(CObj * _pOther)
 {
