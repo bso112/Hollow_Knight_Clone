@@ -34,6 +34,8 @@ public:
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
 	virtual void OnCollisionStay(CObj* _pOther, float _fX, float _fY) override;
+	virtual void OnCollisionExit(CObj* _pOther, float _fX, float _fY) override;
+
 
 
 private:

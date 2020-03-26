@@ -65,7 +65,7 @@ protected:
 
 	OBJTAG::TAG m_eTag;
 
-private:
+protected:
 	//충돌했나
 	bool	m_bCollided;
 

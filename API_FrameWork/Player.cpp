@@ -214,9 +214,11 @@ void CPlayer::Release()
 void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 {
 
+	static int cnt = 0;
+	
 	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 	{
-		m_eCurState = STATE::HIT;
+		++cnt;
 	}
 
 
@@ -224,6 +226,23 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 
 void CPlayer::OnCollisionStay(CObj * _pOther, float _fX, float _fY)
 {
+	static int cnt = 0;
+
+	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
+	{
+		++cnt;
+	}
+
+}
+
+void CPlayer::OnCollisionExit(CObj * _pOther, float _fX, float _fY)
+{
+	static int cnt2 = 0;
+
+	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
+	{
+		++cnt2;
+	}
 }
 
 

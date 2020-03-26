@@ -35,21 +35,19 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
-				Src->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Dst, fX, fY);
 
 			}
 			else
 			{
-				if (Dst->Get_isCollided())
+				if (Dst->Get_isCollided() && Src->Get_isCollided())
 				{
 					Dst->OnCollisionExit(Src, fX, fY);
 					Dst->Set_isCollided(false);
-				}
-				if (Src->Get_isCollided())
-				{
-					Src->OnCollisionExit(Src, fX, fY);
+					Src->OnCollisionExit(Dst, fX, fY);
 					Src->Set_isCollided(false);
 				}
+
 			}
 		}
 	}
@@ -77,21 +75,19 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
-				Src->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Dst, fX, fY);
 
 			}
 			else
 			{
-				if (Dst->Get_isCollided())
+				if (Dst->Get_isCollided() && Src->Get_isCollided())
 				{
 					Dst->OnCollisionExit(Src, fX, fY);
 					Dst->Set_isCollided(false);
-				}
-				if (Src->Get_isCollided())
-				{
-					Src->OnCollisionExit(Src, fX, fY);
+					Src->OnCollisionExit(Dst, fX, fY);
 					Src->Set_isCollided(false);
 				}
+
 			}
 		}
 	}
@@ -117,21 +113,19 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
-				Src->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Dst, fX, fY);
 
 			}
 			else
 			{
-				if (Dst->Get_isCollided())
+				if (Dst->Get_isCollided() && Src->Get_isCollided())
 				{
 					Dst->OnCollisionExit(Src, fX, fY);
 					Dst->Set_isCollided(false);
-				}
-				if (Src->Get_isCollided())
-				{
-					Src->OnCollisionExit(Src, fX, fY);
+					Src->OnCollisionExit(Dst, fX, fY);
 					Src->Set_isCollided(false);
 				}
+
 			}
 		}
 	}
