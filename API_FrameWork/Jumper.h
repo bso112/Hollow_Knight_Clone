@@ -34,7 +34,7 @@ private:
 	bool			m_bJump;
 	float			m_fJumpPower;
 	float			m_fJumpAccel;
-	
+
 	//มกวม บคลอ
 	const Vector2	m_JumpVelo;
 	Vector2			m_curJumpVelo;

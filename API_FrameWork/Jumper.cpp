@@ -25,8 +25,8 @@ void CJumper::Initialize()
 	m_Gravity = Vector2(0, 2.f);
 	m_curJumpVelo = m_JumpVelo;
 
-	m_tInfo.iCX = 200;
-	m_tInfo.iCY = 200;
+	m_tInfo.iCX = 150;
+	m_tInfo.iCY = 150;
 	m_tStat = STAT(80);
 
 	//스폰된 장소가 정찰의 중심점
@@ -82,10 +82,10 @@ int CJumper::Update()
 
 	//타깃이 공격범위안에 들어오면 공격
 
-	
+
 
 	//타겟이 인식범위안에 들어오면
-	if ((m_tInfo.fX + m_fRadius >= target_fX && m_tInfo.fX - m_fRadius <= target_fX) || m_bJump)
+	if ((m_distToTarget < m_fRadius) || m_bJump)
 	{
 		//놀라고
 
@@ -130,29 +130,28 @@ void CJumper::Release()
 void CJumper::Patrol()
 {
 
-	m_eCurState = STATE::WALK;
-
 
 	//순찰범위를 벗어나면
 	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol
 		|| m_tInfo.fX > m_PartolSpot.x + m_fPatrol)
 	{
-		float fX = m_PartolSpot.x - m_tInfo.fX;
-		//순찰장소에 도착하면 리턴
-		if (abs(fX) < 1)
-		{
-			m_eCurState = STATE::IDLE;
-			return;
-		}
-		//왼쪽으로 가야하면 스피드를 -로하자.
-		if (fX < 0)
-			m_fSpeed = m_fSpeed < 0 ? m_fSpeed : m_fSpeed * -1;
-		//아니면 +로 하자.
-		else
-			m_fSpeed = m_fSpeed > 0 ? m_fSpeed : m_fSpeed * -1;
+		Vector2 dirToPatrol = Vector2((float)m_PartolSpot.x, (float)m_PartolSpot.y) - Vector2(m_tInfo.fX, m_tInfo.fY);
+		//순찰 장소와의 거리측정
+		float distToPatrol = dirToPatrol.magnitude();
 
-		//순찰 장소를 중심으로 순찰하기.
-		m_tInfo.fX += m_fSpeed;
+		dirToPatrol = dirToPatrol.Nomalize();
+
+		//도착할때까지
+		if (distToPatrol > 2)
+		{
+			//순찰장소로 간다.
+			m_tInfo.fX += dirToPatrol.fX * m_fSpeed;
+
+			dirToPatrol.fX < 0 ? m_fDir = -abs(m_fDir) : m_fDir = abs(m_fDir);
+
+		}
+
+
 	}
 
 }
@@ -160,16 +159,15 @@ void CJumper::Patrol()
 void CJumper::Chase_Target()
 {
 
-
 	if (m_pTarget->Get_INFO().fX - m_tInfo.fX < 0)
 		m_fDir = -1;
 	else
 		m_fDir = 1;
 
 
-	
+
 	static DWORD timer = GetTickCount();
-	
+
 	static float jumpDir = 0.f;
 	//2초에 한번씩 점프
 	if (timer + 2000 < GetTickCount())
@@ -188,7 +186,7 @@ void CJumper::Chase_Target()
 		//중력적용
 		m_curJumpVelo += m_Gravity;
 
-		
+
 		m_tInfo.fX += m_curJumpVelo.fX * jumpDir * m_fDeltaTime;
 		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
 
@@ -212,7 +210,7 @@ void CJumper::Chase_Target()
 void CJumper::Scene_Change()
 {
 	//거리가 너무 가까워지면 정신없이 바뀜
-	if (m_distToTarget > 5.f)
+	if (m_distToTarget > 1.f)
 	{
 		//방향에 따라 스프라이트 시트 바꾸기.
 		if (m_fDir < 0)
@@ -220,7 +218,7 @@ void CJumper::Scene_Change()
 		else
 			memcpy(m_pFrameKey, L"jumper_right", sizeof(TCHAR) * DIR_LEN);
 	}
-	
+
 
 
 	if (m_eCurState != m_ePrvState)
@@ -234,6 +232,7 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case WALK:
@@ -243,6 +242,7 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case JUMP:
@@ -252,6 +252,7 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case ATTACK:
@@ -261,6 +262,7 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameScene = 3;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 500;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case DEAD:
@@ -270,6 +272,7 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameScene = 4;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case END:

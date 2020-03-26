@@ -95,14 +95,23 @@ int CPlayer::Update()
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
+		static float CurrGravity = 5.f;
+
 		//추락일때 애니메이션 실행
 		if (collision == CTileMgr::END)
+		{
 			m_eCurState = STATE::FALL;
+
+		}
 		else
+		{
+			CurrGravity = m_Gravity.fY;
 			m_eCurState = STATE::IDLE;
-		
-		//상시 중력적용
+		}
+
 		m_tInfo.fY += m_Gravity.fY;
+
+
 	}
 
 
@@ -222,7 +231,7 @@ void CPlayer::Key_Check()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
 		memcpy(m_pFrameKey, L"player_left", DIR_LEN);
-		if(m_eCurState != STATE::FALL)
+		if (m_eCurState != STATE::FALL)
 			m_eCurState = STATE::WALK;
 		m_tInfo.fX -= m_fSpeed;
 	}
@@ -235,7 +244,8 @@ void CPlayer::Key_Check()
 	}
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
-		m_bJump = true;
+		if (m_eCurState != STATE::FALL)
+			m_bJump = true;
 	}
 
 	//공격키 누르면 공격상태
@@ -257,6 +267,7 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CPlayer::WALK:
@@ -266,6 +277,7 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = 4;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CPlayer::ATTACK:
@@ -294,6 +306,7 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case CPlayer::DEAD:
@@ -316,7 +329,7 @@ void CPlayer::Jumping()
 		//스페이스 누르고있으면 더 높이 점프
 		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_SPACE))
 			m_curJumpVelo.fY -= 3.7f;
-		
+
 		//추락이면
 		if (m_curJumpVelo.fY > 0)
 		{
@@ -328,6 +341,7 @@ void CPlayer::Jumping()
 		//중력적용
 		m_curJumpVelo += m_Gravity;
 
+		// * m_fDeltaTime을 해주면 1초에 m_curJumpVelo만큼 이동한다.
 		m_tInfo.fX += m_curJumpVelo.fX * m_fDeltaTime;
 		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
 
@@ -356,12 +370,12 @@ void CPlayer::OffSet()
 
 	if (iOffSetX < (m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
-	if (iOffSetX > (m_tInfo.fX + iScrollX))
+	if (iOffSetX >(m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
 
 	if (iOffSetY < (m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
-	if (iOffSetY > (m_tInfo.fY + iScrollY))
+	if (iOffSetY >(m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
 }
 

@@ -25,6 +25,8 @@ void CChaser::Initialize()
 	m_tInfo.iCY = 100;
 	m_tStat = STAT(50);
 
+	m_fDir = 1.f;
+
 	//스폰된 장소가 정찰의 중심점
 	m_PartolSpot.x = (LONG)m_tInfo.fX;
 	m_PartolSpot.y = (LONG)m_tInfo.fY;
@@ -44,8 +46,7 @@ int CChaser::Update()
 	m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
 
 	//타겟이 인식범위안에 들어오면
-	if (m_tInfo.fX + m_fRadius >= target_fX
-		&& m_tInfo.fX - m_fRadius <= target_fX)
+	if (m_distToTarget < m_fRadius)
 	{
 		//추격상태가 된다.
 		Chase_Target();
@@ -88,33 +89,33 @@ void CChaser::Release()
 void CChaser::Patrol()
 {
 
-	m_eCurState = STATE::WALK;
+	m_eCurState = STATE::IDLE;
 
 	//순찰범위를 벗어나면
 	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol
 		|| m_tInfo.fX > m_PartolSpot.x + m_fPatrol)
 	{
-		float fX = m_PartolSpot.x - m_tInfo.fX;
-		//순찰장소에 도착하면 리턴
-		if (abs(fX) < 1)
-			return;
-		//왼쪽으로 가야하면 스피드를 -로하자.
-		if (fX < 0)
-			m_fSpeed = m_fSpeed < 0 ? m_fSpeed : m_fSpeed * -1;
-		//아니면 +로 하자.
-		else
-			m_fSpeed = m_fSpeed > 0 ? m_fSpeed : m_fSpeed * -1;
-		m_tInfo.fX += m_fSpeed;
+
+		m_eCurState = STATE::WALK;
+
+		Vector2 dirToPatrol = Vector2((float)m_PartolSpot.x, (float)m_PartolSpot.y) - Vector2(m_tInfo.fX, m_tInfo.fY);
+		//순찰 장소와의 거리측정
+		float distToPatrol = dirToPatrol.magnitude();
+
+		dirToPatrol = dirToPatrol.Nomalize();
+
+		//도착할때까지
+		if (distToPatrol > 2)
+		{
+			//순찰장소로 간다.
+			m_tInfo.fX += dirToPatrol.fX * m_fSpeed;
+
+			dirToPatrol.fX < 0 ? m_fDir = -1 : m_fDir = 1;
+
+		}
+
 	}
 }
-
-
-
-
-
-
-
-
 
 
 void CChaser::Chase_Target()
@@ -141,14 +142,17 @@ void CChaser::Chase_Target()
 		{
 			//왼쪽으로 감
 			m_tInfo.fX -= m_fSpeed + 3;
-			memcpy(m_pFrameKey, L"chaser_left", sizeof(TCHAR) * DIR_LEN);
+			m_fDir = -1;
 		}
 		else
 		{
-			memcpy(m_pFrameKey, L"chaser_right", sizeof(TCHAR) * DIR_LEN);
+			//오른쪽으로 감
 			m_tInfo.fX += m_fSpeed + 3;
+			m_fDir = 1;
 		}
 	}
+	else
+		m_eCurState = STATE::IDLE;
 
 
 }
@@ -157,7 +161,7 @@ void CChaser::Scene_Change()
 {
 
 	//거리가 너무 가까워지면 정신없이 바뀜
-	if (m_distToTarget > 5.f)
+	if (m_distToTarget > 1.f)
 	{
 		//방향에 따라 스프라이트 시트 바꾸기.
 		if (m_fDir < 0)
@@ -178,6 +182,7 @@ void CChaser::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CChaser::WALK:
@@ -187,6 +192,7 @@ void CChaser::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CChaser::RUN:
@@ -196,6 +202,7 @@ void CChaser::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CChaser::HIT:
@@ -205,6 +212,7 @@ void CChaser::Scene_Change()
 			m_tFrame.iFrameScene = 3;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 500;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case CChaser::DEAD:
@@ -214,6 +222,7 @@ void CChaser::Scene_Change()
 			m_tFrame.iFrameScene = 4;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case CChaser::END:

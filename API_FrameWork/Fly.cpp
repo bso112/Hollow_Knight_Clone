@@ -149,11 +149,12 @@ void CFly::Chase_Target()
 
 }
 
+
 void CFly::Scene_Change()
 {
 
 	//거리가 너무 가까워지면 정신없이 바뀜
-	if (m_distToTarget > 5.f)
+	if (m_distToTarget > 1.f)
 	{
 		//방향에 따라 스프라이트 시트 바꾸기.
 		if (m_fDir < 0)
@@ -174,6 +175,7 @@ void CFly::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case WALK:
@@ -187,6 +189,7 @@ void CFly::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case HIT:
@@ -196,6 +199,7 @@ void CFly::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 500;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case DEAD:
@@ -205,6 +209,7 @@ void CFly::Scene_Change()
 			m_tFrame.iFrameScene = 3;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case END:
@@ -216,3 +221,4 @@ void CFly::Scene_Change()
 		m_ePrvState = m_eCurState;
 	}
 }
+
