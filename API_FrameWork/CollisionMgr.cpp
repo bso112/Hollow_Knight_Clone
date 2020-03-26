@@ -18,15 +18,38 @@ CCollisionMgr::~CCollisionMgr()
 bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 {
 	RECT rc = {};
-	for(auto& Dst : _Dst)
+	for (auto& Dst : _Dst)
 	{
-		for(auto& Src : _Src)
+		float fX = 0.f, fY = 0.f;
+
+		for (auto& Src : _Src)
 		{
 			if (IntersectRect(&rc, &Dst->Get_Rect(), &Src->Get_Rect()))
 			{
-				Dst->OnCollisionEnter(Src);
-				Src->OnCollisionEnter(Dst);
-				return true;
+				if (!Dst->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+				if (!Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
+
+				Dst->Set_isCollided(true);
+				Src->Set_isCollided(true);
+
+				Dst->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Src, fX, fY);
+
+			}
+			else
+			{
+				if (Dst->Get_isCollided())
+				{
+					Dst->OnCollisionExit(Src, fX, fY);
+					Dst->Set_isCollided(false);
+				}
+				if (Src->Get_isCollided())
+				{
+					Src->OnCollisionExit(Src, fX, fY);
+					Src->Set_isCollided(false);
+				}
 			}
 		}
 	}
@@ -35,17 +58,40 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 
 void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 {
-	for(auto& Dst : _Dst)
+
+
+	for (auto& Dst : _Dst)
 	{
-		for(auto& Src : _Src)
+		for (auto& Src : _Src)
 		{
 			float fX = 0.f, fY = 0.f;
 
-			if(Check_Rect(Dst, Src, &fX, &fY))
+ 			if (Check_Rect(Dst, Src, &fX, &fY))
 			{
-				Dst->OnCollisionEnter(Src, fX, fY);
-				Src->OnCollisionEnter(Dst, fX, fY);
+				if(!Dst->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+				if(!Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
 
+				Dst->Set_isCollided(true);
+				Src->Set_isCollided(true);
+
+				Dst->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Src, fX, fY);
+
+			}
+			else
+			{
+				if (Dst->Get_isCollided())
+				{
+					Dst->OnCollisionExit(Src, fX, fY);
+					Dst->Set_isCollided(false);
+				}
+				if (Src->Get_isCollided())
+				{
+					Src->OnCollisionExit(Src, fX, fY);
+					Src->Set_isCollided(false);
+				}
 			}
 		}
 	}
@@ -53,14 +99,39 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 
 void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 {
-	for(auto& Dst : _Dst)
+	for (auto& Dst : _Dst)
 	{
-		for(auto& Src : _Src)
+
+		for (auto& Src : _Src)
 		{
-			if(Check_Sphere(Dst, Src))
+			float fX = 0.f, fY = 0.f;
+
+			if (Check_Sphere(Dst, Src))
 			{
-				Dst->OnCollisionEnter(Dst);
-				Src->OnCollisionEnter(Src);
+				if (!Dst->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+				if (!Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
+
+				Dst->Set_isCollided(true);
+				Src->Set_isCollided(true);
+
+				Dst->OnCollisionStay(Src, fX, fY);
+				Src->OnCollisionStay(Src, fX, fY);
+
+			}
+			else
+			{
+				if (Dst->Get_isCollided())
+				{
+					Dst->OnCollisionExit(Src, fX, fY);
+					Dst->Set_isCollided(false);
+				}
+				if (Src->Get_isCollided())
+				{
+					Src->OnCollisionExit(Src, fX, fY);
+					Src->Set_isCollided(false);
+				}
 			}
 		}
 	}
@@ -118,7 +189,7 @@ bool CCollisionMgr::Check_Rect(CObj* _Dst, CObj* _Src, float* _x, float* _y)
 	int iCX = (_Dst->Get_INFO().iCX + _Src->Get_INFO().iCX) >> 1;
 	int iCY = (_Dst->Get_INFO().iCY + _Src->Get_INFO().iCY) >> 1;
 
-	if(iCX > fX && iCY > fY)
+	if (iCX > fX && iCY > fY)
 	{
 		*_x = iCX - fX;
 		*_y = iCY - fY;

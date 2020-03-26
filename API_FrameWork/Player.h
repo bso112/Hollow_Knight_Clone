@@ -27,10 +27,13 @@ public:
 	void Set_Bullet(list<CObj*>* _pBullet) { m_pBullet = _pBullet; }
 	void Set_Shield(list<CObj*>* _pShield) { m_pShield = _pShield; }
 
+
 public:
-	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
+	void TakeDamage(float _fDamage) { m_tStat.m_fHp -= _fDamage; if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0; }
 
-
+public:
+	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
+	virtual void OnCollisionStay(CObj* _pOther, float _fX, float _fY) override;
 
 
 private:
@@ -38,6 +41,9 @@ private:
 	void Scene_Change();
 	void Jumping();
 	void OffSet();
+
+
+	
 
 private:
 	template <typename T>

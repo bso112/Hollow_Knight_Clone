@@ -41,9 +41,14 @@ public:
 	const OBJTAG::TAG Get_Tag() const { return m_eTag; }
 
 public:
-	virtual void OnCollisionEnter(CObj* _pOther);
-	//충돌영역을 전달하는 콜리전엔터
+	bool Get_isCollided() { return m_bCollided; }
+	void Set_isCollided(bool _bCollided) { m_bCollided = _bCollided; }
+
+public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
+	virtual void OnCollisionStay(CObj* _pOther, float _fX, float _fY);
+	virtual void OnCollisionExit(CObj* _pOther, float _fX, float _fY);
+
 protected:
 	INFO	m_tInfo;
 	RECT	m_tRect;
@@ -59,6 +64,10 @@ protected:
 	TCHAR	m_pFrameKey[DIR_LEN];
 
 	OBJTAG::TAG m_eTag;
+
+private:
+	//충돌했나
+	bool	m_bCollided;
 
 
 };

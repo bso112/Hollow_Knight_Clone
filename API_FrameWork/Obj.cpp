@@ -3,7 +3,8 @@
 
 
 CObj::CObj()
-	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_pFrameKey(L""), m_eTag(OBJTAG::END)
+	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_pFrameKey(L""), m_eTag(OBJTAG::END),
+	m_bCollided(false)
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
@@ -42,13 +43,16 @@ void CObj::Move_Frame()
 
 
 
-
-
-void CObj::OnCollisionEnter(CObj * _pOther)
+void CObj::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 {
 }
 
-void CObj::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
+void CObj::OnCollisionStay(CObj * _pOther, float _fX, float _fY)
+{
+
+}
+
+void CObj::OnCollisionExit(CObj * _pOther, float _fX, float _fY)
 {
 }
 

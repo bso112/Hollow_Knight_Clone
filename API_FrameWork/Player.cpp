@@ -222,6 +222,10 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 
 }
 
+void CPlayer::OnCollisionStay(CObj * _pOther, float _fX, float _fY)
+{
+}
+
 
 
 void CPlayer::Key_Check()

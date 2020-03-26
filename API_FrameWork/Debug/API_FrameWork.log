@@ -1,4 +1,52 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Player.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
   Obj.cpp
-  API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\Hollow_Knight\Debug\HollowKnight.exe
-  API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\Hollow_Knight\Debug\HollowKnight.pdb (Full PDB)
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  CollisionMgr.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Bullet.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Chaser.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\chaser.cpp(1): fatal error C1041: 프로그램 데이터베이스 'C:\Users\bso11\Desktop\jusin\Hollow_Knight\API_FrameWork\Debug\vc140.idb'을(를) 열 수 없습니다. 여러 CL.EXE에서 동일한 .PDB 파일에 쓰는 경우 /FS를 사용하십시오.
+  코드를 생성하고 있습니다...
+cl : 명령줄 warning D9028: 최소 다시 빌드에 실패했습니다. 정상 빌드로 되돌립니다.
+  컴파일하고 있습니다...
+  Editor.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\editor.cpp(1): fatal error C1041: 프로그램 데이터베이스 'C:\Users\bso11\Desktop\jusin\Hollow_Knight\API_FrameWork\Debug\vc140.pdb'을(를) 열 수 없습니다. 여러 CL.EXE에서 동일한 .PDB 파일에 쓰는 경우 /FS를 사용하십시오.
+  Fly.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  GuideBullet.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  ImageMgr.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\imagemgr.cpp(211): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+  Jumper.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  MainGame.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  Monster.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  Mouse.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  MyButton.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  MyImage.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  MyMenu.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\mymenu.cpp(1): fatal error C1041: 프로그램 데이터베이스 'C:\Users\bso11\Desktop\jusin\Hollow_Knight\API_FrameWork\Debug\vc140.pdb'을(를) 열 수 없습니다. 여러 CL.EXE에서 동일한 .PDB 파일에 쓰는 경우 /FS를 사용하십시오.
+  ObjMgr.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  PillBug.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  ScrewBullet.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  Stage.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  Tile.cpp
+c:\users\bso11\desktop\jusin\hollow_knight\api_framework\obj.h(52): error C2143: 구문 오류: ';'이(가) 'protected' 앞에 없습니다.
+  코드를 생성하고 있습니다...
