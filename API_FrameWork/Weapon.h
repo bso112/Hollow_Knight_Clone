@@ -28,7 +28,6 @@ public:
 public:
 	void Set_Owner(OWNER _owner) { m_eOwner = _owner; }
 	void Swing(float fAngle, float fSpeed);
-	void Set_Effect(CMyImage* _pEffect) { m_pEffect = _pEffect; }
 	void Set_Duration(float _fDuration) { m_fDuration = _fDuration; }
 	void Shoot();
 
@@ -45,7 +44,6 @@ private:
 	float m_fDuration;
 	DWORD m_dwTimer;
 
-	CMyImage* m_pEffect;
 
 };
 

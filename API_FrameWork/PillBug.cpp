@@ -16,7 +16,7 @@ void CPillBug::Initialize()
 {
 	
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/pill_bug.bmp", L"pill_bug");
-
+	memcpy(m_pFrameKey, L"pill_bug", DIR_LEN);
 	m_tInfo.iCX = 140;
 	m_tInfo.iCY = 70;
 	m_tStat = STAT(30);
@@ -54,20 +54,7 @@ void CPillBug::Late_Update()
 {
 }
 
-void CPillBug::Render(HDC _DC)
-{
-	Update_Rect();
 
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
-
-	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"pill_bug");
-
-	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY,
-		m_tInfo.iCX, m_tInfo.iCY, memDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY * m_tFrame.iFrameScene,
-		m_tInfo.iCX, m_tInfo.iCY, RGB(30, 30, 30));
-
-}
 
 void CPillBug::Release()
 {

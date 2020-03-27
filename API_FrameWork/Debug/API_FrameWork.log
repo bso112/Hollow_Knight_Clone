@@ -1,41 +1,4 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  stdafx.cpp
-  Weapon.cpp
-  Tile.cpp
-  Stage.cpp
-  ScrollMgr.cpp
-  ScrewBullet.cpp
-  SceneMgr.cpp
-  Scene.cpp
   Player.cpp
-  PillBug.cpp
-  ObjMgr.cpp
-  Obj.cpp
-  MyTime.cpp
-  MyMenu.cpp
-  MyImage.cpp
-  MyButton.cpp
-  MyBitmap.cpp
-  Mouse.cpp
-  Monster.cpp
-  MainGame.cpp
-  Logo.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  LineMgr.cpp
-  Line.cpp
-  KeyMgr.cpp
-  Jumper.cpp
-  ImageMgr.cpp
-  GuideBullet.cpp
-  Fly.cpp
-  Editor.cpp
-  CollisionMgr.cpp
-  Chaser.cpp
-  Bullet.cpp
-  BmpMgr.cpp
-  API_FrameWork.cpp
-  코드를 생성하고 있습니다...
-  TileMgr.cpp
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\Debug\HollowKnight.exe
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\Debug\HollowKnight.pdb (Full PDB)

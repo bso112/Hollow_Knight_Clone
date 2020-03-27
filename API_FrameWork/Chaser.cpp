@@ -63,24 +63,7 @@ void CChaser::Late_Update()
 {
 }
 
-void CChaser::Render(HDC _DC)
-{
-	Update_Rect();
 
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
-
-	(HPEN)SelectObject(_DC, (HPEN)GetStockObject(WHITE_PEN));
-
-	MoveToEx(_DC, (int)m_tInfo.fX + iScrollX, (int)m_tInfo.fY + iScrollY, nullptr);
-	LineTo(_DC, m_PartolSpot.x + iScrollX, m_PartolSpot.y + iScrollY);
-
-	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
-
-	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY,
-		m_tInfo.iCX, m_tInfo.iCY, memDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY * m_tFrame.iFrameScene,
-		m_tInfo.iCX, m_tInfo.iCY, RGB(30, 30, 30));
-}
 
 void CChaser::Release()
 {

@@ -15,7 +15,7 @@ public:
 	virtual void Initialize()  = 0;
 	virtual int Update()  = 0;
 	virtual void Late_Update()  = 0;
-	virtual void Render(HDC _DC)  = 0;
+	virtual void Render(HDC _DC);
 	virtual void Release() = 0 ;
 
 protected:

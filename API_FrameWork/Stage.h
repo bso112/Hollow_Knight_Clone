@@ -4,6 +4,7 @@
 #define __STAGE_H__
 
 #include "Scene.h"
+class CObj;
 class CStage : public CScene
 {
 public:
@@ -17,6 +18,9 @@ public:
 	virtual void Late_Update() override;
 	virtual void Render(HDC _DC) override;
 	virtual void Release() override;
+
+private:
+	vector<CObj*> m_vecBackground;
 
 
 };

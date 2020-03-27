@@ -12,7 +12,7 @@
 #include "Weapon.h"
 
 CPlayer::CPlayer()
-	: m_fDis(0.f), m_JumpVelo(0.f, -70)
+	: m_fDis(0.f), m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD)
 {
 	ZeroMemory(&m_tPosin, sizeof(m_tPosin));
 }
@@ -26,18 +26,20 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize()
 {
 
+	m_ComboWait = 0.2f;
+	m_eJumpState = JUMP_STATE::STARTING;
 	m_prvPos = Vector2(m_tInfo.fX, m_tInfo.fY);
 	m_velocity = Vector2();
-
 	m_eFront = FRONT::RIGHT;
+
 
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
 	m_tInfo.fX = 400.f;
 	m_tInfo.fY = 1000.f;
-	m_tInfo.iCX = 75;
-	m_tInfo.iCY = 75;
+	m_tInfo.iCX = 192;
+	m_tInfo.iCY = 96;
 
 	m_fAngle = 0.f;
 	m_fDis = 100.f;
@@ -53,21 +55,39 @@ void CPlayer::Initialize()
 	m_eTag = OBJTAG::PLAYER;
 
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_left.bmp", L"player_left");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_right.bmp", L"player_right");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/player_hit.bmp", L"player_hit");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_idle.bmp", L"hero_idle");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_move.bmp", L"hero_move");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_jump_start.bmp", L"hero_jump_start");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_jump_highest.bmp", L"hero_jump_highest");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_jump_falling.bmp", L"hero_jump_falling");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_jump_landing.bmp", L"hero_jump_landing");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_hit.bmp", L"hero_hit");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_att_normal.bmp", L"hero_att_normal");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_att_normal2.bmp", L"hero_att_normal2");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_att_down_to_top.bmp", L"hero_att_down_to_top");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_att_top_to_down.bmp", L"hero_att_top_to_down");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/motion/hero_dead.bmp", L"hero_dead");
+
+	//공격 이펙트
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_dt_eff.bmp", L"att_dt_eff");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_n1_eff.bmp", L"att_n1_eff");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_n2_eff.bmp", L"att_n2_eff");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_td_eff.bmp", L"att_td_eff");
+
 
 	//체력 UI
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/healthUI_skull.bmp", L"healthUI_skull");
 	//CObj* healthUI = CAbstractFactory<CMyImage>::Create(500, 500, L"healthUI_skull", 50, 17);
 	//CImageMgr::Get_Instance()->Add_Image(healthUI);
 
-	//이펙트
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/player_attack.bmp", L"player_attack");
 
 
 
-	memcpy(m_pFrameKey, L"player_right", DIR_LEN);
+	memcpy(m_pFrameKey, L"hero_idle", DIR_LEN);
 
 }
 
@@ -108,7 +128,6 @@ int CPlayer::Update()
 		else
 		{
 			CurrGravity = m_Gravity.fY;
-			m_eCurState = STATE::IDLE;
 		}
 
 		m_tInfo.fY += m_Gravity.fY;
@@ -117,11 +136,15 @@ int CPlayer::Update()
 	}
 
 
+	//기본 상태는 idle. 여기서 idle로 바꿔도 밑에서 상태를 바꾸면 그 상태가 된다.
+	bool isAnimEnd = Move_Frame();
+	//if (isAnimEnd)
+	//	m_eCurState = STATE::IDLE;
 	Key_Check();
 	OffSet();
 	Jumping();
+
 	Scene_Change();
-	Move_Frame();
 	Update_Rect();
 
 	return OBJ_NOEVENT;
@@ -144,7 +167,7 @@ void CPlayer::Render(HDC _DC)
 
 
 	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
-		, m_tInfo.iCX, m_tInfo.iCY, hMemDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY *m_tFrame.iFrameScene, m_tInfo.iCX, m_tInfo.iCY
+		, m_tInfo.iCX, m_tInfo.iCY, hMemDC, m_tInfo.iCX * m_tFrame.iFrameScene, m_tInfo.iCY *m_tFrame.iFrameStart, m_tInfo.iCX, m_tInfo.iCY
 		, RGB(30, 30, 30));
 
 #pragma region DEBUG
@@ -182,13 +205,9 @@ void CPlayer::Render(HDC _DC)
 	lstrcat(szBuff, m_debug);
 	TextOut(_DC, 500, 500, szBuff, lstrlen(szBuff));
 
-#pragma endregion
 	//SelectObject(_DC, GetStockObject(WHITE_PEN));
 	//Rectangle(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
-
-	TextOut(_DC, 500, 200, m_debug, lstrlen(m_debug));
-
-
+#pragma endregion
 #pragma region UI
 
 	hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"healthUI_skull");
@@ -251,28 +270,76 @@ void CPlayer::Attack()
 {
 	m_eCurState = STATE::ATTACK;
 
-	CObj* weapon = nullptr;
 
+	//콤보 판단
+	if (m_ComboTimer + m_ComboWait * 1000 < GetTickCount())
+	{
+		m_bCombo = true;
+	}
+	else
+		m_bCombo = false;
+
+	m_ComboTimer = GetTickCount();
+
+	CObj* weapon = nullptr;
+	FRAME frame;
+
+	switch (m_eFront)
+	{
+	case CPlayer::LEFT:
+	{
+		frame.iFrameStart = 0;
+		frame.iFrameEnd = 1;
+		frame.iFrameScene = 0;
+		frame.dwFrameTime = GetTickCount();
+		frame.dwFrameSpeed = 50;
+		frame.bLoop = false;
+		break;
+	}
+	case CPlayer::RIGHT:
+	{
+		frame.iFrameStart = 0;
+		frame.iFrameEnd = 1;
+		frame.iFrameScene = 1;
+		frame.dwFrameTime = GetTickCount();
+		frame.dwFrameSpeed = 50;
+		frame.bLoop = false;
+		break;
+	}
+	default:
+		break;
+	}
+
+
+
+	//이펙트 생성
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
-		weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY - m_tInfo.iCX);
+	{
+		m_eAttDir = ATT_DIR::UP;
+		weapon = CAbstractFactory<CWeapon>::Create(m_tInfo.fX, m_tInfo.fY - (m_tInfo.iCY >> 1), L"att_dt_eff", frame, 192, 192);
+
+	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
-		weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY + m_tInfo.iCX);
+	{
+		m_eAttDir = ATT_DIR::DOWN;
+		weapon = CAbstractFactory<CWeapon>::Create(m_tInfo.fX, m_tInfo.fY + (m_tInfo.iCY >> 1), L"att_td_eff", frame, 192, 192);
+	}
 	else
 	{
-		//정면에 생성
-		if(m_eFront == FRONT::RIGHT)
-			weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY);
+		//공격 방향
+		int iDir = m_eFront == FRONT::RIGHT ? 1 : -1;
+
+		if (m_bCombo)
+			weapon = CAbstractFactory<CWeapon>::Create(m_tInfo.fX + (m_tInfo.iCX >> 1) * iDir, m_tInfo.fY, L"att_n2_eff", frame, 192, 96);
 		else
-			weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX - m_tInfo.iCX, m_tInfo.fY);
+			weapon = CAbstractFactory<CWeapon>::Create(m_tInfo.fX + (m_tInfo.iCX >> 1) * iDir, m_tInfo.fY, L"att_n1_eff", frame, 192, 96);
 	}
 
 	if (weapon)
 	{
-		dynamic_cast<CWeapon*>(weapon)->Set_Effect(new CMyImage(L"player_attack"));
 		//2초동안만 지속
-		dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.f);
+		dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.1f);
 		CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
-
 	}
 
 
@@ -285,27 +352,44 @@ void CPlayer::Attack()
 void CPlayer::Key_Check()
 {
 
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
+	//왼쪽버튼 눌렀을때
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_LEFT))
 	{
-		memcpy(m_pFrameKey, L"player_left", DIR_LEN);
+		//추락할때는 움직이는 모션 못함
 		if (m_eCurState != STATE::FALL)
 			m_eCurState = STATE::WALK;
+		//왼쪽보기
 		m_eFront = FRONT::LEFT;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 		m_tInfo.fX -= m_fSpeed;
+
+	if (CKeyMgr::Get_Instance()->Key_Up(VK_LEFT))
+		m_eCurState = STATE::IDLE;
+
+
+	//오른쪽버튼 눌렀을때
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_RIGHT))
+	{
+		if (m_eCurState != STATE::FALL)
+			m_eCurState = STATE::WALK;
+		//오른쪽보기
+		m_eFront = FRONT::RIGHT;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
-	{
-		memcpy(m_pFrameKey, L"player_right", DIR_LEN);
-		if (m_eCurState != STATE::FALL)
-			m_eCurState = STATE::WALK;
-		m_eFront = FRONT::RIGHT;
 		m_tInfo.fX += m_fSpeed;
-	}
+
+	if (CKeyMgr::Get_Instance()->Key_Up(VK_RIGHT))
+		m_eCurState = STATE::IDLE;
+
+	//점프
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		if (m_eCurState != STATE::FALL)
 			m_bJump = true;
+		//점프 시작
+		m_eJumpState = JUMP_STATE::STARTING;
+		m_eCurState = STATE::JUMP;
 	}
 
 	//공격키 누르면 공격
@@ -318,15 +402,17 @@ void CPlayer::Key_Check()
 
 void CPlayer::Scene_Change()
 {
+	//상태가 바뀔때 한번만 실행
 	if (m_eCurState != m_ePrvState)
 	{
 		switch (m_eCurState)
 		{
 		case CPlayer::IDLE:
 		{
+			memcpy(m_pFrameKey, L"hero_idle", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 0;
+			m_tFrame.iFrameEnd = 7;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = true;
@@ -334,9 +420,10 @@ void CPlayer::Scene_Change()
 		}
 		case CPlayer::WALK:
 		{
+			memcpy(m_pFrameKey, L"hero_move", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 4;
+			m_tFrame.iFrameEnd = 6;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = true;
@@ -344,32 +431,74 @@ void CPlayer::Scene_Change()
 		}
 		case CPlayer::ATTACK:
 		{
+			//위 공격 아래 공격 구분
+			if (m_eAttDir == ATT_DIR::UP)
+			{
+				memcpy(m_pFrameKey, L"hero_att_down_to_top", DIR_LEN);
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.iFrameScene = m_eFront;
+				m_tFrame.dwFrameTime = GetTickCount();
+				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.bLoop = false;
 
+				//초기화
+				m_eAttDir = ATT_DIR::ATT_END;
+			}
+			else if (m_eAttDir == ATT_DIR::DOWN)
+			{
+				memcpy(m_pFrameKey, L"hero_att_top_to_down", DIR_LEN);
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.iFrameScene = m_eFront;
+				m_tFrame.dwFrameTime = GetTickCount();
+				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.bLoop = false;
+
+				//초기화
+				m_eAttDir = ATT_DIR::ATT_END;
+			}
+			//콤보냐
+			else if (m_bCombo)
+			{
+				//콤보공격 모션
+				memcpy(m_pFrameKey, L"hero_att_normal2", DIR_LEN);
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.iFrameScene = m_eFront;
+				m_tFrame.dwFrameTime = GetTickCount();
+				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.bLoop = false;
+
+				//2격 했으면 리셋.
+				m_ComboTimer = GetTickCount();
+			}
+			else
+			{
+				//보통 공격모션
+				memcpy(m_pFrameKey, L"hero_att_normal", DIR_LEN);
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.iFrameScene = m_eFront;
+				m_tFrame.dwFrameTime = GetTickCount();
+				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.bLoop = false;
+			}
 		}
 		case CPlayer::HIT:
 		{
 
 			break;
 		}
-		case CPlayer::JUMP:
-		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 1;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 200;
-			m_tFrame.bLoop = false;
-			break;
-		}
 		case CPlayer::FALL:
 		{
+			memcpy(m_pFrameKey, L"hero_jump_falling", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 2;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = false;
-			break;
 		}
 		case CPlayer::DEAD:
 			break;
@@ -379,7 +508,68 @@ void CPlayer::Scene_Change()
 			break;
 		}
 
+		//상태가 바뀌었을때 한번만 설정해줘야하니. 
 		m_ePrvState = m_eCurState;
+	}
+
+
+	//점프에 따른 점프상태 변경
+	if (m_eCurState == STATE::JUMP && m_ePrvJumpState != m_eJumpState)
+	{
+		switch (m_eJumpState)
+		{
+		case CPlayer::STARTING:
+		{
+			memcpy(m_pFrameKey, L"hero_jump_start", DIR_LEN);
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 4;
+			m_tFrame.iFrameScene = m_eFront;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
+			break;
+		}
+		case CPlayer::HIGHEST:
+		{
+			memcpy(m_pFrameKey, L"hero_jump_highest", DIR_LEN);
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameScene = m_eFront;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
+			break;
+		}
+		case CPlayer::FALLING:
+		{
+			memcpy(m_pFrameKey, L"hero_jump_falling", DIR_LEN);
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameScene = m_eFront;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
+			break;
+		}
+		case CPlayer::LANDING:
+		{
+			memcpy(m_pFrameKey, L"hero_jump_landing", DIR_LEN);
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameScene = m_eFront;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.bLoop = false;
+			break;
+		}
+		case CPlayer::JUMP_END:
+			break;
+		default:
+			break;
+		}
+
+		m_ePrvJumpState = m_eJumpState;
+
 	}
 }
 
@@ -388,17 +578,13 @@ void CPlayer::Jumping()
 
 	if (m_bJump)
 	{
+
+		m_eCurState = STATE::JUMP;
+
 		//스페이스 누르고있으면 더 높이 점프
 		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_SPACE))
-			m_curJumpVelo.fY -= 3.7f;
+			m_curJumpVelo.fY -= 3.7f;		
 
-		//추락이면
-		if (m_curJumpVelo.fY > 0)
-		{
-			m_eCurState = STATE::FALL;
-		}
-		else
-			m_eCurState = STATE::JUMP;
 
 		//중력적용
 		m_curJumpVelo += m_Gravity;
@@ -411,11 +597,19 @@ void CPlayer::Jumping()
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
+		
 		if (collision == CTileMgr::BOTTOM)
 		{
-			//점프 초기화
+			//점프 초기화 
 			m_curJumpVelo = m_JumpVelo;
+			m_eJumpState = JUMP_STATE::LANDING;
+			//점프 초기화
 			m_bJump = false;
+		}
+		else if (m_curJumpVelo.fY > 0)
+		{
+			//추락중
+			m_eJumpState = JUMP_STATE::FALLING;
 		}
 
 	}

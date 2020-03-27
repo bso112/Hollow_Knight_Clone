@@ -20,8 +20,6 @@ CEditor::~CEditor()
 
 void CEditor::Initialize()
 {
-	//백그라운드 이미지
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Background/background_editor.bmp", L"background_editor");
 	//타일을 TileX * TileY만큼 미리 생성해둔다.
 	CTileMgr::Get_Instance()->Initialize();
 	//맵을 제작할때 쓸 이미지를 불러온다.
@@ -51,12 +49,11 @@ void CEditor::Render(HDC _DC)
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
-	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"background_editor");
-	BitBlt(_DC, 0, 0, WINCX, WINCY, memDC, 0, 0, SRCCOPY);
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
 	CObjMgr::Get_Instance()->Render(_DC);
 
+	//이미지 구분을 위한 이미지 이름 출력
 	const TCHAR* szBuff = CImageMgr::Get_Instance()->Get_ImageName(m_iSelected);
 	if (szBuff)
 		TextOut(_DC, 800, 500, szBuff, lstrlen(szBuff));
@@ -158,7 +155,7 @@ void CEditor::Key_Check()
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
 		//해당 위치에 타일의 상태를 뒤집는다.
-		CTileMgr::Get_Instance()->Delete_Tile(pt);
+		CTileMgr::Get_Instance()->UnPiking_Tile(pt);
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
 	{

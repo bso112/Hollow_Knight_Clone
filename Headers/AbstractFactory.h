@@ -40,6 +40,17 @@ public:
 		return pObj;
 	}
 
+	static CObj* Create(float _x, float _y, TCHAR* _pFrameKey, FRAME _frame ,int _iCX, int _iCY)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_x, _y);
+		pObj->Set_FrameKey(_pFrameKey);
+		pObj->Set_Size(_iCX, _iCY);
+		pObj->Set_Frame(_frame);
+		pObj->Initialize();
+		return pObj;
+	}
+
 
 
 };

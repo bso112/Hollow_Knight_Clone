@@ -8,7 +8,7 @@
 #include "Functor.h"
 #include "Extern.h"
 #include "Enum.h"
-#include "AbstractFactory.h"
 #include "Struct.h"
+#include "AbstractFactory.h"
 
 #endif // !__INCLUDE_H__

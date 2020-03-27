@@ -30,7 +30,10 @@ HDC CBmpMgr::Find_Image(const TCHAR * _pImageKey)
 	auto iter = find_if(m_mapBmp.begin(), m_mapBmp.end(), CStringCMP(_pImageKey));
 
 	if (m_mapBmp.end() == iter)
+	{
+		MessageBox(g_hWnd, L"비트맵을 찾지 못했습니다.", L"비트맵매니저", MB_OK);
 		return nullptr;
+	}
 
 	return iter->second->Get_MemDC();
 }

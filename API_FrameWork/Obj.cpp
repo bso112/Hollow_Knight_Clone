@@ -17,7 +17,7 @@ CObj::~CObj()
 }
 
 
-void CObj::Move_Frame()
+bool CObj::Move_Frame()
 {
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
@@ -25,7 +25,6 @@ void CObj::Move_Frame()
 		if (m_tFrame.iFrameStart < m_tFrame.iFrameEnd)
 		{
 			++m_tFrame.iFrameStart;
-
 		}
 		else
 		{
@@ -34,11 +33,16 @@ void CObj::Move_Frame()
 				m_tFrame.iFrameStart = 0;
 			}
 			else
+			{
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+				return true;
+			}
 		}
 
 		m_tFrame.dwFrameTime = GetTickCount();
 	}
+
+	return false;
 }
 
 

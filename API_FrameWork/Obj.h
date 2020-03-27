@@ -29,8 +29,11 @@ public:
 	void Set_PosY(float _y) { m_tInfo.fY += _y; }
 	void Set_FrameKey(TCHAR* _key) { memcpy(m_pFrameKey, _key, sizeof(TCHAR) * DIR_LEN); }
 	void Set_Size(int _iCX, int _iCY) { m_tInfo.iCX = _iCX; m_tInfo.iCY = _iCY; }
+	void Set_Frame(FRAME _frame) { m_tFrame = _frame; }
+
 public:
-	void Move_Frame();
+	//애니메이션이 끝났으면 true를 반환
+	bool Move_Frame();
 	
 
 public:
@@ -65,9 +68,11 @@ protected:
 
 	OBJTAG::TAG m_eTag;
 
-protected:
+private:
 	//충돌했나
 	bool	m_bCollided;
+	//현재 충돌하고 있는 오브젝트 갯수
+	int		m_iCollisionCnt;
 
 
 };

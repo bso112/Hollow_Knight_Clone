@@ -54,6 +54,7 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 			}
 			else
 			{
+				//바꿔야됨. 충돌카운트 고려해서.. 만약 이미 충돌인 애들끼리 충돌한다면? -> 이경우는 신경쓸필요 없다. 어차피 몬스터랑 플레이어만 충돌처리할거니까.
 				if (Dst->Get_isCollided() && Src->Get_isCollided())
 				{
 					Dst->OnCollisionExit(Src, fX, fY);

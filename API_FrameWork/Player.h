@@ -16,6 +16,10 @@ public:
 	enum STATE { IDLE, WALK, ATTACK, HIT, JUMP, FALL, DEAD, END };
 	//플레이어 정면
 	enum FRONT { LEFT, RIGHT, FRONT_END};
+	//공격 방향
+	enum ATT_DIR { UP, DOWN, ATT_END};
+	//점프 상태
+	enum JUMP_STATE {STARTING, HIGHEST, FALLING, LANDING, JUMP_END};
 
 
 public:
@@ -70,7 +74,8 @@ private:
 	POINT			m_tPosin;
 	float			m_fDis;
 
-	// 점프
+	// 점프. 실제로 점프(움직임)을 하는가?
+	//m_eState == JUMP는 점프 애니메이션을 위한 것. 점프 애니메이션이 끝나야 다른 상태로 됨.
 	bool			m_bJump;
 
 	//점프 벡터
@@ -94,6 +99,19 @@ private:
 
 	//플레이어 정면
 	FRONT			m_eFront;
+	//공격 방향
+	ATT_DIR			m_eAttDir;
+	//콤보냐
+	bool			m_bCombo;
+
+	DWORD			m_ComboTimer;
+	//콤보 사이의 최대 간격
+	float			m_ComboWait;
+
+	//점프상태
+	JUMP_STATE			m_ePrvJumpState;
+	JUMP_STATE			m_eJumpState;
+
 
 
 };

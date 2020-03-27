@@ -3,6 +3,8 @@
 #include "Monster.h"
 #include "Player.h"
 #include "MyImage.h"
+#include "ScrollMgr.h"
+#include "BmpMgr.h"
 
 CWeapon::CWeapon()
 	:m_eOwner(END), m_fDamage(0.f),m_fDuration(FLT_MAX)
@@ -16,8 +18,7 @@ CWeapon::~CWeapon()
 
 void CWeapon::Initialize()
 {
-	if (m_pEffect)
-		m_pEffect->Initialize();
+
 
 	m_dwTimer = GetTickCount();
 }
@@ -27,17 +28,13 @@ int CWeapon::Update()
 	if (m_bDead)
 		return OBJ_DEAD;
 
-
-	if (m_pEffect)
-		m_pEffect->Set_Pos(m_tInfo.fX, m_tInfo.fY);
+	Move_Frame();
 
 	return OBJ_NOEVENT;
 }
 
 void CWeapon::Late_Update()
 {
-	if (m_pEffect)
-		m_pEffect->Late_Update();
 
 	//지속시간동안 생존
 	if (m_dwTimer + m_fDuration * 1000 < GetTickCount())
@@ -46,13 +43,23 @@ void CWeapon::Late_Update()
 
 void CWeapon::Render(HDC _DC)
 {
-	if (m_pEffect)
-		m_pEffect->Render(_DC);
+	Update_Rect();
+
+
+	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+
+	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
+
+
+	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
+		, m_tInfo.iCX, m_tInfo.iCY, hMemDC, m_tInfo.iCX * m_tFrame.iFrameScene, m_tInfo.iCY *m_tFrame.iFrameStart, m_tInfo.iCX, m_tInfo.iCY
+		, RGB(30, 30, 30));
 }
 
 void CWeapon::Release()
 {
-	SAFE_DELETE(m_pEffect);
+
 }
 
 void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)

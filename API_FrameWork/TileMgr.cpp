@@ -49,7 +49,7 @@ void CTileMgr::Late_Update()
 
 void CTileMgr::Render(HDC _DC)
 {
-	for (auto& tile : m_vecCollTile)
+	for (auto& tile : m_setCollTile)
 	{
 		tile->Render(_DC);
 	}
@@ -60,7 +60,7 @@ void CTileMgr::Release()
 {
 	for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<CObj*>);
 	m_vecTile.clear();
-	m_vecCollTile.clear();
+	m_setCollTile.clear();
 }
 
 void CTileMgr::Picking_Tile(POINT & _pt)
@@ -77,10 +77,12 @@ void CTileMgr::Picking_Tile(POINT & _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(true);
+	m_setCollTile.insert(m_vecTile[iIndex]);
+	
 }
 
 //타일을 콜라이더가 아닌것으로 만든다.
-void CTileMgr::Delete_Tile(POINT& _pt)
+void CTileMgr::UnPiking_Tile(POINT& _pt)
 {
 	//마우스포인트를 받아 타일의 인덱스로 변환한다.
 	int x = _pt.x / TILECX;
@@ -151,7 +153,7 @@ CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO
 		float minDist = FLT_MAX;
 		CObj* minTile = nullptr;
 		//가장 거리가 가까운 타일을 구한다.
-		for (auto& tile : m_vecCollTile)
+		for (auto& tile : m_setCollTile)
 		{
 			float distX = abs(tile->Get_INFO().fX - _dst.fX);
 			float distY = abs(tile->Get_INFO().fY - _dst.fY);
@@ -215,7 +217,7 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 	
 	*/
 	//가장 거리가 가까운 타일을 구한다.
-	for (auto& tile : m_vecCollTile)
+	for (auto& tile : m_setCollTile)
 	{
 		float distX = abs(tile->Get_INFO().fX - _pObj->Get_INFO().fX);
 		float distY = abs(tile->Get_INFO().fY - _pObj->Get_INFO().fY);
@@ -321,7 +323,7 @@ void CTileMgr::Load_Tile()
 		{
 			//콜라이더로 셋팅해준다.
 			dynamic_cast<CTile*>(pObj)->Reverse_isCollider();
-			m_vecCollTile.push_back(pObj);
+			m_setCollTile.insert(pObj);
 
 		}
 		m_vecTile.emplace_back(pObj);
