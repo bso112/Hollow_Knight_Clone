@@ -17,6 +17,7 @@ CCollisionMgr::~CCollisionMgr()
 
 bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 {
+
 	RECT rc = {};
 	for (auto& Dst : _Dst)
 	{
@@ -26,10 +27,23 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 		{
 			if (IntersectRect(&rc, &Dst->Get_Rect(), &Src->Get_Rect()))
 			{
+				
+				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
+				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
+				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+
+				//반대도 마찬가지.
+				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
+				
+
+				//충돌이고 충돌했으면 false면 충돌진입상태
 				if (!Dst->Get_isCollided())
 					Dst->OnCollisionEnter(Src, fX, fY);
 				if (!Src->Get_isCollided())
 					Src->OnCollisionEnter(Dst, fX, fY);
+
 
 				Dst->Set_isCollided(true);
 				Src->Set_isCollided(true);

@@ -77,8 +77,6 @@ void CTileMgr::Picking_Tile(POINT & _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(true);
-	m_vecCollTile.push_back(m_vecTile[iIndex]);
-
 }
 
 //타일을 콜라이더가 아닌것으로 만든다.
@@ -96,117 +94,9 @@ void CTileMgr::Delete_Tile(POINT& _pt)
 		return;
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_isColider(false);
-	//오브젝트 매니저에서 지워야할텐데?
 
 }
 
-////타일을 밟고 있는가?
-//bool CTileMgr::IsStepOnTile(CObj * _pObj, float& _fY)
-//{
-//	float fX;
-//	float fY;
-//	for (auto& tile : m_vecCollTile)
-//	{
-//		//콜라이더 타일이면
-//		if (((CTile*)tile)->Get_isColider())
-//		{
-//			//충돌했고
-//			if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
-//				//상하충돌이고
-//				if (fX > fY)
-//					//만약 타일이 아래에 있으면 밟고 있는것이다.
-//					if (tile->Get_Rect().top < _pObj->Get_Rect().bottom)
-//					{
-//						_fY = tile->Get_Rect().top - (_pObj->Get_INFO().iCY >> 1);
-//						return true;
-//					}
-//		}
-//
-//	}
-//	return false;
-//}
-//
-////아래에 타일이 있는가?
-//bool CTileMgr::RayCast_Down_Tile(CObj* _pObj, float & _fY, float _maxdist)
-//{
-//	//obj의 렉트를 가져와서 그 렉트의 bootom을 maxdist만큼 늘린 렉트(광선)을 만든다.
-//	RECT tmp = _pObj->Get_Rect();
-//	RECT rc = { tmp.left, tmp.top, tmp.right, tmp.bottom + _maxdist };
-//	RECT* pRay = &rc;
-//
-//	RECT tmp2 = {};
-//	float minDist = FLT_MAX;
-//	CObj* minTile = nullptr;
-//	for (auto& tile : m_vecCollTile)
-//	{
-//		//레이의 시작점의 아래에 있는 타일만 검사
-//		if (tile->Get_Rect().top > pRay->top)
-//		{
-//			//렉트와 충돌한 타일 중
-//			if (IntersectRect(&tmp2, pRay, &tile->Get_Rect()))
-//			{
-//				//렉트와 가장 거리가 가까운 타일을 구한다.
-//				float dist = (float)abs(tile->Get_Rect().top - pRay->top);
-//				if (minDist > dist)
-//				{
-//					minDist = dist;
-//					minTile = tile;
-//				}
-//			}
-//		}
-//
-//	}
-//	//예외처리
-//	if (minTile == nullptr)
-//		return false;
-//	//성공. mintile의 top을 넘겨준다.
-//	_fY = minTile->Get_Rect().top;
-//	return true;
-//}
-//
-//CTileMgr::COLLISION CTileMgr::Collision_Tile(CObj * _pObj, RECT& _rc)
-//{
-//	float fX;
-//	float fY;
-//	for (auto& tile : m_vecCollTile)
-//	{
-//
-//		//충돌하면
-//		if (CCollisionMgr::Check_Rect(_pObj, tile, &fX, &fY))
-//		{
-//			//인자 값에 충돌한 타일의 렉트를 넘겨준다.
-//			_rc = tile->Get_Rect();
-//
-//			//상하충돌이면
-//			if (fX > fY)
-//			{
-//				//만약 타일이 아래에 있으면 밟고 있는것이다.
-//				if (tile->Get_Rect().top <= _pObj->Get_Rect().bottom)
-//				{
-//					return COLLISION::BOTTOM;
-//				}
-//				else
-//				{
-//					return COLLISION::TOP;
-//				}
-//			}
-//			//좌우충돌이면
-//			else
-//			{
-//				//타일이 왼쪽에 있으면
-//				if (tile->Get_Rect().right <= _pObj->Get_Rect().left)
-//					return COLLISION::LEFT;
-//				//오른쪽에 있으면
-//				else
-//					return COLLISION::RIGHT;
-//			}
-//		}
-//
-//
-//
-//	}
-//	return COLLISION::END;
-//}
 
 CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO _info, RECT& _rc)
 {
@@ -379,7 +269,7 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 //그린 타일을 저장한다.
 void CTileMgr::Save_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile3.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -404,7 +294,7 @@ void CTileMgr::Save_Tile()
 
 void CTileMgr::Load_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile3.dat", GENERIC_READ
+	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ
 		, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)

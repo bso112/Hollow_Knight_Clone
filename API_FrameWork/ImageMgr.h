@@ -51,6 +51,8 @@ private:
 	//전체 이미지 벡터(원본 + 인스턴스)
 	vector<CObj*>		m_vecImage;
 	vector<CObj*>		m_vecImageInstance;
+	//배경이미지
+	vector<CObj*>		m_vecBackground;
 
 };
 

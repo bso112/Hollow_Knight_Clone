@@ -27,7 +27,12 @@ protected:
 protected:
 	//인식범위에 플레이어가 들어왔는가?
 	bool IsAlert();
-	void Take_Damage(float _fDamage) { m_tStat.m_fHp -= _fDamage; if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0; }
+
+public:
+	virtual void Take_Damage(float _fDamage) { m_tStat.m_fHp -= _fDamage; if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0; }
+
+public:
+	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
 
 protected:
 	STAT m_tStat;

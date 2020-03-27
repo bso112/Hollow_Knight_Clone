@@ -72,7 +72,7 @@ void CChaser::Render(HDC _DC)
 
 	(HPEN)SelectObject(_DC, (HPEN)GetStockObject(WHITE_PEN));
 
-	MoveToEx(_DC, m_tInfo.fX + iScrollX, m_tInfo.fY + iScrollY, nullptr);
+	MoveToEx(_DC, (int)m_tInfo.fX + iScrollX, (int)m_tInfo.fY + iScrollY, nullptr);
 	LineTo(_DC, m_PartolSpot.x + iScrollX, m_PartolSpot.y + iScrollY);
 
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);

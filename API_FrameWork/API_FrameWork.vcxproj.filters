@@ -121,6 +121,9 @@
     <Filter Include="소스 파일\05.TIme">
       <UniqueIdentifier>{c8463b63-f360-49a9-a39e-be384345317d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\09.Weapon">
+      <UniqueIdentifier>{a0e49091-faad-4c62-ad3d-67b07a45253b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -234,6 +237,9 @@
     <ClInclude Include="MyTime.h">
       <Filter>소스 파일\05.TIme</Filter>
     </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>소스 파일\01.Obj\09.Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -340,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="MyTime.cpp">
       <Filter>소스 파일\05.TIme</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>소스 파일\01.Obj\09.Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

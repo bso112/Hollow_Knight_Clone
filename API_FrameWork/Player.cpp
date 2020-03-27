@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "Bullet.h"
-#include "ScrewBullet.h"
 #include "ObjMgr.h"
-#include "GuideBullet.h"
-#include "LineMgr.h"
 #include "KeyMgr.h"
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
@@ -13,6 +9,7 @@
 #include "ImageMgr.h"
 #include "CollisionMgr.h"
 #include "MyTime.h"
+#include "Weapon.h"
 
 CPlayer::CPlayer()
 	: m_fDis(0.f), m_JumpVelo(0.f, -70)
@@ -31,6 +28,8 @@ void CPlayer::Initialize()
 
 	m_prvPos = Vector2(m_tInfo.fX, m_tInfo.fY);
 	m_velocity = Vector2();
+
+	m_eFront = FRONT::RIGHT;
 
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
@@ -58,10 +57,13 @@ void CPlayer::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_right.bmp", L"player_right");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/player_hit.bmp", L"player_hit");
 
-	////체력 UI
+	//체력 UI
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/healthUI_skull.bmp", L"healthUI_skull");
 	//CObj* healthUI = CAbstractFactory<CMyImage>::Create(500, 500, L"healthUI_skull", 50, 17);
 	//CImageMgr::Get_Instance()->Add_Image(healthUI);
+
+	//이펙트
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/player_attack.bmp", L"player_attack");
 
 
 
@@ -215,7 +217,7 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 {
 
 	static int cnt = 0;
-	
+
 	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 	{
 		++cnt;
@@ -245,6 +247,39 @@ void CPlayer::OnCollisionExit(CObj * _pOther, float _fX, float _fY)
 	}
 }
 
+void CPlayer::Attack()
+{
+	m_eCurState = STATE::ATTACK;
+
+	CObj* weapon = nullptr;
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
+		weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY - m_tInfo.iCX);
+	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
+		weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY + m_tInfo.iCX);
+	else
+	{
+		//정면에 생성
+		if(m_eFront == FRONT::RIGHT)
+			weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX + m_tInfo.iCX, m_tInfo.fY);
+		else
+			weapon =CAbstractFactory<CWeapon>::Create(m_tInfo.fX - m_tInfo.iCX, m_tInfo.fY);
+	}
+
+	if (weapon)
+	{
+		dynamic_cast<CWeapon*>(weapon)->Set_Effect(new CMyImage(L"player_attack"));
+		//2초동안만 지속
+		dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.f);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
+
+	}
+
+
+
+
+}
+
 
 
 void CPlayer::Key_Check()
@@ -256,6 +291,7 @@ void CPlayer::Key_Check()
 		memcpy(m_pFrameKey, L"player_left", DIR_LEN);
 		if (m_eCurState != STATE::FALL)
 			m_eCurState = STATE::WALK;
+		m_eFront = FRONT::LEFT;
 		m_tInfo.fX -= m_fSpeed;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
@@ -263,6 +299,7 @@ void CPlayer::Key_Check()
 		memcpy(m_pFrameKey, L"player_right", DIR_LEN);
 		if (m_eCurState != STATE::FALL)
 			m_eCurState = STATE::WALK;
+		m_eFront = FRONT::RIGHT;
 		m_tInfo.fX += m_fSpeed;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
@@ -271,9 +308,11 @@ void CPlayer::Key_Check()
 			m_bJump = true;
 	}
 
-	//공격키 누르면 공격상태
-	if (CKeyMgr::Get_Instance()->Key_Pressing('X'))
-		m_eCurState = STATE::ATTACK;
+	//공격키 누르면 공격
+	if (CKeyMgr::Get_Instance()->Key_Down('X'))
+	{
+		Attack();
+	}
 
 }
 
@@ -393,12 +432,12 @@ void CPlayer::OffSet()
 
 	if (iOffSetX < (m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
-	if (iOffSetX >(m_tInfo.fX + iScrollX))
+	if (iOffSetX > (m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
 
 	if (iOffSetY < (m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
-	if (iOffSetY >(m_tInfo.fY + iScrollY))
+	if (iOffSetY > (m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
 }
 

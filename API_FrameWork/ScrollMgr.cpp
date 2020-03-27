@@ -30,9 +30,9 @@ void CScrollMgr::Scroll_Lock()
 	//캐릭터가 오른쪽으로 이동할때 락
 	//WINCX - TILECX * TILEX 는 맵이 스크롤될 수 있는 최대값이다.
 	//즉, 최대 스크롤값을 제한해 준것이다.
-	if (-2900 > m_fScrollX)
-		m_fScrollX = -2900;
+	if (-8440 > m_fScrollX)
+		m_fScrollX = -8440;
 	//캐릭터가 아래로 이동할때 락
-	if (-1100 > m_fScrollY)
-		m_fScrollY = -1100;
+	if (-1970 > m_fScrollY)
+		m_fScrollY = -1970;
 }

@@ -14,7 +14,7 @@ CMyTime::~CMyTime()
 
 void CMyTime::Initalize()
 {
-	m_dwPrvTime = 0.f;
+	m_dwPrvTime = 0;
 	m_dwCurrTime = GetTickCount();
 }
 

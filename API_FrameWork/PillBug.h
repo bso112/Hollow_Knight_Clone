@@ -20,7 +20,6 @@ public:
 	virtual void Scene_Change() override;
 
 
-
 protected:
 	virtual void Patrol() override;
 	virtual void Chase_Target() override;

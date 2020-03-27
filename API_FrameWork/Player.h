@@ -14,6 +14,8 @@ public:
 
 public:
 	enum STATE { IDLE, WALK, ATTACK, HIT, JUMP, FALL, DEAD, END };
+	//플레이어 정면
+	enum FRONT { LEFT, RIGHT, FRONT_END};
 
 
 public:
@@ -29,13 +31,19 @@ public:
 
 
 public:
-	void TakeDamage(float _fDamage) { m_tStat.m_fHp -= _fDamage; if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0; }
+	void Take_Damage(float _fDamage) {
+		m_tStat.m_fHp -= _fDamage;
+		if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0;
+		m_eCurState = STATE::HIT;
+	}
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
 	virtual void OnCollisionStay(CObj* _pOther, float _fX, float _fY) override;
 	virtual void OnCollisionExit(CObj* _pOther, float _fX, float _fY) override;
 
+private:
+	void Attack();
 
 
 private:
@@ -83,6 +91,9 @@ private:
 	Vector2			m_velocity;
 
 	TCHAR*			m_debug;
+
+	//플레이어 정면
+	FRONT			m_eFront;
 
 
 };

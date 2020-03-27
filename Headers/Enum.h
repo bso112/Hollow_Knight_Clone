@@ -11,7 +11,7 @@ namespace BULLET
 namespace OBJID
 {
 
-	enum ID { UI, PLAYER, MONSTER, TILE, END };
+	enum ID { UI, PLAYER, MONSTER, TILE, WEAPON, END };
 	
 
 }

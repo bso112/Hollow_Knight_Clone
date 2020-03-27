@@ -34,7 +34,7 @@ void CMainGame::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BackBuffer.bmp", L"BackBuffer");
 	
 	CMyTime::Get_Instance()->Initalize();
-	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_LOGO);
+	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_LOGO);
 }
 
 void CMainGame::Update()
@@ -47,7 +47,7 @@ void CMainGame::Late_Update()
 {
 	CSceneMgr::Get_Instance()->Late_Update();
 	CKeyMgr::Get_Instance()->Key_Update();
-	//CScrollMgr::Get_Instance()->Scroll_Lock();
+	CScrollMgr::Get_Instance()->Scroll_Lock();
 }
 
 void CMainGame::Render()

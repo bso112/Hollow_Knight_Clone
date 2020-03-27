@@ -7,6 +7,7 @@ class CMyImage : public CObj
 {
 public:
 	CMyImage();
+	CMyImage(TCHAR* _pFrameKey) { memcpy(m_pFrameKey, _pFrameKey, sizeof(TCHAR) * DIR_LEN); }
 	~CMyImage();
 	
 	CMyImage(CMyImage& _obj);
