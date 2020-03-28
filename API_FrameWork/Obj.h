@@ -30,6 +30,9 @@ public:
 	void Set_FrameKey(TCHAR* _key) { memcpy(m_pFrameKey, _key, sizeof(TCHAR) * DIR_LEN); }
 	void Set_Size(int _iCX, int _iCY) { m_tInfo.iCX = _iCX; m_tInfo.iCY = _iCY; }
 	void Set_Frame(FRAME _frame) { m_tFrame = _frame; }
+	void Set_Info(INFO _info) { m_tInfo = _info; }
+	void Set_ImgInfo(INFO _imgInfo) { m_tImgInfo = _imgInfo; }
+
 
 public:
 	//애니메이션이 끝났으면 true를 반환
@@ -55,6 +58,10 @@ public:
 protected:
 	INFO	m_tInfo;
 	RECT	m_tRect;
+
+	//비트맵 이미지를 위한 정보
+	INFO	m_tImgInfo;
+	RECT	m_tImgRect;
 
 	float	m_fSpeed;
 	bool	m_bDead;

@@ -8,6 +8,8 @@ CObj::CObj()
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
+	ZeroMemory(&m_tImgInfo, sizeof(m_tInfo));
+	ZeroMemory(&m_tImgRect, sizeof(m_tRect));
 	ZeroMemory(&m_tFrame, sizeof(m_tFrame));
 }
 
@@ -64,10 +66,20 @@ void CObj::OnCollisionExit(CObj * _pOther, float _fX, float _fY)
 
 void CObj::Update_Rect()
 {
-	m_tRect.left = LONG(m_tInfo.fX - (m_tInfo.iCX / 2));
-	m_tRect.top = LONG(m_tInfo.fY - (m_tInfo.iCY * 0.5f));
+	m_tRect.left = LONG(m_tInfo.fX - (m_tInfo.iCX >> 1));
+	m_tRect.top = LONG(m_tInfo.fY - (m_tInfo.iCY >> 1));
 	m_tRect.right = LONG(m_tInfo.fX + (m_tInfo.iCX >> 1));
 	m_tRect.bottom = LONG(m_tInfo.fY + (m_tInfo.iCY >> 1));
+
+	m_tImgInfo.fX = m_tInfo.fX;
+	m_tImgInfo.fY = m_tInfo.fY;
+
+	m_tImgRect.left = LONG(m_tImgInfo.fX - (m_tImgInfo.iCX >> 1));
+	m_tImgRect.top = LONG(m_tImgInfo.fY - (m_tImgInfo.iCY >> 1));
+	m_tImgRect.right = LONG(m_tImgInfo.fX + (m_tImgInfo.iCX >> 1));
+	m_tImgRect.bottom = LONG(m_tImgInfo.fY + (m_tImgInfo.iCY >> 1));
+
+
 }
 
 void CObj::Set_Pos(float _x, float _y)

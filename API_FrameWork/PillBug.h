@@ -11,6 +11,10 @@ public:
 	~CPillBug();
 
 public:
+	enum STATE { MOVE, DEAD, END};
+
+
+public:
 	// CMonster을(를) 통해 상속됨
 	virtual void Initialize() override;
 	virtual int Update() override;
@@ -23,7 +27,11 @@ protected:
 	virtual void Patrol() override;
 	virtual void Chase_Target() override;
 
-
+public:
+	STATE			m_eCurState;
+	STATE			m_ePrvState;
+	//정면
+	FRONT			m_eFront;
 };
 
 #define __PILLBUG_H__

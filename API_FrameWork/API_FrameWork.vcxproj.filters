@@ -25,26 +25,11 @@
     <Filter Include="소스 파일\01.Obj\00.Player">
       <UniqueIdentifier>{70938639-31db-4291-95b4-b39b5023607f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.Obj\01.Bullet">
-      <UniqueIdentifier>{d2ef457b-2226-4ad8-8818-9fd039f93165}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\01.Obj\02.Monster">
       <UniqueIdentifier>{690617ca-b2c5-4897-9e63-cf84e708acc8}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\01.Obj\03.Mouse">
       <UniqueIdentifier>{0f145fbf-939b-4f27-af6d-959e0b21727b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\01.Obj\01.Bullet\00.Normal_Bullet">
-      <UniqueIdentifier>{f311d6c3-ff0b-4f2a-8d0d-c198f5035419}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\01.Obj\01.Bullet\01.Screw_Bullet">
-      <UniqueIdentifier>{304fe249-2dca-490a-83e6-d47bda78f25d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\01.Obj\01.Bullet\02.Guide_Bullet">
-      <UniqueIdentifier>{2a168686-f05b-4c97-b736-e9c8b8e1eb21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\02.Line">
-      <UniqueIdentifier>{71df3ef7-2fe1-4e55-b4a7-6a1b5572349a}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\03.Bitmap">
       <UniqueIdentifier>{a575caf0-7717-4947-b8a2-75bd08aef58b}</UniqueIdentifier>
@@ -57,9 +42,6 @@
     </Filter>
     <Filter Include="소스 파일\98.Manager\01.CObjMgr">
       <UniqueIdentifier>{921cff15-41e1-48f8-8f79-5ee3a61c79e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\98.Manager\02.LineMgr">
-      <UniqueIdentifier>{82a64658-cb84-4bc6-967a-1dbfe4dc2fa3}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\98.Manager\03.KeyMgr">
       <UniqueIdentifier>{03f55c82-d6d5-4256-bfec-445d13103949}</UniqueIdentifier>
@@ -124,6 +106,9 @@
     <Filter Include="소스 파일\01.Obj\09.Weapon">
       <UniqueIdentifier>{a0e49091-faad-4c62-ad3d-67b07a45253b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\06.Helper">
+      <UniqueIdentifier>{ee4fad55-0f25-48d6-a571-6039e3e4c620}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -156,23 +141,8 @@
     <ClInclude Include="CollisionMgr.h">
       <Filter>소스 파일\98.Manager\00.CollisionMgr</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>소스 파일\01.Obj\01.Bullet\00.Normal_Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="ScrewBullet.h">
-      <Filter>소스 파일\01.Obj\01.Bullet\01.Screw_Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="ObjMgr.h">
       <Filter>소스 파일\98.Manager\01.CObjMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="GuideBullet.h">
-      <Filter>소스 파일\01.Obj\01.Bullet\02.Guide_Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Line.h">
-      <Filter>소스 파일\02.Line</Filter>
-    </ClInclude>
-    <ClInclude Include="LineMgr.h">
-      <Filter>소스 파일\98.Manager\02.LineMgr</Filter>
     </ClInclude>
     <ClInclude Include="KeyMgr.h">
       <Filter>소스 파일\98.Manager\03.KeyMgr</Filter>
@@ -266,23 +236,8 @@
     <ClCompile Include="CollisionMgr.cpp">
       <Filter>소스 파일\98.Manager\00.CollisionMgr</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>소스 파일\01.Obj\01.Bullet\00.Normal_Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="ScrewBullet.cpp">
-      <Filter>소스 파일\01.Obj\01.Bullet\01.Screw_Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="ObjMgr.cpp">
       <Filter>소스 파일\98.Manager\01.CObjMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="GuideBullet.cpp">
-      <Filter>소스 파일\01.Obj\01.Bullet\02.Guide_Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Line.cpp">
-      <Filter>소스 파일\02.Line</Filter>
-    </ClCompile>
-    <ClCompile Include="LineMgr.cpp">
-      <Filter>소스 파일\98.Manager\02.LineMgr</Filter>
     </ClCompile>
     <ClCompile Include="KeyMgr.cpp">
       <Filter>소스 파일\98.Manager\03.KeyMgr</Filter>
@@ -349,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
       <Filter>소스 파일\01.Obj\09.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobFunc.cpp">
+      <Filter>소스 파일\06.Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

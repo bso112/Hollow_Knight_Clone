@@ -10,6 +10,9 @@ class CMonster : public CObj
 public:
 	CMonster();
 	virtual ~CMonster();
+public:
+	//정면
+	enum FRONT { LEFT, RIGHT, FRONT_END };
 
 public:
 	virtual void Initialize()  = 0;
@@ -44,6 +47,9 @@ protected:
 	POINT m_PartolSpot;
 	//향하는 방향(x축) ..스프라이트 시트 구분을 위함
 	float m_fDir;
+
+
+
 	
 };
 

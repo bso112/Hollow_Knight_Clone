@@ -13,4 +13,7 @@ void Safe_Delete(T& _obj)
 	}
 }
 
+
+
+
 #endif // !__FUNCTION_H__

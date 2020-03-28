@@ -23,10 +23,13 @@ public:
 
 public:
 	void Set_Tag(SAVEDATA::TAG _eTag) { m_eTag = _eTag; }
-	void Set_Frame(FRAME _frame) { m_tFrame = _frame; }
 	const SAVEDATA::TAG& Get_Tag() { return m_eTag; }
+	void Set_Duration(float _fDuration) { m_fDuration = _fDuration; }
 private:
 	SAVEDATA::TAG m_eTag;
+	//이미지가 살아있는 시간
+	float m_fDuration;
+	DWORD m_dwTimer;
 
 
 };

@@ -150,16 +150,12 @@
   <ItemGroup>
     <ClInclude Include="API_FrameWork.h" />
     <ClInclude Include="BmpMgr.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chaser.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Fly.h" />
-    <ClInclude Include="GuideBullet.h" />
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="KeyMgr.h" />
-    <ClInclude Include="Line.h" />
-    <ClInclude Include="LineMgr.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="MenuPointer.h">
@@ -180,7 +176,6 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="ScrewBullet.h" />
     <ClInclude Include="ScrollMgr.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
@@ -194,16 +189,13 @@
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp" />
     <ClCompile Include="BmpMgr.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chaser.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Fly.cpp" />
-    <ClCompile Include="GuideBullet.cpp" />
+    <ClCompile Include="GlobFunc.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
-    <ClCompile Include="Line.cpp" />
-    <ClCompile Include="LineMgr.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="MenuPointer.cpp">
@@ -223,7 +215,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
-    <ClCompile Include="ScrewBullet.cpp" />
     <ClCompile Include="ScrollMgr.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="stdafx.cpp">

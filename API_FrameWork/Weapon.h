@@ -5,7 +5,7 @@
 #include "Obj.h"
 class CMyImage;
 
-//각종 공격효과, 실제 무기
+//데미지를 줄 수 있는 무기, 효과
 class CWeapon : public CObj
 {
 public:
@@ -40,7 +40,7 @@ private:
 	//손잡이에 대한 상대적 위치
 	Vector2 m_vPosition;
 
-	//무기가 살아있는 시간
+	//이펙트가 살아있는 시간
 	float m_fDuration;
 	DWORD m_dwTimer;
 

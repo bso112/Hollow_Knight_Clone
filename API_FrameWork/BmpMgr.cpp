@@ -31,7 +31,9 @@ HDC CBmpMgr::Find_Image(const TCHAR * _pImageKey)
 
 	if (m_mapBmp.end() == iter)
 	{
-		MessageBox(g_hWnd, L"비트맵을 찾지 못했습니다.", L"비트맵매니저", MB_OK);
+		TCHAR* msg = L"비트맵을 찾지 못했습니다.";
+		lstrcat(msg, _pImageKey);
+		MessageBox(g_hWnd, msg, L"비트맵매니저", MB_OK);
 		return nullptr;
 	}
 

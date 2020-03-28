@@ -51,6 +51,17 @@ public:
 		return pObj;
 	}
 
+	static CObj* Create(INFO _tInfo, INFO _tImgInfo, TCHAR* _pFrameKey, FRAME _frame)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Info(_tInfo);
+		pObj->Set_ImgInfo(_tImgInfo);
+		pObj->Set_FrameKey(_pFrameKey);
+		pObj->Set_Frame(_frame);
+		pObj->Initialize();
+		return pObj;
+	}
+
 
 
 };

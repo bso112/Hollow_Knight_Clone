@@ -5,7 +5,6 @@
 #include "Mouse.h"
 #include "CollisionMgr.h"
 #include "ObjMgr.h"
-#include "LineMgr.h"
 #include "KeyMgr.h"
 #include "BmpMgr.h"
 #include "SceneMgr.h"
@@ -92,7 +91,6 @@ void CMainGame::Release()
 	CScrollMgr::Destroy_Instance();
 	CTileMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance();
-	CLineMgr::Destroy_Instance();
 	CKeyMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
 	CImageMgr::Destroy_Instance();

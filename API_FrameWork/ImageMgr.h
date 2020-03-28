@@ -14,8 +14,9 @@ public:
 	void Late_Update();
 	void Render(HDC _DC);
 	void Release();
-	void Add_Image(CObj* _pImage) { m_vecImageInstance.push_back(_pImage); }
-	int Get_VecImageSize() { return m_vecImage.size(); }
+	void Add_Image(CObj* _pImage) { m_vecImage.push_back(_pImage); }
+	void Add_EditImage(CObj* _pImage) { m_vecImageForEditor.push_back(_pImage); }
+	int Get_VecImageSize() { return m_vecImageForEditor.size(); }
 
 
 public:
@@ -23,7 +24,7 @@ public:
 	CObj* Get_Image(int _iIndex);
 	const TCHAR* Get_ImageName(int _iIndex);
 	//인스턴스를 뒤에서 하나 지운다.
-	void Pop_back() {if(m_vecImageInstance.size() >= 0) m_vecImageInstance.pop_back(); }
+	void Pop_back() {if(m_vecImage.size() > 0) m_vecImage.pop_back(); }
 public:
 	//이미지를 드래그한다.
 	void Drag_Image(POINT& _pt);
@@ -48,11 +49,10 @@ public:
 
 private:
 	static CImageMgr*	m_pInstance;
-	//전체 이미지 벡터(원본 + 인스턴스)
+	//에디터 배치용 이미지
+	vector<CObj*>		m_vecImageForEditor;
+	//실제 처리할 이미지
 	vector<CObj*>		m_vecImage;
-	vector<CObj*>		m_vecImageInstance;
-	//배경이미지
-	vector<CObj*>		m_vecBackground;
 
 };
 

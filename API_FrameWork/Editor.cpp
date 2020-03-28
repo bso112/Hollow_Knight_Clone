@@ -5,8 +5,8 @@
 #include "BmpMgr.h"
 #include "TileMgr.h"
 #include "ImageMgr.h"
+#include "MyImage.h"
 #include "Obj.h"
-#include "ObjMgr.h"
 
 CEditor::CEditor()
 	:m_iSelected(0)
@@ -20,10 +20,35 @@ CEditor::~CEditor()
 
 void CEditor::Initialize()
 {
+
+	//백그라운드 이미지
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Field/Tutorial/tutorial_backlayer1.bmp", L"tutorial_backlayer1");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Field/Tutorial/tutorial_backlayer2.bmp", L"tutorial_backlayer2");
+
+	//포그라운드 이미지
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Field/Tutorial/tutorial_mainlayer.bmp", L"tutorial_mainlayer");
+
 	//타일을 TileX * TileY만큼 미리 생성해둔다.
 	CTileMgr::Get_Instance()->Initialize();
 	//맵을 제작할때 쓸 이미지를 불러온다.
 	CImageMgr::Get_Instance()->Initialize();
+
+
+	CObj* img;
+
+	//몬스터
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/PillBug/move.bmp", L"pillBug");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"pillBug", 256, 256);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Fly/move.bmp", L"fly");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"pillBug", 256, 256);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/move.bmp", L"husk");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"pillBug", 256, 256);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+
+	
+
 
 }
 
@@ -32,7 +57,6 @@ void CEditor::Update()
 	Key_Check();
 	CTileMgr::Get_Instance()->Update();
 	CImageMgr::Get_Instance()->Update();
-	CObjMgr::Get_Instance()->Update();
 
 
 }
@@ -41,7 +65,6 @@ void CEditor::Late_Update()
 {
 	CTileMgr::Get_Instance()->Late_Update();
 	CImageMgr::Get_Instance()->Late_Update();
-	CObjMgr::Get_Instance()->Late_Update();
 }
 
 void CEditor::Render(HDC _DC)
@@ -49,9 +72,20 @@ void CEditor::Render(HDC _DC)
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
+	//백그라운드 렌더
+	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_backlayer1");
+	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
+	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_backlayer2");
+	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
+
+
+	//포그라운드 렌더
+	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_mainlayer");
+	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
+
+
 	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
-	CObjMgr::Get_Instance()->Render(_DC);
 
 	//이미지 구분을 위한 이미지 이름 출력
 	const TCHAR* szBuff = CImageMgr::Get_Instance()->Get_ImageName(m_iSelected);
@@ -66,7 +100,6 @@ void CEditor::Release()
 {
 	CImageMgr::Destroy_Instance();
 	CTileMgr::Destroy_Instance();
-	CObjMgr::Destroy_Instance();
 	
 }
 

@@ -19,7 +19,7 @@ public:
 	//공격 방향
 	enum ATT_DIR { UP, DOWN, ATT_END};
 	//점프 상태
-	enum JUMP_STATE {STARTING, HIGHEST, FALLING, LANDING, JUMP_END};
+	enum JUMP_STATE {STARTING, FALLING, LANDING, JUMP_END};
 
 
 public:
@@ -29,17 +29,11 @@ public:
 	virtual void Render(HDC _DC) override;
 	virtual void Release() override;
 
-public:
-	void Set_Bullet(list<CObj*>* _pBullet) { m_pBullet = _pBullet; }
-	void Set_Shield(list<CObj*>* _pShield) { m_pShield = _pShield; }
 
 
 public:
-	void Take_Damage(float _fDamage) {
-		m_tStat.m_fHp -= _fDamage;
-		if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0;
-		m_eCurState = STATE::HIT;
-	}
+	void Take_Damage(float _fDamage);
+
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
@@ -68,11 +62,6 @@ private:
 	}
 
 private:
-	list<CObj*>*	m_pBullet;
-	list<CObj*>*	m_pShield;
-
-	POINT			m_tPosin;
-	float			m_fDis;
 
 	// 점프. 실제로 점프(움직임)을 하는가?
 	//m_eState == JUMP는 점프 애니메이션을 위한 것. 점프 애니메이션이 끝나야 다른 상태로 됨.
@@ -84,9 +73,11 @@ private:
 	Vector2			m_Gravity;
 	float			m_fDeltaTime;
 
+	//플레이어 상태
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
 
+	//플레이어의 스텟
 	STAT			m_tStat;
 	FRAME			m_tHealthUI;
 
@@ -98,6 +89,7 @@ private:
 	TCHAR*			m_debug;
 
 	//플레이어 정면
+	FRONT			m_ePrvFront;
 	FRONT			m_eFront;
 	//공격 방향
 	ATT_DIR			m_eAttDir;

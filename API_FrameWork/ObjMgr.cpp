@@ -2,9 +2,10 @@
 #include "ObjMgr.h"
 #include "Obj.h"
 #include "Player.h"
-#include "Bullet.h"
+#include "KeyMgr.h"
 #include "Monster.h"
 #include "CollisionMgr.h"
+#include "ScrollMgr.h"
 
 CObjMgr* CObjMgr::m_pInstance = nullptr;
 
@@ -78,7 +79,11 @@ void CObjMgr::Render(HDC _DC)
 	for (int i = 0; i < OBJID::END; ++i)
 	{
 		for (auto& pObj : m_listObj[i])
+		{
+			if (CKeyMgr::Get_Instance()->Key_Pressing('E'))
+				Draw_Rect(_DC, pObj->Get_Rect(), CScrollMgr::Get_Instance()->Get_Scroll_X(), CScrollMgr::Get_Instance()->Get_Scroll_Y());
 			pObj->Render(_DC);
+		}
 	}
 }
 
