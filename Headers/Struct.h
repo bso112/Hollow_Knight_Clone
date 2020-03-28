@@ -86,31 +86,31 @@ typedef struct tagVector2
 		return *this;
 	}
 
-	tagVector2& operator+=(int _scalar)
+	tagVector2& operator+=(float _scalar)
 	{
 		fX += _scalar;
 		fY += _scalar;
 		return *this;
 	}
 
-	tagVector2& operator-=(int _scalar)
+	tagVector2& operator-=(float _scalar)
 	{
 		fX -= _scalar;
 		fY -= _scalar;
 		return *this;
 	}
 
-	tagVector2 operator*(int _scalar)
+	tagVector2 operator*(float _scalar)
 	{
 		return tagVector2(fX * _scalar, fY * _scalar);
 	}
-	tagVector2 operator+(int _scalar)
+	tagVector2 operator+(float _scalar)
 	{
 
 		return tagVector2(fX  +_scalar, fY + _scalar);
 	}
 
-	tagVector2 operator-(int _scalar)
+	tagVector2 operator-(float _scalar)
 	{
 		return tagVector2(fX  -_scalar, fY - _scalar);
 	}

@@ -14,7 +14,7 @@
 
 CPlayer::CPlayer()
 	: m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD), m_ePrvFront(FRONT::FRONT_END), 
-	m_timerForRigidBody(0), m_fForceTime(0.f)
+	m_dwForceTimer(0), m_fForceTime(0.f)
 {
 
 }
@@ -138,7 +138,7 @@ int CPlayer::Update()
 #pragma region ³Ë¹é
 		
 	//¿Ö ¶³¸®Áö?
-	if (m_timerForRigidBody + m_fForceTime * 1000 > GetTickCount())
+	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
 	{
  		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
 		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
@@ -150,6 +150,16 @@ int CPlayer::Update()
 		m_velocity.fY = 0;
 	}
 #pragma endregion
+
+#pragma region ÇÇ°ÝÈ¿°ú
+
+	if (m_dwHitTimer + 1000 > GetTickCount())
+	{
+		m_eCurState = STATE::HIT;
+	}
+
+#pragma endregion
+
 
 	Move_Frame();
 	Key_Check();
@@ -268,7 +278,7 @@ void CPlayer::Take_Damage(float _fDamage)
 
 void CPlayer::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
 {
-	m_timerForRigidBody = GetTickCount();
+	m_dwForceTimer = GetTickCount();
 	m_velocity = _vDir * _fForce;
 	m_fForceTime = _fTime;
 
@@ -279,6 +289,17 @@ void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 	{
 		m_eCurState = STATE::HIT;
+		m_dwHitTimer = GetTickCount();
+		FRAME frame;
+		frame.iFrameStart = 0;
+		frame.iFrameEnd = 1;
+		frame.iFrameScene = 0;
+		frame.dwFrameTime = GetTickCount();
+		frame.dwFrameSpeed = 200;
+		frame.bLoop = false;
+		CObj* pEffect = CAbstractFactory<CMyImage>::Create(m_tInfo.fX, m_tInfo.fY, L"hero_hit_eff", frame, 800, 300);
+		dynamic_cast<CMyImage*>(pEffect)->Set_Duration(1.f);
+		CImageMgr::Get_Instance()->Add_Image(pEffect);
 	}
 }
 
@@ -708,8 +729,8 @@ void CPlayer::OffSet()
 {
 	int iOffSetX = WINCX >> 1;
 	int iOffSetY = WINCY >> 1;
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	float iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
+	float iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
 
 	if (iOffSetX < (m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));

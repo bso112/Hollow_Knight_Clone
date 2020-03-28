@@ -53,7 +53,7 @@ void CMouse::Render(HDC _DC)
 
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
-	GdiTransparentBlt(_DC, m_tInfo.fX, m_tInfo.fY, 37, 37, hMemDC, 0, 0, 37, 37, RGB(30, 30, 30));
+	GdiTransparentBlt(_DC, (int)m_tInfo.fX, (int)m_tInfo.fY, 37, 37, hMemDC, 0, 0, 37, 37, RGB(30, 30, 30));
 
 }
 

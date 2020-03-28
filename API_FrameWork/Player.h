@@ -106,12 +106,13 @@ private:
 	JUMP_STATE		m_ePrvJumpState;
 	JUMP_STATE		m_eJumpState;
 
-	//넉백
-	DWORD			m_timerForRigidBody;
+	//넉백 타이머
+	DWORD			m_dwForceTimer;
 	//힘을 주는 시간
 	float			m_fForceTime;
 
-
+	//피격 이펙트 타이머
+	DWORD			m_dwHitTimer;
 
 
 };

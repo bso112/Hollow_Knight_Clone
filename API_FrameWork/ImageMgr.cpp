@@ -34,10 +34,29 @@ void CImageMgr::Initialize()
 
 void CImageMgr::Update()
 {
+	auto& iter = m_vecImage.begin();
+	for (; iter != m_vecImage.end();)
+	{
+		int msg =(*iter)->Update();
+		if (msg == OBJ_DEAD)
+		{
+			SAFE_DELETE(*iter);
+			iter = m_vecImage.erase(iter);
+
+			if (m_vecImage.empty())
+				break;
+		}
+		else
+			++iter;
+	}
 }
 
 void CImageMgr::Late_Update()
 {
+	for (auto& img : m_vecImage)
+	{
+		img->Late_Update();
+	}
 }
 
 void CImageMgr::Render(HDC _DC)
@@ -162,7 +181,7 @@ void CImageMgr::Load_Image()
 		if (0 == dwByte)
 			break;
 
-			
+
 		//만약 스테이지 씬이면
 		if (CSceneMgr::Get_Instance()->Get_CurrentScene() == CSceneMgr::SCENEID::SCENE_STAGE)
 		{
@@ -171,7 +190,7 @@ void CImageMgr::Load_Image()
 			{
 			case SAVEDATA::PILLBUG:
 			{
-				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,  CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CPillBug>::Create(tInfo.fX, tInfo.fY));
 				break;
 
 			}

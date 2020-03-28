@@ -48,8 +48,8 @@ void CTile::Render(HDC _DC)
 		if (!CKeyMgr::Get_Instance()->Key_Pressing('E'))
 			return;
 
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	float iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
+	float iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
 	
 	Draw_Rect(_DC, m_tRect, iScrollX, iScrollY);
 }
