@@ -2,6 +2,7 @@
 #include "Chaser.h"
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
+#include "TileMgr.h"
 
 CChaser::CChaser()
 {
@@ -43,7 +44,14 @@ void CChaser::Initialize()
 
 int CChaser::Update()
 {
-	Move_Frame();
+
+
+	//점프일때는 따로 콜리전 체크해줌
+	CTileMgr::COLLISION collision = CTileMgr::END;
+	CTileMgr::Get_Instance()->Collision_Ex(this, collision);
+
+	//중력
+	m_tInfo.fY += m_Gravity.fY;
 
 	float target_fX = m_pTarget->Get_INFO().fX;
 
@@ -60,6 +68,7 @@ int CChaser::Update()
 		//아니면 정찰
 		Patrol();
 
+	Move_Frame();
 	Scene_Change();
 	return 0;
 }

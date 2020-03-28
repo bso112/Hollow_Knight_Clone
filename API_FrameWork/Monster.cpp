@@ -31,6 +31,9 @@ void CMonster::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 	if (_pOther->Get_Tag() == OBJTAG::PLAYER)
 	{
 		dynamic_cast<CPlayer*>(_pOther)->Take_Damage(20);
+		Vector2 pushDir = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
+		dynamic_cast<CPlayer*>(_pOther)->Add_Force(pushDir, 100.f, 0.2f);
+
 	}
 }
 

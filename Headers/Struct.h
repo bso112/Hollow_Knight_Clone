@@ -70,7 +70,7 @@ typedef struct tagVector2
 
 	tagVector2 operator-(tagVector2 _vec)
 	{
-		return Vector2(fX - _vec.fX, fY - _vec.fY);
+		return tagVector2(fX - _vec.fX, fY - _vec.fY);
 	}
 	tagVector2& operator+=(tagVector2 _vec)
 	{
@@ -102,17 +102,17 @@ typedef struct tagVector2
 
 	tagVector2 operator*(int _scalar)
 	{
-		return Vector2(fX * _scalar, fY * _scalar);
+		return tagVector2(fX * _scalar, fY * _scalar);
 	}
 	tagVector2 operator+(int _scalar)
 	{
 
-		return Vector2(fX  +_scalar, fY + _scalar);
+		return tagVector2(fX  +_scalar, fY + _scalar);
 	}
 
 	tagVector2 operator-(int _scalar)
 	{
-		return Vector2(fX  -_scalar, fY - _scalar);
+		return tagVector2(fX  -_scalar, fY - _scalar);
 	}
 
 

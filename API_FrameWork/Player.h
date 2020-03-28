@@ -33,6 +33,8 @@ public:
 
 public:
 	void Take_Damage(float _fDamage);
+	//vDir 방향으로 1초에 _fForce만큼 _fTime 초만큼 이동한다.
+	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 
 
 public:
@@ -101,8 +103,14 @@ private:
 	float			m_ComboWait;
 
 	//점프상태
-	JUMP_STATE			m_ePrvJumpState;
-	JUMP_STATE			m_eJumpState;
+	JUMP_STATE		m_ePrvJumpState;
+	JUMP_STATE		m_eJumpState;
+
+	//넉백
+	DWORD			m_timerForRigidBody;
+	//힘을 주는 시간
+	float			m_fForceTime;
+
 
 
 

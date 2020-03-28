@@ -17,16 +17,19 @@ CJumper::~CJumper()
 
 void CJumper::Initialize()
 {
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/jumper_left.bmp", L"jumper_left");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/jumper_right.bmp", L"jumper_right");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Jumper/jumper_left.bmp", L"jumper_left");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Jumper/jumper_right.bmp", L"jumper_right");
 
 	memcpy(m_pFrameKey, L"jumper_right", sizeof(TCHAR) * DIR_LEN);
 
 	m_Gravity = Vector2(0, 2.f);
 	m_curJumpVelo = m_JumpVelo;
 
-	m_tInfo.iCX = 150;
-	m_tInfo.iCY = 150;
+	m_tInfo.iCX = 80;
+	m_tInfo.iCY = 173;
+	m_tImgInfo.iCX = 200;
+	m_tImgInfo.iCY = 200;
+
 	m_tStat = STAT(80);
 
 	//스폰된 장소가 정찰의 중심점
@@ -101,6 +104,20 @@ int CJumper::Update()
 
 	Scene_Change();
 	return 0;
+}
+
+void CJumper::Render(HDC _DC)
+{
+	Update_Rect();
+
+	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+
+	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
+
+	GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
+		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameStart, m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
+		, RGB(30, 30, 30));
 }
 
 void CJumper::Late_Update()
@@ -214,7 +231,7 @@ void CJumper::Scene_Change()
 		case IDLE:
 		{
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameEnd = 1;
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
@@ -227,27 +244,17 @@ void CJumper::Scene_Change()
 			m_tFrame.iFrameEnd = 4;
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.dwFrameSpeed = 150;
 			m_tFrame.bLoop = true;
 			break;
 		}
 		case JUMP:
 		{
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
+			m_tFrame.iFrameEnd = 5;
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
-			m_tFrame.bLoop = false;
-			break;
-		}
-		case ATTACK:
-		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 3;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 500;
 			m_tFrame.bLoop = false;
 			break;
 		}
@@ -255,7 +262,7 @@ void CJumper::Scene_Change()
 		{
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 3;
-			m_tFrame.iFrameScene = 4;
+			m_tFrame.iFrameScene = 3;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = false;

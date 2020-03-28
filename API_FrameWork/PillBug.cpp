@@ -86,7 +86,6 @@ void CPillBug::Patrol()
 
 
 
-
 	//점프일때는 따로 콜리전 체크해줌
 	CTileMgr::COLLISION collision = CTileMgr::END;
 	CTileMgr::Get_Instance()->Collision_Ex(this, collision);

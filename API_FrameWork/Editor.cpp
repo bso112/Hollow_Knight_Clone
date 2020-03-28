@@ -41,14 +41,22 @@ void CEditor::Initialize()
 	img = CAbstractFactory<CMyImage>::Create(0, 0, L"pillBug", 256, 256);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::PILLBUG);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Fly/move.bmp", L"fly");
 	img = CAbstractFactory<CMyImage>::Create(0, 0, L"fly", 256, 256);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::FLY);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/move.bmp", L"husk");
 	img = CAbstractFactory<CMyImage>::Create(0, 0, L"husk", 256, 256);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::CHASER);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Jumper/jumper_left.bmp", L"jumper");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"jumper", 200, 200);
+	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::JUMPER);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+
 
 	
 

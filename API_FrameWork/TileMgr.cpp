@@ -270,7 +270,7 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 //그린 타일을 저장한다.
 void CTileMgr::Save_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile2.dat", GENERIC_WRITE
+	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE
 		, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (INVALID_HANDLE_VALUE == hFile)

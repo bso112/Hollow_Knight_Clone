@@ -13,7 +13,8 @@
 #include "MyImage.h"
 
 CPlayer::CPlayer()
-	: m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD), m_ePrvFront(FRONT::FRONT_END)
+	: m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD), m_ePrvFront(FRONT::FRONT_END), 
+	m_timerForRigidBody(0), m_fForceTime(0.f)
 {
 
 }
@@ -30,7 +31,7 @@ void CPlayer::Initialize()
 	m_ComboWait = 0.2f;
 	m_eJumpState = JUMP_STATE::STARTING;
 	m_prvPos = Vector2(m_tInfo.fX, m_tInfo.fY);
-	m_velocity = Vector2();
+	m_velocity = Vector2(0,0);
 	m_eFront = FRONT::RIGHT;
 
 
@@ -101,20 +102,13 @@ int CPlayer::Update()
 {
 
 
+#pragma region 중력적용, 델타타임
 	//델타타임 구하기
 	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
 	//프레임사이의 간격이 너무 크면 안됨.
 	if (m_fDeltaTime > 0.15f)
 		m_fDeltaTime = 0.15f;
 
-
-	Vector2 currPos(m_tInfo.fX, m_tInfo.fY);
-
-	////속도 구하기
-	m_velocity = currPos - m_prvPos;
-
-	//이전 위치를 갱신
-	m_prvPos = currPos;
 
 	if (!m_bJump)
 	{
@@ -132,12 +126,30 @@ int CPlayer::Update()
 			//기본상태
 			m_eCurState = STATE::IDLE;
 
-
 		m_tInfo.fY += m_Gravity.fY;
 
+		
 
 	}
+#pragma endregion
 
+	
+
+#pragma region 넉백
+		
+	//왜 떨리지?
+	if (m_timerForRigidBody + m_fForceTime * 1000 > GetTickCount())
+	{
+ 		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
+		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
+	}
+	else
+	{
+		m_fForceTime = 0.f;
+		m_velocity.fX = 0;
+		m_velocity.fY = 0;
+	}
+#pragma endregion
 
 	Move_Frame();
 	Key_Check();
@@ -251,6 +263,14 @@ void CPlayer::Take_Damage(float _fDamage)
 	CImageMgr::Get_Instance()->Add_Image(effect);
 
 
+
+}
+
+void CPlayer::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
+{
+	m_timerForRigidBody = GetTickCount();
+	m_velocity = _vDir * _fForce;
+	m_fForceTime = _fTime;
 
 }
 
