@@ -147,7 +147,7 @@ int CPlayer::Update()
 
 #pragma region 넉백
 		
-	//1초 동안 넉백
+
 	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
 	{
  		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
@@ -396,6 +396,7 @@ void CPlayer::Attack()
 	{
 		//0.1초동안만 지속
 		dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.1f);
+		dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::PLAYER);
 		CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
 	}
 

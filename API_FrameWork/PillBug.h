@@ -23,9 +23,9 @@ public:
 	virtual void Scene_Change() override;
 
 public:
-	virtual void Take_Damage(float _fDamage);
 	// CMonster을(를) 통해 상속됨
 	virtual void OnDead() override;
+	virtual void OnTakeDamage() override;
 
 protected:
 	virtual void Patrol() override;
@@ -36,6 +36,9 @@ public:
 	STATE			m_ePrvState;
 
 
+
+
+	// CMonster을(를) 통해 상속됨
 
 };
 

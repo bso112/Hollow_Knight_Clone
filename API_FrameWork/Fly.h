@@ -22,20 +22,11 @@ protected:
 	virtual void Patrol() override;
 	virtual void Chase_Target() override;
 	virtual void Scene_Change() override;
-	virtual void Take_Damage(float _fDamage)
-	{
-		m_tStat.m_fHp -= _fDamage;
-		if (m_tStat.m_fHp < 0)
-		{
-			m_tStat.m_fHp = 0;
-			m_eCurState = STATE::DEAD;
-		}
-		m_eCurState = STATE::HIT;
-	}
 
 protected:
 	// CMonster을(를) 통해 상속됨
-	virtual void OnDead() override;
+	virtual void OnDead()		override { m_eCurState = STATE::DEAD; };
+	virtual void OnTakeDamage() override { m_eCurState = STATE::HIT; };
 
 
 private:
@@ -45,6 +36,8 @@ private:
 	Vector2			m_Velocity;
 	//타깃과의 유지거리
 	float			m_distToTarget;
+
+	// CMonster을(를) 통해 상속됨
 };
 
 

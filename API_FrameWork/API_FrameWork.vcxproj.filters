@@ -109,6 +109,9 @@
     <Filter Include="소스 파일\06.Helper">
       <UniqueIdentifier>{ee4fad55-0f25-48d6-a571-6039e3e4c620}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\04.FalseKnight">
+      <UniqueIdentifier>{5346afda-44e4-4fa2-8f7e-69adacd75d61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="Weapon.h">
       <Filter>소스 파일\01.Obj\09.Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="FalseKnight.h">
+      <Filter>소스 파일\01.Obj\02.Monster\04.FalseKnight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -307,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="GlobFunc.cpp">
       <Filter>소스 파일\06.Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="FalseKnight.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\04.FalseKnight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

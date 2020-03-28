@@ -152,6 +152,7 @@
     <ClInclude Include="BmpMgr.h" />
     <ClInclude Include="Chaser.h" />
     <ClInclude Include="CollisionMgr.h" />
+    <ClInclude Include="FalseKnight.h" />
     <ClInclude Include="Fly.h" />
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="Jumper.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="BmpMgr.cpp" />
     <ClCompile Include="Chaser.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
+    <ClCompile Include="FalseKnight.cpp" />
     <ClCompile Include="Fly.cpp" />
     <ClCompile Include="GlobFunc.cpp" />
     <ClCompile Include="ImageMgr.cpp" />

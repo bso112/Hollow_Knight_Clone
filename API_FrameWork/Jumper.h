@@ -30,6 +30,8 @@ protected:
 protected:
 	// CMonster을(를) 통해 상속됨
 	virtual void OnDead() override;
+	// CMonster을(를) 통해 상속됨
+	virtual void OnTakeDamage() override;
 
 
 private:
@@ -47,6 +49,8 @@ private:
 
 	//타깃과의 유지거리
 	float			m_distToTarget;
+
+
 
 };
 

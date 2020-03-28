@@ -3,6 +3,7 @@
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
 #include "TileMgr.h"
+#include "MyTime.h"
 
 CChaser::CChaser()
 {
@@ -44,6 +45,29 @@ void CChaser::Initialize()
 
 int CChaser::Update()
 {
+
+#pragma region 넉백
+
+	//델타타임 구하기
+	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
+	//프레임사이의 간격이 너무 크면 안됨.
+	if (m_fDeltaTime > 0.15f)
+		m_fDeltaTime = 0.15f;
+
+
+	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
+	{
+		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
+		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
+	}
+	else
+	{
+		m_fForceTime = 0.f;
+		m_velocity.fX = 0;
+		m_velocity.fY = 0;
+	}
+#pragma endregion
+
 
 
 	//점프일때는 따로 콜리전 체크해줌
@@ -226,6 +250,4 @@ void CChaser::Scene_Change()
 	}
 }
 
-void CChaser::OnDead()
-{
-}
+

@@ -3,6 +3,7 @@
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
 #include "TileMgr.h"
+#include "MyTime.h"
 
 CPillBug::CPillBug()
 {
@@ -15,6 +16,7 @@ CPillBug::~CPillBug()
 
 void CPillBug::Initialize()
 {
+
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/PillBug/move.bmp", L"pillBug_move");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/PillBug/dead.bmp", L"pillBug_dead");
@@ -48,6 +50,29 @@ int CPillBug::Update()
 {
 	if (m_bDead)
 		return OBJ_DEAD;
+
+#pragma region 넉백
+
+	//델타타임 구하기
+	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
+	//프레임사이의 간격이 너무 크면 안됨.
+	if (m_fDeltaTime > 0.15f)
+		m_fDeltaTime = 0.15f;
+
+
+
+	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
+	{
+		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
+		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
+	}
+	else
+	{
+		m_fForceTime = 0.f;
+		m_velocity.fX = 0;
+		m_velocity.fY = 0;
+	}
+#pragma endregion
 
 
 	if (m_eCurState != STATE::DEAD)
@@ -109,21 +134,10 @@ void CPillBug::Chase_Target()
 {
 }
 
-void CPillBug::Take_Damage(float _fDamage)
+void CPillBug::OnTakeDamage()
 {
-	if (m_eCurState != STATE::DEAD)
-	{
-		m_tStat.m_fHp -= _fDamage;
-
-		if (m_tStat.m_fHp < 0)
-		{
-			OnDead();
-			m_tStat.m_fHp = 0;
-		}
-	}
-
-
 }
+
 void CPillBug::OnDead()
 {
 	m_eCurState = STATE::DEAD;

@@ -29,6 +29,11 @@ protected:
 
 protected:
 	virtual void OnDead() = 0;
+	virtual void OnTakeDamage() = 0;
+
+public:
+	//vDir 방향으로 1초에 _fForce만큼이동하는 속력으로 _fTime 초만큼 이동한다.
+	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 	
 protected:
 	//인식범위에 플레이어가 들어왔는가?
@@ -38,9 +43,12 @@ public:
 	virtual void Take_Damage(float _fDamage) 
 	{
 		m_tStat.m_fHp -= _fDamage; 
-		if (m_tStat.m_fHp < 0) 
+		if (m_tStat.m_fHp < 0)
+		{
 			m_tStat.m_fHp = 0;
-		
+			OnDead();
+		}
+		OnTakeDamage();
 	}
 
 public:
@@ -68,6 +76,12 @@ protected:
 	Vector2			m_Gravity;
 	float			m_fDeltaTime;
 
+	//밀려나는 벡터
+	Vector2			m_velocity;
+	//넉백 타이머
+	DWORD			m_dwForceTimer;
+	//힘을 주는 시간
+	float			m_fForceTime;
 
 
 	

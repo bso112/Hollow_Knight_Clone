@@ -5,9 +5,11 @@
 #include "Player.h"
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
+#include "MyTime.h"
 
 CMonster::CMonster()
-	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f), m_fDeadWait(0.f), m_dwDeadTimer(MAXDWORD), m_eFront(FRONT::LEFT), m_Gravity(Vector2(0, GRAVITY))
+	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f), m_fDeadWait(0.f), m_dwDeadTimer(MAXDWORD), m_eFront(FRONT::LEFT), m_Gravity(Vector2(0, GRAVITY)),
+	m_velocity(Vector2(0,0)), m_dwForceTimer(MAXDWORD), m_fForceTime(0.f)
 {
 	m_tStat = {};
 	//몬스터의 타깃은 항상 플레이어
@@ -15,6 +17,13 @@ CMonster::CMonster()
 	
 
 	m_eTag = OBJTAG::MONSTER;
+}
+
+void CMonster::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
+{
+	m_dwForceTimer = GetTickCount();
+	m_velocity = _vDir * _fForce;
+	m_fForceTime = _fTime;
 }
 
 bool CMonster::IsAlert()

@@ -50,6 +50,31 @@ void CJumper::Initialize()
 
 int CJumper::Update()
 {
+
+
+#pragma region 넉백
+
+	//델타타임 구하기
+	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
+	//프레임사이의 간격이 너무 크면 안됨.
+	if (m_fDeltaTime > 0.15f)
+		m_fDeltaTime = 0.15f;
+
+
+	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
+	{
+		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
+		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
+	}
+	else
+	{
+		m_fForceTime = 0.f;
+		m_velocity.fX = 0;
+		m_velocity.fY = 0;
+	}
+#pragma endregion
+
+
 	Move_Frame();
 
 	float target_fX = m_pTarget->Get_INFO().fX;
@@ -279,5 +304,9 @@ void CJumper::Scene_Change()
 }
 
 void CJumper::OnDead()
+{
+}
+
+void CJumper::OnTakeDamage()
 {
 }

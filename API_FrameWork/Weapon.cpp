@@ -67,6 +67,8 @@ void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 	if (_pOther->Get_Tag() == OBJTAG::MONSTER && m_eOwner == OWNER::PLAYER)
 	{
 		dynamic_cast<CMonster*>(_pOther)->Take_Damage(m_fDamage);
+		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
+		dynamic_cast<CMonster*>(_pOther)->Add_Force(pushDir, 100.f, 0.2f);
 	}
 	else if (_pOther->Get_Tag() == OBJTAG::PLAYER && m_eOwner == OWNER::MONSTER)
 	{
