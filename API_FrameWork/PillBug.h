@@ -11,7 +11,7 @@ public:
 	~CPillBug();
 
 public:
-	enum STATE { MOVE, DEAD, END};
+	enum STATE { MOVE, DEAD, END };
 
 
 public:
@@ -22,6 +22,10 @@ public:
 	virtual void Release() override;
 	virtual void Scene_Change() override;
 
+public:
+	virtual void Take_Damage(float _fDamage);
+	// CMonster을(를) 통해 상속됨
+	virtual void OnDead() override;
 
 protected:
 	virtual void Patrol() override;
@@ -30,8 +34,9 @@ protected:
 public:
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
-	//정면
-	FRONT			m_eFront;
+
+
+
 };
 
 #define __PILLBUG_H__

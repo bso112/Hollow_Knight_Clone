@@ -15,7 +15,7 @@
 
 
 CMainGame::CMainGame()
-	: m_pPlayer(nullptr), m_dwTime(GetTickCount()), m_iFPS(0)
+	: m_pPlayer(nullptr), m_dwTime(GetTickCount()), m_iFPS(0), m_pCursor(nullptr)
 {
 	ZeroMemory(m_szFPS, sizeof(m_szFPS));
 }
@@ -34,12 +34,14 @@ void CMainGame::Initialize()
 	
 	CMyTime::Get_Instance()->Initalize();
 	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_LOGO);
+	m_pCursor = CAbstractFactory<CMouse>::Create();
 }
 
 void CMainGame::Update()
 {
 	CSceneMgr::Get_Instance()->Update();
 	CMyTime::Get_Instance()->Update();
+	m_pCursor->Update();
 }
 
 void CMainGame::Late_Update()
@@ -47,6 +49,7 @@ void CMainGame::Late_Update()
 	CSceneMgr::Get_Instance()->Late_Update();
 	CKeyMgr::Get_Instance()->Key_Update();
 	CScrollMgr::Get_Instance()->Scroll_Lock();
+	m_pCursor->Late_Update();
 }
 
 void CMainGame::Render()
@@ -57,6 +60,7 @@ void CMainGame::Render()
 	BitBlt(hBackBuffer, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
 
 	CSceneMgr::Get_Instance()->Render(hBackBuffer);
+	m_pCursor->Render(hBackBuffer);
 
 #pragma region 출력
 	// 스크롤 출력
@@ -94,6 +98,6 @@ void CMainGame::Release()
 	CKeyMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
 	CImageMgr::Destroy_Instance();
-
+	SAFE_DELETE(m_pCursor);
 	ReleaseDC(g_hWnd, m_DC);
 }

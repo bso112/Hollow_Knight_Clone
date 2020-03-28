@@ -21,7 +21,7 @@
 #define TILECY 20
 
 #define DIR_LEN 100
-
+#define GRAVITY 5.f
 
 
 

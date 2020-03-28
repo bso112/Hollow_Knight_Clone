@@ -28,6 +28,8 @@ private:
 	DWORD		m_dwTime;
 	int			m_iFPS;
 	TCHAR		m_szFPS[16];
+
+	CObj*		m_pCursor;
 };
 
 

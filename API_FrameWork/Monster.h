@@ -26,13 +26,22 @@ protected:
 	virtual void Chase_Target() = 0;
 	//스프라이트 시트 체인지
 	virtual void Scene_Change() = 0;
+
+protected:
+	virtual void OnDead() = 0;
 	
 protected:
 	//인식범위에 플레이어가 들어왔는가?
 	bool IsAlert();
 
 public:
-	virtual void Take_Damage(float _fDamage) { m_tStat.m_fHp -= _fDamage; if (m_tStat.m_fHp < 0) m_tStat.m_fHp = 0; }
+	virtual void Take_Damage(float _fDamage) 
+	{
+		m_tStat.m_fHp -= _fDamage; 
+		if (m_tStat.m_fHp < 0) 
+			m_tStat.m_fHp = 0;
+		
+	}
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;
@@ -47,6 +56,17 @@ protected:
 	POINT m_PartolSpot;
 	//향하는 방향(x축) ..스프라이트 시트 구분을 위함
 	float m_fDir;
+
+	FRONT m_eFront;
+	FRONT m_ePrvFront;
+
+	//죽음 ~ 오브젝트 소멸까지 대기시간
+	float m_fDeadWait;
+	DWORD m_dwDeadTimer;
+
+	//중력
+	Vector2			m_Gravity;
+	float			m_fDeltaTime;
 
 
 

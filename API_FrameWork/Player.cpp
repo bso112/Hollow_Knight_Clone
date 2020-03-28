@@ -52,7 +52,7 @@ void CPlayer::Initialize()
 	m_fSpeed = 5.f;
 
 	m_curJumpVelo = m_JumpVelo;
-	m_Gravity = Vector2(0, 5.f);
+	m_Gravity = Vector2(0, GRAVITY);
 
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
@@ -93,16 +93,12 @@ void CPlayer::Initialize()
 	//CImageMgr::Get_Instance()->Add_Image(healthUI);
 
 
-
-
 	memcpy(m_pFrameKey, L"hero_idle", DIR_LEN);
 
 }
 
 int CPlayer::Update()
 {
-
-
 
 
 	//델타타임 구하기
@@ -128,13 +124,14 @@ int CPlayer::Update()
 
 
 		//부딪힌게 아무것도 없으면 추락
-		if (collision == CTileMgr::END && m_eJumpState != LANDING)
+		if (collision == CTileMgr::END)
 		{
 			m_eCurState = STATE::FALL;
 		}
 		else
-			//기본 상태
+			//기본상태
 			m_eCurState = STATE::IDLE;
+
 
 		m_tInfo.fY += m_Gravity.fY;
 
@@ -207,6 +204,10 @@ void CPlayer::Render(HDC _DC)
 	lstrcat(szBuff, m_debug);
 	TextOut(_DC, 500, 200, szBuff, lstrlen(szBuff));
 
+	TCHAR		szBuff2[32] = L"좌표 : ";
+	swprintf_s(szBuff, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
+	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+
 	//Draw_Rect(_DC, m_tRect, iScrollX, iScrollY);
 
 #pragma endregion
@@ -227,8 +228,6 @@ void CPlayer::Release()
 
 void CPlayer::Take_Damage(float _fDamage)
 {
-
-
 	m_tStat.m_fHp -= _fDamage;
 	if (m_tStat.m_fHp < 0)
 	{
@@ -257,15 +256,10 @@ void CPlayer::Take_Damage(float _fDamage)
 
 void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 {
-
-	static int cnt = 0;
-
 	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 	{
-		++cnt;
+		m_eCurState = STATE::HIT;
 	}
-
-
 }
 
 void CPlayer::OnCollisionStay(CObj * _pOther, float _fX, float _fY)
@@ -335,6 +329,7 @@ void CPlayer::Attack()
 	INFO info;
 	INFO imgInfo;
 
+	float margin = 20.f;
 
 	//이펙트 생성
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
@@ -365,7 +360,7 @@ void CPlayer::Attack()
 		//공격 방향
 		int iDir = m_eFront == FRONT::RIGHT ? 1 : -1;
 
-		info.fX = m_tInfo.fX + (m_tInfo.iCX >> 1) * iDir;
+		info.fX = m_tInfo.fX + ((m_tInfo.iCX >> 1) + margin) * iDir;
 		info.fY = m_tInfo.fY;
 		info.iCX = 160;
 		info.iCY = 90;
@@ -425,6 +420,8 @@ void CPlayer::Key_Check()
 
 
 	//애니메이션 상태변화. 밑에 있을수록 우선순위가 낮다.
+
+
 	//공격중
 	if (CKeyMgr::Get_Instance()->Key_Pressing('X'))
 	{
@@ -454,6 +451,7 @@ void CPlayer::Key_Check()
 			m_eCurState = STATE::WALK;
 
 	}
+
 
 
 
@@ -568,12 +566,12 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
-			m_tFrame.bLoop = false;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CPlayer::DEAD:
 		{
-			memcpy(m_pFrameKey, L"hero_hit", DIR_LEN);
+			memcpy(m_pFrameKey, L"hero_dead", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 8;
 			m_tFrame.iFrameScene = m_eFront;
@@ -595,7 +593,7 @@ void CPlayer::Scene_Change()
 
 
 	//점프에 따른 점프상태 변경
-	if ( ((m_eCurState == STATE::JUMP) && (m_ePrvJumpState != m_eJumpState)) || (m_ePrvFront != m_eFront))
+	if ( m_eCurState == STATE::JUMP && ((m_ePrvJumpState != m_eJumpState) || (m_ePrvFront != m_eFront)))
 	{
 		switch (m_eJumpState)
 		{
@@ -617,8 +615,8 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 100;
-			m_tFrame.bLoop = false;
+			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.bLoop = true;
 			break;
 		}
 		case CPlayer::LANDING:
@@ -628,7 +626,7 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 50;
+			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.bLoop = false;
 			break;
 		}
@@ -675,7 +673,7 @@ void CPlayer::Jumping()
 			m_bJump = false;
 
 		}
-		else if (m_curJumpVelo.fY > 0)
+		else if (m_curJumpVelo.fY > -15)
 		{
 			//추락중
 			m_eJumpState = JUMP_STATE::FALLING;

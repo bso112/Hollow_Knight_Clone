@@ -26,6 +26,10 @@ protected:
 	virtual void Chase_Target() override;
 	virtual void Scene_Change() override;
 
+protected:
+	// CMonster을(를) 통해 상속됨
+	virtual void OnDead() override;
+
 
 private:
 	STATE			m_eCurState;

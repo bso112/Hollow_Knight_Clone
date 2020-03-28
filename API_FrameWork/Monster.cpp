@@ -7,7 +7,7 @@
 #include "BmpMgr.h"
 
 CMonster::CMonster()
-	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f)
+	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f), m_fDeadWait(0.f), m_dwDeadTimer(MAXDWORD), m_eFront(FRONT::LEFT), m_Gravity(Vector2(0, GRAVITY))
 {
 	m_tStat = {};
 	//몬스터의 타깃은 항상 플레이어

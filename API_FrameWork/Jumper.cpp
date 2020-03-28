@@ -270,3 +270,7 @@ void CJumper::Scene_Change()
 		m_ePrvState = m_eCurState;
 	}
 }
+
+void CJumper::OnDead()
+{
+}

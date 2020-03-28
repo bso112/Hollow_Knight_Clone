@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Mouse.h"
-
-
+#include "BmpMgr.h"
 CMouse::CMouse()
 {
 }
@@ -16,6 +15,9 @@ void CMouse::Initialize()
 {
 	m_tInfo.iCX = 50;
 	m_tInfo.iCY = 50;
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/cursor.bmp", L"cursor");
+	memcpy(m_pFrameKey, L"cursor", DIR_LEN);
 }
 
 int CMouse::Update()
@@ -49,7 +51,10 @@ void CMouse::Render(HDC _DC)
 {
 	Update_Rect();
 
-	Ellipse(_DC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
+	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
+
+	GdiTransparentBlt(_DC, m_tInfo.fX, m_tInfo.fY, 37, 37, hMemDC, 0, 0, 37, 37, RGB(30, 30, 30));
+
 }
 
 void CMouse::Release()

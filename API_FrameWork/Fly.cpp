@@ -15,13 +15,16 @@ CFly::~CFly()
 void CFly::Initialize()
 {
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/fly_left.bmp", L"fly_left");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/fly_right.bmp", L"fly_right");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Fly/move.bmp", L"fly_move");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Fly/dead.bmp", L"fly_dead");
 
-	memcpy(m_pFrameKey, L"fly_right", sizeof(TCHAR) * DIR_LEN);
+	memcpy(m_pFrameKey, L"fly_move", sizeof(TCHAR) * DIR_LEN);
 
 	m_tInfo.iCX = 120;
 	m_tInfo.iCY = 115;
+	m_tImgInfo.iCX = 256;
+	m_tImgInfo.iCY = 256;
+
 	m_tStat = STAT(80);
 
 	//스폰된 장소가 정찰의 중심점
@@ -83,7 +86,7 @@ void CFly::Patrol()
 	float distToPatrol = dirToPatrol.magnitude();
 
 	dirToPatrol = dirToPatrol.Nomalize();
-	
+
 	//도착할때까지
 	if (distToPatrol > 2)
 	{
@@ -145,9 +148,9 @@ void CFly::Scene_Change()
 	{
 		//방향에 따라 스프라이트 시트 바꾸기.
 		if (m_fDir < 0)
-			memcpy(m_pFrameKey, L"fly_left", sizeof(TCHAR) * DIR_LEN);
+			m_eFront = FRONT::LEFT;
 		else
-			memcpy(m_pFrameKey, L"fly_right", sizeof(TCHAR) * DIR_LEN);
+			m_eFront = FRONT::RIGHT;
 	}
 
 
@@ -155,45 +158,24 @@ void CFly::Scene_Change()
 	{
 		switch (m_eCurState)
 		{
-		case IDLE:
-		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 0;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 200;
-			m_tFrame.bLoop = true;
-			break;
-		}
-		case WALK:
-		{
-
-		}
 		case RUN:
 		{
+			memcpy(m_pFrameKey, L"fly_move", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 2;
+			m_tFrame.iFrameEnd = 3;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = true;
 			break;
 		}
-		case HIT:
-		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 1;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 500;
-			m_tFrame.bLoop = false;
-			break;
-		}
+
 		case DEAD:
 		{
+			memcpy(m_pFrameKey, L"fly_dead", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 3;
+			m_tFrame.iFrameEnd = 6;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = false;
@@ -207,5 +189,9 @@ void CFly::Scene_Change()
 
 		m_ePrvState = m_eCurState;
 	}
+}
+
+void CFly::OnDead()
+{
 }
 

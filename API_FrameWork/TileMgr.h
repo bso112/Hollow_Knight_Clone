@@ -11,6 +11,7 @@ private:
 	~CTileMgr();
 
 public:
+	//충돌하는 오브젝트의 입장에서의 충돌방향
 	enum COLLISION { LEFT, RIGHT, TOP, BOTTOM, END};
 public:
 	//타일을 그린다

@@ -16,13 +16,18 @@ CChaser::~CChaser()
 void CChaser::Initialize()
 {
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/chaser_left.bmp", L"chaser_left");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/chaser_right.bmp", L"chaser_right");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/move.bmp", L"husk_move");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/idle.bmp", L"husk_idle");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/attack.bmp", L"husk_attack");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/dead.bmp", L"husk_dead");
 
-	memcpy(m_pFrameKey, L"chaser_right", sizeof(TCHAR) * DIR_LEN);
+	memcpy(m_pFrameKey, L"husk_idle", DIR_LEN);
 
 	m_tInfo.iCX = 100;
 	m_tInfo.iCY = 100;
+	m_tImgInfo.iCX = 256;
+	m_tImgInfo.iCY = 256;
+
 	m_tStat = STAT(50);
 
 	m_fDir = 1.f;
@@ -31,7 +36,7 @@ void CChaser::Initialize()
 	m_PartolSpot.x = (LONG)m_tInfo.fX;
 	m_PartolSpot.y = (LONG)m_tInfo.fY;
 
-	m_fRadius = 200;
+	m_fRadius = 500;
 	m_fPatrol = 100;
 	m_fSpeed = 1.f;
 }
@@ -106,11 +111,11 @@ void CChaser::Chase_Target()
 	m_eCurState = STATE::RUN;
 
 
-	//2초 간격으로 추격
+	//1.5초 간격으로 추격
 	static DWORD timer = GetTickCount();
-	//2초에 한번씩 뒤바뀌는 락
+	//1.5초에 한번씩 뒤바뀌는 락
 	static bool lock = false;
-	if (timer + 2000 < GetTickCount())
+	if (timer + 1500 < GetTickCount())
 	{
 		timer = GetTickCount();
 		lock = !lock;
@@ -148,9 +153,9 @@ void CChaser::Scene_Change()
 	{
 		//방향에 따라 스프라이트 시트 바꾸기.
 		if (m_fDir < 0)
-			memcpy(m_pFrameKey, L"chaser_left", sizeof(TCHAR) * DIR_LEN);
+			m_eFront = FRONT::LEFT;
 		else
-			memcpy(m_pFrameKey, L"chaser_right", sizeof(TCHAR) * DIR_LEN);
+			m_eFront = FRONT::RIGHT;
 	}
 
 
@@ -160,9 +165,10 @@ void CChaser::Scene_Change()
 		{
 		case CChaser::IDLE:
 		{
+			memcpy(m_pFrameKey, L"husk_idle", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 0;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = true;
@@ -170,9 +176,10 @@ void CChaser::Scene_Change()
 		}
 		case CChaser::WALK:
 		{
+			memcpy(m_pFrameKey, L"husk_move", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
-			m_tFrame.iFrameScene = 1;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = true;
@@ -180,29 +187,21 @@ void CChaser::Scene_Change()
 		}
 		case CChaser::RUN:
 		{
+			memcpy(m_pFrameKey, L"husk_attack", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 2;
+			m_tFrame.iFrameEnd = 10;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 200;
+			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.bLoop = true;
-			break;
-		}
-		case CChaser::HIT:
-		{
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iFrameScene = 3;
-			m_tFrame.dwFrameTime = GetTickCount();
-			m_tFrame.dwFrameSpeed = 500;
-			m_tFrame.bLoop = false;
 			break;
 		}
 		case CChaser::DEAD:
 		{
+			memcpy(m_pFrameKey, L"husk_dead", DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
-			m_tFrame.iFrameScene = 4;
+			m_tFrame.iFrameEnd = 9;
+			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
 			m_tFrame.bLoop = false;
@@ -216,4 +215,8 @@ void CChaser::Scene_Change()
 
 		m_ePrvState = m_eCurState;
 	}
+}
+
+void CChaser::OnDead()
+{
 }
