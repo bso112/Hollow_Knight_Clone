@@ -33,7 +33,7 @@ public:
 
 public:
 	void Take_Damage(float _fDamage);
-	//vDir 방향으로 1초에 _fForce만큼 _fTime 초만큼 이동한다.
+	//vDir 방향으로 1초에 _fForce만큼이동하는 속력으로 _fTime 초만큼 이동한다.
 	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 
 
@@ -44,13 +44,15 @@ public:
 
 private:
 	void Attack();
-
+	void Hit();
 
 private:
 	void Key_Check();
 	void Scene_Change();
 	void Jumping();
 	void OffSet();
+
+	
 
 
 	
@@ -113,6 +115,8 @@ private:
 
 	//피격 이펙트 타이머
 	DWORD			m_dwHitTimer;
+	//피격 시간
+	float			m_fHitTime;
 
 
 };

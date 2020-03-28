@@ -12,6 +12,7 @@
 
 #define OBJ_NOEVENT 0
 #define OBJ_DEAD 1
+#define OBJ_FREEZE 2
 
 #define PI 3.141592f
 

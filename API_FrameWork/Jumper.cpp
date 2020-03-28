@@ -25,8 +25,8 @@ void CJumper::Initialize()
 	m_Gravity = Vector2(0, 2.f);
 	m_curJumpVelo = m_JumpVelo;
 
-	m_tInfo.iCX = 80;
-	m_tInfo.iCY = 173;
+	m_tInfo.iCX = 75;
+	m_tInfo.iCY = 110;
 	m_tImgInfo.iCX = 200;
 	m_tImgInfo.iCY = 200;
 

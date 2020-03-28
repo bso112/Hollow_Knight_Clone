@@ -35,6 +35,8 @@ void CPlayer::Initialize()
 	m_eFront = FRONT::RIGHT;
 
 
+	m_fHitTime = 1.f;
+
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
@@ -82,16 +84,15 @@ void CPlayer::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_n1_eff.bmp", L"att_n1_eff");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_n2_eff.bmp", L"att_n2_eff");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_td_eff.bmp", L"att_td_eff");
-
-	//피격 이펙트
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/att_td_eff.bmp", L"att_td_eff");
 
 
-
-	//체력 UI
+	//피격이펙트
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/hero_hit_eff.bmp", L"hero_hit_eff");
-	//CObj* healthUI = CAbstractFactory<CMyImage>::Create(500, 500, L"healthUI_skull", 50, 17);
-	//CImageMgr::Get_Instance()->Add_Image(healthUI);
+
+
+	
+
 
 
 	memcpy(m_pFrameKey, L"hero_idle", DIR_LEN);
@@ -100,7 +101,16 @@ void CPlayer::Initialize()
 
 int CPlayer::Update()
 {
+#pragma region 피격효과
 
+	if (m_dwHitTimer + m_fHitTime * 1000 > GetTickCount())
+	{
+		m_eCurState = STATE::HIT;
+		Scene_Change();
+		return OBJ_FREEZE;
+	}
+
+#pragma endregion
 
 #pragma region 중력적용, 델타타임
 	//델타타임 구하기
@@ -137,8 +147,8 @@ int CPlayer::Update()
 
 #pragma region 넉백
 		
-	//왜 떨리지?
-	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
+	//1초 동안 넉백
+	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
 	{
  		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
 		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
@@ -151,14 +161,7 @@ int CPlayer::Update()
 	}
 #pragma endregion
 
-#pragma region 피격효과
 
-	if (m_dwHitTimer + 1000 > GetTickCount())
-	{
-		m_eCurState = STATE::HIT;
-	}
-
-#pragma endregion
 
 
 	Move_Frame();
@@ -256,29 +259,16 @@ void CPlayer::Take_Damage(float _fDamage)
 		m_bDead = true;
 		m_tStat.m_fHp = 0;
 	}
-	m_eCurState = STATE::HIT;
-
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
-
-	FRAME frame;
-	frame.iFrameStart = 0;
-	frame.iFrameEnd = 1;
-	frame.iFrameScene = 0;
-	frame.dwFrameTime = GetTickCount();
-	frame.dwFrameSpeed = 200;
-	frame.bLoop = false;
-	CObj* effect = CAbstractFactory<CMyImage>::Create(m_tInfo.fX + iScrollX - 200, m_tInfo.fX + iScrollY - 150, L"hero_hit_eff", frame, 400, 300);
-	dynamic_cast<CMyImage*>(effect)->Set_Duration(1.f);
-	CImageMgr::Get_Instance()->Add_Image(effect);
-
+	
+	Hit();
 
 
 }
 
 void CPlayer::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
 {
-	m_dwForceTimer = GetTickCount();
+	//히트타임 끝나고 밀려남
+	m_dwForceTimer = m_dwHitTimer + m_fHitTime * 1000;
 	m_velocity = _vDir * _fForce;
 	m_fForceTime = _fTime;
 
@@ -286,21 +276,7 @@ void CPlayer::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
 
 void CPlayer::OnCollisionEnter(CObj* _pOther, float _fX, float _fY)
 {
-	if (_pOther->Get_Tag() == OBJTAG::MONSTER)
-	{
-		m_eCurState = STATE::HIT;
-		m_dwHitTimer = GetTickCount();
-		FRAME frame;
-		frame.iFrameStart = 0;
-		frame.iFrameEnd = 1;
-		frame.iFrameScene = 0;
-		frame.dwFrameTime = GetTickCount();
-		frame.dwFrameSpeed = 200;
-		frame.bLoop = false;
-		CObj* pEffect = CAbstractFactory<CMyImage>::Create(m_tInfo.fX, m_tInfo.fY, L"hero_hit_eff", frame, 800, 300);
-		dynamic_cast<CMyImage*>(pEffect)->Set_Duration(1.f);
-		CImageMgr::Get_Instance()->Add_Image(pEffect);
-	}
+
 }
 
 void CPlayer::OnCollisionStay(CObj * _pOther, float _fX, float _fY)
@@ -426,6 +402,22 @@ void CPlayer::Attack()
 
 
 
+}
+
+void CPlayer::Hit()
+{
+	m_eCurState = STATE::HIT;
+	m_dwHitTimer = GetTickCount();
+	FRAME frame;
+	frame.iFrameStart = 0;
+	frame.iFrameEnd = 1;
+	frame.iFrameScene = 0;
+	frame.dwFrameTime = GetTickCount();
+	frame.dwFrameSpeed = 200;
+	frame.bLoop = false;
+	CObj* pEffect = CAbstractFactory<CMyImage>::Create(m_tInfo.fX, m_tInfo.fY, L"hero_hit_eff", frame, 800, 300);
+	dynamic_cast<CMyImage*>(pEffect)->Set_Duration(1.f);
+	CImageMgr::Get_Instance()->Add_Image(pEffect);
 }
 
 
@@ -728,7 +720,7 @@ void CPlayer::Jumping()
 void CPlayer::OffSet()
 {
 	int iOffSetX = WINCX >> 1;
-	int iOffSetY = WINCY >> 1;
+	int iOffSetY = 450;
 	float iScrollX = CScrollMgr::Get_Instance()->Get_Scroll_X();
 	float iScrollY = CScrollMgr::Get_Instance()->Get_Scroll_Y();
 

@@ -45,10 +45,14 @@ int CObjMgr::Update()
 
 				if (m_listObj[i].empty())
 					break;
-
 			}
 			else
+			{
+				if (OBJ_FREEZE == iEvent)
+					return 0;
+
 				++iter;
+			}
 		}
 	}
 

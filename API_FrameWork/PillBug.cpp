@@ -20,7 +20,7 @@ void CPillBug::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/PillBug/dead.bmp", L"pillBug_dead");
 
 	memcpy(m_pFrameKey, L"pillBug_move", DIR_LEN);
-	m_tInfo.iCX = 140;
+	m_tInfo.iCX = 120;
 	m_tInfo.iCY = 70;
 	m_tImgInfo.iCX = 256;
 	m_tImgInfo.iCY = 256;
