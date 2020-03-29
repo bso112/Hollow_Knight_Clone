@@ -5,6 +5,7 @@
 
 #include "Scene.h"
 class CObj;
+class CMyImage;
 class CStage : public CScene
 {
 public:
@@ -18,6 +19,8 @@ public:
 	virtual void Late_Update() override;
 	virtual void Render(HDC _DC) override;
 	virtual void Release() override;
+
+
 
 
 

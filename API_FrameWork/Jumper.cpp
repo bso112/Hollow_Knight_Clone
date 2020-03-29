@@ -51,7 +51,8 @@ void CJumper::Initialize()
 int CJumper::Update()
 {
 
-
+	if (m_bDead)
+		return OBJ_DEAD;
 #pragma region 넉백
 
 	//델타타임 구하기
@@ -75,16 +76,6 @@ int CJumper::Update()
 #pragma endregion
 
 
-	Move_Frame();
-
-	float target_fX = m_pTarget->Get_INFO().fX;
-
-	//델타타임 구하기
-	m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
-	//프레임사이의 간격이 너무 크면 안됨.
-	if (m_fDeltaTime > 0.15f)
-		m_fDeltaTime = 0.15f;
-
 
 
 
@@ -105,30 +96,45 @@ int CJumper::Update()
 	}
 
 
-	//타깃과의 거리측정
-	m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
-
-	//타깃이 공격범위안에 들어오면 공격
 
 
-
-	//타겟이 인식범위안에 들어오면
-	if ((m_distToTarget < m_fRadius) || m_bJump)
+	if (m_eCurState != STATE::DEAD)
 	{
-		//놀라고
+		float target_fX = m_pTarget->Get_INFO().fX;
+		//타깃과의 거리측정
+		m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
 
-		//추격상태가 된다.
-		Chase_Target();
+
+		//타겟이 인식범위안에 들어오면
+		if ((m_distToTarget < m_fRadius) || m_bJump)
+		{
+			//놀라고
+
+			//추격상태가 된다.
+			Chase_Target();
+		}
+		//점프가 끝나야만
+		else
+		{
+			// 정찰
+			Patrol();
+		}
+
 	}
-	//점프가 끝나야만
-	else
+	else //죽었으면
 	{
-		// 정찰
-		Patrol();
+		//일정시간후 파괴
+		if (m_dwDeadTimer + m_fDeadWait * 1000 < GetTickCount())
+			m_bDead = true;
 	}
 
+
+
+
+
+	Move_Frame();
 	Scene_Change();
-	return 0;
+	return OBJ_NOEVENT;
 }
 
 void CJumper::Render(HDC _DC)
@@ -305,6 +311,8 @@ void CJumper::Scene_Change()
 
 void CJumper::OnDead()
 {
+	m_eCurState = STATE::DEAD;
+	m_dwDeadTimer = GetTickCount();
 }
 
 void CJumper::OnTakeDamage()

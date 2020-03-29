@@ -112,6 +112,9 @@
     <Filter Include="소스 파일\01.Obj\02.Monster\04.FalseKnight">
       <UniqueIdentifier>{5346afda-44e4-4fa2-8f7e-69adacd75d61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\02.Monster\05.HuskGaurd">
+      <UniqueIdentifier>{240e54fd-8533-4b35-b420-cf2ac88ac004}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="FalseKnight.h">
       <Filter>소스 파일\01.Obj\02.Monster\04.FalseKnight</Filter>
     </ClInclude>
+    <ClInclude Include="HuskGaurd.h">
+      <Filter>소스 파일\01.Obj\02.Monster\05.HuskGaurd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -316,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="FalseKnight.cpp">
       <Filter>소스 파일\01.Obj\02.Monster\04.FalseKnight</Filter>
+    </ClCompile>
+    <ClCompile Include="HuskGaurd.cpp">
+      <Filter>소스 파일\01.Obj\02.Monster\05.HuskGaurd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

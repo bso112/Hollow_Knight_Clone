@@ -19,7 +19,7 @@ CWeapon::~CWeapon()
 void CWeapon::Initialize()
 {
 	
-
+	m_fDamage = 15.f;
 	m_dwTimer = GetTickCount();
 }
 

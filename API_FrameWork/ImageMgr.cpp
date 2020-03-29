@@ -61,7 +61,6 @@ void CImageMgr::Late_Update()
 
 void CImageMgr::Render(HDC _DC)
 {
-
 	for (auto& img : m_vecImage)
 		img->Render(_DC);
 

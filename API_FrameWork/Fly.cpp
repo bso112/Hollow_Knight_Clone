@@ -3,6 +3,7 @@
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
 #include "MyTime.h"
+#include "TileMgr.h"
 CFly::CFly()
 {
 }
@@ -42,7 +43,8 @@ void CFly::Initialize()
 int CFly::Update()
 {
 
-
+	if (m_bDead)
+		return OBJ_DEAD;
 #pragma region 넉백
 
 	//델타타임 구하기
@@ -65,31 +67,49 @@ int CFly::Update()
 #pragma endregion
 
 
+	CTileMgr::COLLISION collision = CTileMgr::END;
+	CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
-	float target_fX = m_pTarget->Get_INFO().fX;
-
-	//타깃과의 거리측정
-	m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
-
-	//기본상태
-	m_eCurState = STATE::IDLE;
-
-	//타겟이 인식범위안에 들어오면
-	if (m_tInfo.fX + m_fRadius >= target_fX
-		&& m_tInfo.fX - m_fRadius <= target_fX)
+	if (m_eCurState != STATE::DEAD)
 	{
-		//놀라고
+		float target_fX = m_pTarget->Get_INFO().fX;
 
-		//추격상태가 된다.
-		Chase_Target();
+		//타깃과의 거리측정
+		m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
+
+		//기본상태
+		m_eCurState = STATE::IDLE;
+
+		//타겟이 인식범위안에 들어오면
+		if (m_tInfo.fX + m_fRadius >= target_fX
+			&& m_tInfo.fX - m_fRadius <= target_fX)
+		{
+			//놀라고
+
+			//추격상태가 된다.
+			Chase_Target();
+		}
+		else
+			//아니면 정찰
+			Patrol();
 	}
-	else
-		//아니면 정찰
-		Patrol();
+	else //죽었으면
+	{
+		//일정시간후 파괴
+		if (m_dwDeadTimer + m_fDeadWait * 1000 < GetTickCount())
+			m_bDead = true;
+	}
+
+
+
+
+
+
+	
 
 	Move_Frame();
 	Scene_Change();
-	return 0;
+	return OBJ_NOEVENT;
 }
 
 void CFly::Late_Update()
@@ -213,5 +233,16 @@ void CFly::Scene_Change()
 
 		m_ePrvState = m_eCurState;
 	}
+}
+
+void CFly::OnDead()
+{
+	m_eCurState = STATE::DEAD;
+	memcpy(m_pFrameKey, L"fly_dead", DIR_LEN);
+	m_dwDeadTimer = GetTickCount();
+}
+
+void CFly::OnTakeDamage()
+{
 }
 

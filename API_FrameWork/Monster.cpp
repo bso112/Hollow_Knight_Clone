@@ -9,13 +9,13 @@
 
 CMonster::CMonster()
 	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f), m_fDeadWait(0.f), m_dwDeadTimer(MAXDWORD), m_eFront(FRONT::LEFT), m_Gravity(Vector2(0, GRAVITY)),
-	m_velocity(Vector2(0,0)), m_dwForceTimer(MAXDWORD), m_fForceTime(0.f)
+	m_velocity(Vector2(0,0)), m_dwForceTimer(MAXDWORD), m_fForceTime(0.f), m_fAttRange(0.f)
 {
 	m_tStat = {};
 	//몬스터의 타깃은 항상 플레이어
 	m_pTarget = CObjMgr::Get_Instance()->Get_Player();
 	
-
+	m_fDeadWait = 2.f;
 	m_eTag = OBJTAG::MONSTER;
 }
 
@@ -58,6 +58,15 @@ void CMonster::Render(HDC _DC)
 	GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
+
+#pragma region 디버그
+
+
+	TCHAR		szBuff[32] = L"";
+	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
+	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+#pragma endregion
+
 }
 
 CMonster::~CMonster()

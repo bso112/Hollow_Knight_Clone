@@ -36,6 +36,9 @@ public:
 	//vDir 방향으로 1초에 _fForce만큼이동하는 속력으로 _fTime 초만큼 이동한다.
 	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 
+public:
+	const STAT& Get_Stat() { return m_tStat; }
+
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY) override;

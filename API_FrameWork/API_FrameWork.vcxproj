@@ -154,6 +154,7 @@
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="FalseKnight.h" />
     <ClInclude Include="Fly.h" />
+    <ClInclude Include="HuskGaurd.h" />
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="KeyMgr.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="FalseKnight.cpp" />
     <ClCompile Include="Fly.cpp" />
     <ClCompile Include="GlobFunc.cpp" />
+    <ClCompile Include="HuskGaurd.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="KeyMgr.cpp" />

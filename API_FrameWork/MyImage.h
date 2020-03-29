@@ -25,6 +25,7 @@ public:
 	void Set_Tag(SAVEDATA::TAG _eTag) { m_eTag = _eTag; }
 	const SAVEDATA::TAG& Get_Tag() { return m_eTag; }
 	void Set_Duration(float _fDuration) {  m_fDuration = _fDuration; }
+	void Play_Anim() { m_tFrame.dwFrameTime = GetTickCount(); }
 private:
 	SAVEDATA::TAG m_eTag;
 	//이미지가 살아있는 시간

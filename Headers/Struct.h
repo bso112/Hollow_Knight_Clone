@@ -116,7 +116,7 @@ typedef struct tagVector2
 	}
 
 
-
+	//임시객체를 리턴만 할뿐, 자기자신의 값을 변경하지는 않음
 	tagVector2 Nomalize()
 	{
 		tagVector2 vec = {};

@@ -233,7 +233,6 @@ void CPlayer::Render(HDC _DC)
 	swprintf_s(szBuff, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
 	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
 
-	//Draw_Rect(_DC, m_tRect, iScrollX, iScrollY);
 
 #pragma endregion
 #pragma region UI

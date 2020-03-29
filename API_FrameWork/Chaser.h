@@ -23,14 +23,8 @@ public:
 
 protected:
 	// CMonster을(를) 통해 상속됨
-	virtual void OnDead() override
-	{
-		m_eCurState = STATE::DEAD;
-	}
-	virtual void OnTakeDamage() override
-	{
-		m_eCurState = STATE::HIT;
-	};
+	virtual void OnDead() override;
+	virtual void OnTakeDamage() override;
 
 private:
 	STATE			m_eCurState;

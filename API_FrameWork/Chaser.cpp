@@ -46,6 +46,9 @@ void CChaser::Initialize()
 int CChaser::Update()
 {
 
+	if (m_bDead)
+		return OBJ_DEAD;
+
 #pragma region 넉백
 
 	//델타타임 구하기
@@ -77,24 +80,41 @@ int CChaser::Update()
 	//중력
 	m_tInfo.fY += m_Gravity.fY;
 
-	float target_fX = m_pTarget->Get_INFO().fX;
 
-	//타깃과의 거리측정
-	m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
-
-	//타겟이 인식범위안에 들어오면
-	if (m_distToTarget < m_fRadius)
+	if (m_eCurState != STATE::DEAD)
 	{
-		//추격상태가 된다.
-		Chase_Target();
+		float target_fX = m_pTarget->Get_INFO().fX;
+
+		//타깃과의 거리측정
+		m_distToTarget = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).magnitude();
+
+		//타겟이 인식범위안에 들어오면
+		if (m_distToTarget < m_fRadius)
+		{
+			m_eCurState = STATE::RUN;
+			//추격상태가 된다.
+			Chase_Target();
+		}
+		else
+		{
+			m_eCurState = STATE::IDLE;
+			//아니면 정찰
+			Patrol();
+		}
 	}
-	else
-		//아니면 정찰
-		Patrol();
+	else //죽었으면
+	{
+		//일정시간후 파괴
+		if (m_dwDeadTimer + m_fDeadWait * 1000 < GetTickCount())
+			m_bDead = true;
+	}
+
+
+	
 
 	Move_Frame();
 	Scene_Change();
-	return 0;
+	return OBJ_NOEVENT;
 }
 
 void CChaser::Late_Update()
@@ -110,7 +130,6 @@ void CChaser::Release()
 void CChaser::Patrol()
 {
 
-	m_eCurState = STATE::IDLE;
 
 	//순찰범위를 벗어나면
 	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol
@@ -141,7 +160,6 @@ void CChaser::Patrol()
 
 void CChaser::Chase_Target()
 {
-	m_eCurState = STATE::RUN;
 
 
 	//1.5초 간격으로 추격
@@ -248,6 +266,17 @@ void CChaser::Scene_Change()
 
 		m_ePrvState = m_eCurState;
 	}
+}
+
+void CChaser::OnDead()
+{
+	m_eCurState = STATE::DEAD;
+	memcpy(m_pFrameKey, L"husk_dead", DIR_LEN);
+	m_dwDeadTimer = GetTickCount();
+}
+
+void CChaser::OnTakeDamage()
+{
 }
 
 

@@ -43,7 +43,7 @@ public:
 	virtual void Take_Damage(float _fDamage) 
 	{
 		m_tStat.m_fHp -= _fDamage; 
-		if (m_tStat.m_fHp < 0)
+		if (m_tStat.m_fHp <= 0)
 		{
 			m_tStat.m_fHp = 0;
 			OnDead();
@@ -58,6 +58,8 @@ protected:
 	STAT m_tStat;
 	//인식범위
 	float m_fRadius;
+	//공격범위
+	float m_fAttRange;
 	//정찰범위
 	float m_fPatrol;
 	//정찰 기준점
