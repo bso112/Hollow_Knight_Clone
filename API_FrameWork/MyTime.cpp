@@ -20,7 +20,7 @@ void CMyTime::Initalize()
 
 void CMyTime::Update()
 {
-	m_dwPrvTime = m_dwCurrTime;
 	m_dwCurrTime = GetTickCount();
-	m_dwDeltaTime = m_dwCurrTime = m_dwPrvTime;
+	m_dwDeltaTime = m_dwCurrTime - m_dwPrvTime;
+	m_dwPrvTime = m_dwCurrTime;
 }

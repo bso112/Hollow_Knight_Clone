@@ -21,10 +21,10 @@ void CFly::Initialize()
 
 	memcpy(m_pFrameKey, L"fly_move", sizeof(TCHAR) * DIR_LEN);
 
-	m_tInfo.iCX = 60;
-	m_tInfo.iCY = 90;
-	m_tImgInfo.iCX = 256;
-	m_tImgInfo.iCY = 256;
+	m_tInfo.iCX = 45;
+	m_tInfo.iCY = 67;
+	m_tImgInfo.iCX = 192;
+	m_tImgInfo.iCY = 192;
 
 	m_tStat = STAT(80);
 

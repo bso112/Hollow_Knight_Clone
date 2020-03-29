@@ -3,7 +3,7 @@
 #define __HUSKGAURD_H__
 
 #define SPEED 3.f
-#define JUMP_VELO Vector2(0.f, -70.f);
+#define JUMP_VELO Vector2(70.f, -70.f);
 #include "Monster.h"
 
 class CHuskGaurd : public CMonster

@@ -25,10 +25,10 @@ void CChaser::Initialize()
 
 	memcpy(m_pFrameKey, L"husk_idle", DIR_LEN);
 
-	m_tInfo.iCX = 100;
-	m_tInfo.iCY = 100;
-	m_tImgInfo.iCX = 256;
-	m_tImgInfo.iCY = 256;
+	m_tInfo.iCX = 75;
+	m_tInfo.iCY = 75;
+	m_tImgInfo.iCX = 192;
+	m_tImgInfo.iCY = 192;
 
 	m_tStat = STAT(50);
 

@@ -42,8 +42,8 @@ void CPlayer::Initialize()
 
 	m_tInfo.fX = 7260.f;
 	m_tInfo.fY = 1793.f;
-	m_tInfo.iCX = 60;
-	m_tInfo.iCY = 105;
+	m_tInfo.iCX = 56;
+	m_tInfo.iCY = 97;
 
 	m_tImgInfo.fX = 400.f;
 	m_tImgInfo.fY = 1000.f;
@@ -690,8 +690,8 @@ void CPlayer::Jumping()
 		m_curJumpVelo += m_Gravity;
 
 		// * m_fDeltaTime을 해주면 1초에 m_curJumpVelo만큼 이동한다.
-		m_tInfo.fX += m_curJumpVelo.fX * m_fDeltaTime;
-		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
+		m_tInfo.fX += m_curJumpVelo.fX * 0.15f;
+		m_tInfo.fY += m_curJumpVelo.fY * 0.15f;
 
 		//점프상태이고, 바닥과 충돌이면 점프해제
 		CTileMgr::COLLISION collision = CTileMgr::END;
