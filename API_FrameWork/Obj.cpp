@@ -3,7 +3,7 @@
 
 
 CObj::CObj()
-	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_pFrameKey(L""), m_eTag(OBJTAG::END),
+	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_eTag(OBJTAG::END),
 	m_bCollided(false)
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
@@ -11,6 +11,7 @@ CObj::CObj()
 	ZeroMemory(&m_tImgInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tImgRect, sizeof(m_tRect));
 	ZeroMemory(&m_tFrame, sizeof(m_tFrame));
+	ZeroMemory(m_pFrameKey, sizeof(m_pFrameKey));
 }
 
 
@@ -19,7 +20,7 @@ CObj::~CObj()
 }
 
 
-bool CObj::Move_Frame()
+void CObj::Move_Frame()
 {
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
@@ -37,14 +38,12 @@ bool CObj::Move_Frame()
 			else
 			{
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-				return true;
 			}
 		}
 
 		m_tFrame.dwFrameTime = GetTickCount();
 	}
 
-	return false;
 }
 
 

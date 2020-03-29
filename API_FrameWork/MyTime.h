@@ -10,7 +10,7 @@ public:
 	void Update();
 
 public:
-	float Get_DeltaTime() { return (float)m_dwDeltaTime * 1000; }
+	float Get_DeltaTime() { return (float)m_dwDeltaTime / 1000; }
 
 public:
 	static CMyTime* Get_Instance()

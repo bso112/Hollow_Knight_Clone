@@ -2,8 +2,8 @@
 #ifndef __HUSKGAURD_H__
 #define __HUSKGAURD_H__
 
-#define SPEED 2.f
-#define JUMP_VELO Vector2(0.f, -70);
+#define SPEED 3.f
+#define JUMP_VELO Vector2(0.f, -70.f);
 #include "Monster.h"
 
 class CHuskGaurd : public CMonster
@@ -18,6 +18,7 @@ public:
 public:
 	virtual void Initialize() override;
 	virtual int Update() override;
+	virtual void Render(HDC _DC) override;
 	virtual void Late_Update() override;
 	virtual void Release() override;
 

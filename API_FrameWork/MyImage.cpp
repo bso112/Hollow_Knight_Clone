@@ -2,7 +2,7 @@
 #include "MyImage.h"
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
-
+#include "SceneMgr.h"
 CMyImage::CMyImage()
 	:m_eTag(SAVEDATA::END), m_fDuration(FLT_MAX)
 {
@@ -39,6 +39,8 @@ int CMyImage::Update()
 
 void CMyImage::Late_Update()
 {
+	if (CSceneMgr::Get_Instance()->Get_CurrentScene() == CSceneMgr::SCENEID::SCENE_EDIT)
+		return;
 	//지속시간동안 생존
 	if (m_dwTimer + m_fDuration * 1000 < GetTickCount())
 		m_bDead = true;

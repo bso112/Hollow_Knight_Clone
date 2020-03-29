@@ -65,6 +65,8 @@ void CMonster::Render(HDC _DC)
 	TCHAR		szBuff[32] = L"";
 	swprintf_s(szBuff, L"Ã¼·Â: %d", (int)m_tStat.m_fHp);
 	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+
+
 #pragma endregion
 
 }

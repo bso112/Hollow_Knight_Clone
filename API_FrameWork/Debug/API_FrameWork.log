@@ -1,5 +1,25 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Stage.cpp
-c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\stage.cpp(104): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Jumper.cpp
+  HuskGaurd.cpp
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(197): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(381): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(432): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(453): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(457): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\huskgaurd.cpp(458): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Weapon.cpp
+  Player.cpp
+c:\users\bso11\desktop\jusin\my_hollow_knight\api_framework\player.cpp(270): warning C4244: '=': 'float'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  PillBug.cpp
+  Fly.cpp
+  Chaser.cpp
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  MyTime.cpp
+  Monster.cpp
+  MainGame.cpp
+  FalseKnight.cpp
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\Debug\HollowKnight.exe
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\Debug\HollowKnight.pdb (Full PDB)

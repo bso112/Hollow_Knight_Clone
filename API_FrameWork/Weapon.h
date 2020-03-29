@@ -30,7 +30,8 @@ public:
 	void Swing(float fAngle, float fSpeed);
 	void Set_Duration(float _fDuration) { m_fDuration = _fDuration; }
 	void Shoot();
-
+	//vDir 방향으로 1초에 _fForce만큼이동하는 속력으로 _fTime 초만큼 이동한다.
+	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 
 private:
 	OWNER m_eOwner;
@@ -44,6 +45,11 @@ private:
 	float m_fDuration;
 	DWORD m_dwTimer;
 
+	Vector2 m_velocity;
+	//힘 타이머
+	DWORD			m_dwForceTimer;
+	//힘을 주는 시간
+	float			m_fForceTime;
 
 };
 

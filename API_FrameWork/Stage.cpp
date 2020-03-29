@@ -43,15 +43,6 @@ void CStage::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/HP_INTRO.bmp", L"HP_INTRO");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/HP_DESTROY.bmp", L"HP_DESTROY");
 
-	/*
-	FRAME frame;
-	frame.iFrameStart = 0;
-	frame.iFrameEnd = 6;
-	frame.iFrameScene = 0;
-	//나중에 애니메이션 실행할때 GetTIckCount로
-	frame.dwFrameTime = 0;
-	frame.dwFrameSpeed = 200;
-	*/
 
 
 

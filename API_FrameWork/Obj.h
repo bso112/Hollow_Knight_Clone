@@ -35,8 +35,7 @@ public:
 
 
 public:
-	//애니메이션이 끝났으면 true를 반환
-	bool Move_Frame();
+	void Move_Frame();
 	
 
 public:

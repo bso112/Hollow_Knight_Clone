@@ -58,6 +58,12 @@ void CEditor::Initialize()
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/standby.bmp", L"huskGaurd");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"huskGaurd", 1024, 640);
+	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::HUSKGAURD);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+
+
 	
 
 
@@ -90,20 +96,19 @@ void CEditor::Render(HDC _DC)
 	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
 
 
+	CImageMgr::Get_Instance()->Render(_DC);
+
 	//포그라운드 렌더
 	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_mainlayer");
 	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
 
 
-	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
 
 	//이미지 구분을 위한 이미지 이름 출력
 	const TCHAR* szBuff = CImageMgr::Get_Instance()->Get_ImageName(m_iSelected);
 	if (szBuff)
 		TextOut(_DC, 800, 500, szBuff, lstrlen(szBuff));
-
-
 
 }
 

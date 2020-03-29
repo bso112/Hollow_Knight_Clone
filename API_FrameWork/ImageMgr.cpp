@@ -9,6 +9,7 @@
 #include "ObjMgr.h"
 #include "Jumper.h"
 #include "Fly.h"
+#include "HuskGaurd.h"
 
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
@@ -23,12 +24,6 @@ CImageMgr::~CImageMgr()
 
 void CImageMgr::Initialize()
 {
-	//맵 작성에 쓰일 이미지들
-
-	CObj* pObj;
-
-
-
 
 }
 
@@ -215,6 +210,11 @@ void CImageMgr::Load_Image()
 			case SAVEDATA::FLY:
 			{
 				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CFly>::Create(tInfo.fX, tInfo.fY));
+				break;
+			}
+			case SAVEDATA::HUSKGAURD:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CHuskGaurd>::Create(tInfo.fX, tInfo.fY));
 				break;
 			}
 			case SAVEDATA::END:

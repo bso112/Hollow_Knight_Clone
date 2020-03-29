@@ -224,6 +224,8 @@ void CJumper::Chase_Target()
 		m_tInfo.fX += m_curJumpVelo.fX * jumpDir * m_fDeltaTime;
 		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
 
+
+
 		//점프상태이고, 바닥과 충돌이면 점프해제
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
