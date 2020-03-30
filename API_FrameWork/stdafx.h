@@ -25,6 +25,16 @@
 #include <algorithm>
 #include <functional>
 #include <set>
-using namespace std;
 
+// 사운드
+#include <io.h>
+#include "fmod.h"
+#pragma comment (lib, "fmodex_vc.lib")
+
+
+// 동영상
+#include <Vfw.h>
+#pragma comment (lib, "Vfw32.lib")
+
+using namespace std;
 #include "Include.h"

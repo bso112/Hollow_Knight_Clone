@@ -6,6 +6,7 @@
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
 #include "MyTime.h"
+#include "SoundMgr.h"
 
 CMonster::CMonster()
 	:m_fRadius(0.f), m_PartolSpot(), m_fPatrol(0.f), m_fDir(0.f), m_fDeadWait(0.f), m_dwDeadTimer(MAXDWORD), m_eFront(FRONT::LEFT), m_Gravity(Vector2(0, GRAVITY)),
@@ -71,7 +72,20 @@ void CMonster::Render(HDC _DC)
 
 }
 
+void CMonster::Take_Damage(float _fDamage)
+{
+	CSoundMgr::Get_Instance()->PlaySound(L"Enemy_damage.wav", CSoundMgr::CHANNELID::MONSTER);
+	m_tStat.m_fHp -= _fDamage;
+	if (m_tStat.m_fHp <= 0)
+	{
+		m_tStat.m_fHp = 0;
+		OnDead();
+	}
+	OnTakeDamage();
+}
+
 CMonster::~CMonster()
 {
 }
+
 

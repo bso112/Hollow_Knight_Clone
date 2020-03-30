@@ -33,7 +33,7 @@ void CMainGame::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BackBuffer.bmp", L"BackBuffer");
 	
 	CMyTime::Get_Instance()->Initalize();
-	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_LOGO);
+	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_STAGE);
 	m_pCursor = CAbstractFactory<CMouse>::Create();
 }
 
@@ -54,6 +54,10 @@ void CMainGame::Late_Update()
 
 void CMainGame::Render()
 {
+
+	if (CSceneMgr::SCENE_LOGO == CSceneMgr::Get_Instance()->Get_CurrentScene())
+		return;
+
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Back");
 	HDC hBackBuffer = CBmpMgr::Get_Instance()->Find_Image(L"BackBuffer");
 

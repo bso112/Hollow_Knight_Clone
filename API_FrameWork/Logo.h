@@ -16,6 +16,9 @@ public:
 	virtual void Late_Update() override;
 	virtual void Render(HDC _DC) override;
 	virtual void Release() override;
+
+private:
+	HWND		m_hVideo;
 };
 
 #endif // !__LOGO_H__

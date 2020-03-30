@@ -4,6 +4,7 @@
 #include "MyButton.h"
 #include "ObjMgr.h"
 #include "MenuPointer.h"
+#include "SoundMgr.h"
 
 
 
@@ -25,9 +26,9 @@ void CMyMenu::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Menu/GameEnd.bmp", L"Button_Exit");
 
 
+	CSoundMgr::Get_Instance()->Initialize();
+	CSoundMgr::Get_Instance()->PlayBGM(L"Crossroads_Main.wav");
 
-
-	
 	//버튼을 만들고, 앞서 생성한 이미지의 키값을 통해 버튼의 이미지를 셋팅한다.
 	CObj* pObj = CAbstractFactory<CMyButton>::Create(750.f, 350.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey(L"Button_Start");
@@ -66,6 +67,7 @@ void CMyMenu::Render(HDC _DC)
 
 void CMyMenu::Release()
 {
+	CSoundMgr::Get_Instance()->StopAll();
 	//오브젝트 매니저는 싱글톤이고, 모든 씬에 존재한다. 따라서 이때
 	//CObjMgr::Destroy_Instance(); 를 해버리면 메뉴가 사용하는 것 이외의 플레이어, 몬스터등에 대한 정보도 지워지게 된다.
 	//따라서 버튼만 선별적으로 지우는 함수를 만들어 지운다.

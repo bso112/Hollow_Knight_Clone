@@ -5,6 +5,7 @@
 
 
 #include "Obj.h"
+#include "TileMgr.h"
 
 class CPlayer : public CObj
 {
@@ -121,6 +122,9 @@ private:
 	//피격 시간
 	float			m_fHitTime;
 
+	
+	float			m_fAttCoolDown;
+	CTileMgr::COLLISION m_eCollision;
 
 };
 

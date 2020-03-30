@@ -11,9 +11,10 @@
 #include "MyTime.h"
 #include "Weapon.h"
 #include "MyImage.h"
+#include "SoundMgr.h"
 
 CPlayer::CPlayer()
-	: m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD), m_ePrvFront(FRONT::FRONT_END), 
+	: m_JumpVelo(0.f, -70), m_bCombo(false), m_ComboTimer(MAXDWORD), m_ePrvFront(FRONT::FRONT_END),
 	m_dwForceTimer(0), m_fForceTime(0.f)
 {
 
@@ -28,20 +29,21 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize()
 {
 
-	m_ComboWait = 0.2f;
 	m_eJumpState = JUMP_STATE::STARTING;
 	m_prvPos = Vector2(m_tInfo.fX, m_tInfo.fY);
-	m_velocity = Vector2(0,0);
+	m_velocity = Vector2(0, 0);
 	m_eFront = FRONT::RIGHT;
 
+	m_fAttCoolDown = 0.5f;
+	m_ComboWait = 0.8f;
 
 	m_fHitTime = 1.f;
 
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 7260.f;
-	m_tInfo.fY = 1793.f;
+	m_tInfo.fX = 400.f;
+	m_tInfo.fY = 1000.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -91,7 +93,7 @@ void CPlayer::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Hero/effect/hero_hit_eff.bmp", L"hero_hit_eff");
 
 
-	
+
 
 
 
@@ -119,14 +121,11 @@ int CPlayer::Update()
 	if (m_fDeltaTime > 0.15f)
 		m_fDeltaTime = 0.15f;
 
-
 	if (!m_bJump)
 	{
-		//점프일때는 따로 콜리전 체크해줌
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
-
-
+		m_eCollision = collision;
 		//부딪힌게 아무것도 없으면 추락
 		if (collision == CTileMgr::END)
 		{
@@ -137,20 +136,17 @@ int CPlayer::Update()
 			m_eCurState = STATE::IDLE;
 
 		m_tInfo.fY += m_Gravity.fY;
-
-		
-
 	}
 #pragma endregion
 
-	
+
 
 #pragma region 넉백
-		
 
-	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
+
+	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
 	{
- 		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
+		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
 		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
 	}
 	else
@@ -258,7 +254,7 @@ void CPlayer::Take_Damage(float _fDamage)
 		m_bDead = true;
 		m_tStat.m_fHp = 0;
 	}
-	
+
 	Hit();
 
 
@@ -301,7 +297,7 @@ void CPlayer::OnCollisionExit(CObj * _pOther, float _fX, float _fY)
 
 void CPlayer::Attack()
 {
-
+	CSoundMgr::Get_Instance()->PlaySound(L"Att_One.wav", CSoundMgr::CHANNELID::PLAYER_ATT);
 
 	//콤보 판단
 	if (m_ComboTimer + m_ComboWait * 1000 < GetTickCount())
@@ -388,13 +384,15 @@ void CPlayer::Attack()
 			weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"att_n2_eff", frame);
 		}
 		else
+		{
 			weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"att_n1_eff", frame);
+		}
 	}
 
 	if (weapon)
 	{
-		//0.1초동안만 지속
-		dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.1f);
+		//0.2초동안만 지속
+		dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.2f);
 		dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::PLAYER);
 		CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
 	}
@@ -406,6 +404,8 @@ void CPlayer::Attack()
 
 void CPlayer::Hit()
 {
+
+	CSoundMgr::Get_Instance()->PlaySound(L"Hero_damage.wav", CSoundMgr::CHANNELID::PLAYER);
 	m_eCurState = STATE::HIT;
 	m_dwHitTimer = GetTickCount();
 	FRAME frame;
@@ -428,21 +428,50 @@ void CPlayer::Key_Check()
 	//어떤 키를 누르건 화살표를 같이 누르면 무조건 이동, 방향변경
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
+		if (m_eCollision == CTileMgr::BOTTOM)
+			CSoundMgr::Get_Instance()->PlaySound(L"Hero_walk_footsteps_stone.wav", CSoundMgr::CHANNELID::PLAYER_FOOTSTEP);
 		//왼쪽보기
 		m_eFront = FRONT::LEFT;
 		m_tInfo.fX -= m_fSpeed;
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
+		if (m_eCollision == CTileMgr::BOTTOM)
+			CSoundMgr::Get_Instance()->PlaySound(L"Hero_walk_footsteps_stone.wav", CSoundMgr::CHANNELID::PLAYER_FOOTSTEP);
 		//오른쪽보기
 		m_eFront = FRONT::RIGHT;
 		m_tInfo.fX += m_fSpeed;
 	}
+	else
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::PLAYER_FOOTSTEP);
+
+
+	//공격 애니메이션을 위한 트리거
+	static bool bAttack = false;
+	//공격 애니메이션을 재생에 쓸 타이머
+	static DWORD attAnimTimer = 0;
+	//공격이 예약되었는가 (쿨타임 때문에 조작감 이상해서 예약기능 넣음)
+	static bool reserved = false;
+
 
 	//공격키 누르면 무조건 공격
-	if (CKeyMgr::Get_Instance()->Key_Down('X'))
+	if (CKeyMgr::Get_Instance()->Key_Pressing('X') || reserved)
 	{
-		Attack();
+		if (CKeyMgr::Get_Instance()->Key_Down('X'))
+			reserved = true;
+
+		static DWORD attTimer = GetTickCount();
+		if (attTimer + m_fAttCoolDown * 1000 < GetTickCount())
+		{
+			Attack();
+			attTimer = GetTickCount();
+
+			//1초동안 어택애니메이션 재생
+			bAttack = true;
+			attAnimTimer = GetTickCount();
+			reserved = false;
+		}
+
 	}
 	//공격중에는 점프 못함
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
@@ -454,13 +483,17 @@ void CPlayer::Key_Check()
 
 	//애니메이션 상태변화. 밑에 있을수록 우선순위가 낮다.
 
-
-	//공격중
-	if (CKeyMgr::Get_Instance()->Key_Pressing('X'))
+	//어택애니메이션 재생
+	if (bAttack)
 	{
-		m_eCurState = STATE::ATTACK;
-
-	}	
+		if (attAnimTimer + 500 > GetTickCount())
+			m_eCurState = STATE::ATTACK;
+		else
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_ATT);
+			bAttack = false;
+		}
+	}
 	//공격중에는 점프 못함. 점프중일때 공격가능
 	else if (m_bJump)
 	{
@@ -532,7 +565,7 @@ void CPlayer::Scene_Change()
 				m_tFrame.iFrameEnd = 4;
 				m_tFrame.iFrameScene = m_eFront;
 				m_tFrame.dwFrameTime = GetTickCount();
-				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.dwFrameSpeed = 100;
 				m_tFrame.bLoop = false;
 
 				//초기화
@@ -545,7 +578,7 @@ void CPlayer::Scene_Change()
 				m_tFrame.iFrameEnd = 4;
 				m_tFrame.iFrameScene = m_eFront;
 				m_tFrame.dwFrameTime = GetTickCount();
-				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.dwFrameSpeed = 100;
 				m_tFrame.bLoop = false;
 
 				//초기화
@@ -560,7 +593,7 @@ void CPlayer::Scene_Change()
 				m_tFrame.iFrameEnd = 4;
 				m_tFrame.iFrameScene = m_eFront;
 				m_tFrame.dwFrameTime = GetTickCount();
-				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.dwFrameSpeed = 100;
 				m_tFrame.bLoop = false;
 
 				//2격 했으면 리셋.
@@ -574,7 +607,7 @@ void CPlayer::Scene_Change()
 				m_tFrame.iFrameEnd = 4;
 				m_tFrame.iFrameScene = m_eFront;
 				m_tFrame.dwFrameTime = GetTickCount();
-				m_tFrame.dwFrameSpeed = 40;
+				m_tFrame.dwFrameSpeed = 100;
 				m_tFrame.bLoop = false;
 
 			}
@@ -626,7 +659,7 @@ void CPlayer::Scene_Change()
 
 
 	//점프에 따른 점프상태 변경
-	if ( m_eCurState == STATE::JUMP && ((m_ePrvJumpState != m_eJumpState) || (m_ePrvFront != m_eFront)))
+	if (m_eCurState == STATE::JUMP && ((m_ePrvJumpState != m_eJumpState) || (m_ePrvFront != m_eFront)))
 	{
 		switch (m_eJumpState)
 		{
@@ -679,12 +712,11 @@ void CPlayer::Jumping()
 
 	if (m_bJump)
 	{
-
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::PLAYER_FOOTSTEP);
 
 		//스페이스 누르고있으면 더 높이 점프
 		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_SPACE))
 			m_curJumpVelo.fY -= 3.7f;
-
 
 		//중력적용
 		m_curJumpVelo += m_Gravity;
@@ -696,7 +728,7 @@ void CPlayer::Jumping()
 		//점프상태이고, 바닥과 충돌이면 점프해제
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
-
+		m_eCollision = collision;
 
 		if (collision == CTileMgr::BOTTOM)
 		{

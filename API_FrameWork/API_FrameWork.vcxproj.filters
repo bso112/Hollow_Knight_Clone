@@ -115,6 +115,9 @@
     <Filter Include="소스 파일\01.Obj\02.Monster\05.HuskGaurd">
       <UniqueIdentifier>{240e54fd-8533-4b35-b420-cf2ac88ac004}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\98.Manager\09.SoundMgr">
+      <UniqueIdentifier>{399e6d3c-0b91-4c5c-b35c-01226a45a275}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="HuskGaurd.h">
       <Filter>소스 파일\01.Obj\02.Monster\05.HuskGaurd</Filter>
     </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -325,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="HuskGaurd.cpp">
       <Filter>소스 파일\01.Obj\02.Monster\05.HuskGaurd</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

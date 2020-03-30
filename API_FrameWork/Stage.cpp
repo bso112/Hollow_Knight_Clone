@@ -8,6 +8,7 @@
 #include "TileMgr.h"
 #include "ImageMgr.h"
 #include "MyImage.h"
+#include "SoundMgr.h"
 
 CStage::CStage()
 {
@@ -20,6 +21,9 @@ CStage::~CStage()
 
 void CStage::Initialize()
 {
+
+	CSoundMgr::Get_Instance()->Initialize();
+	CSoundMgr::Get_Instance()->PlayBGM(L"wind_loop.wav");
 
 	//플레이어 로드 (제일 위에 있어야함. 플레이어를 필요로하는것들이 있기 때문에)
 	CObj* player = CAbstractFactory<CPlayer>::Create();
