@@ -58,7 +58,7 @@ int CChaser::Update()
 		m_fDeltaTime = 0.15f;
 
 
-	if (m_dwForceTimer + m_fForceTime * 1000> GetTickCount())
+	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
 	{
 		m_tInfo.fX += m_velocity.fX * m_fDeltaTime;
 		m_tInfo.fY += m_velocity.fY * m_fDeltaTime;
@@ -110,7 +110,7 @@ int CChaser::Update()
 	}
 
 
-	
+
 
 	Move_Frame();
 	Scene_Change();
@@ -170,25 +170,15 @@ void CChaser::Chase_Target()
 	{
 		timer = GetTickCount();
 		lock = !lock;
+		m_pTarget->Get_INFO().fX - m_tInfo.fX < 0 ? m_fDir = -1 : m_fDir = 1;
 	}
 
-	if (!lock)
+	//1.5초 동안
+	if (lock)
 	{
-		m_fSpeed = abs(m_fSpeed);
+		//왼쪽으로 감
+		m_tInfo.fX += (m_fSpeed + 4) * m_fDir;
 
-		//타겟이 왼쪽에 있으면
-		if (m_pTarget->Get_INFO().fX - m_tInfo.fX < 0)
-		{
-			//왼쪽으로 감
-			m_tInfo.fX -= m_fSpeed + 3;
-			m_fDir = -1;
-		}
-		else
-		{
-			//오른쪽으로 감
-			m_tInfo.fX += m_fSpeed + 3;
-			m_fDir = 1;
-		}
 	}
 	else
 		m_eCurState = STATE::IDLE;

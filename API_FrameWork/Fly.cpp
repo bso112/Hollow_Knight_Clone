@@ -26,14 +26,14 @@ void CFly::Initialize()
 	m_tImgInfo.iCX = 192;
 	m_tImgInfo.iCY = 192;
 
-	m_tStat = STAT(80);
+	m_tStat = STAT(50);
 
 	//스폰된 장소가 정찰의 중심점
 	m_PartolSpot.x = (LONG)m_tInfo.fX;
 	m_PartolSpot.y = (LONG)m_tInfo.fY;
 
 	//인식범위
-	m_fRadius = 400;
+	m_fRadius = 300;
 	//정찰범위
 	m_fPatrol = 100;
 	//속도

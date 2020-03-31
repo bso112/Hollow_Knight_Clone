@@ -48,6 +48,19 @@ public:
 public:
 	bool Get_isCollided() { return m_bCollided; }
 	void Set_isCollided(bool _bCollided) { m_bCollided = _bCollided; }
+	//충돌한 오브젝트를 저장한다.
+	void Add_Collided(CObj* _pColided) { m_listCollided.push_back(_pColided); }
+	//충돌한 오브젝트 리스트의 사이즈를 가져온다.
+	int Get_CollidedSize() { return m_listCollided.size(); }
+	//충돌한 오브젝트 리스트에 _pCollied가 있는지 검사한다.
+	bool Contain_Colided(CObj* _pCollided) 
+	{
+		for (auto& colided : m_listCollided)
+			if (_pCollided == colided)
+				return true;
+		return false;
+	}
+
 
 public:
 	virtual void OnCollisionEnter(CObj* _pOther, float _fX, float _fY);
@@ -77,9 +90,8 @@ protected:
 private:
 	//충돌했나
 	bool	m_bCollided;
-	//현재 충돌하고 있는 오브젝트 갯수
-	int		m_iCollisionCnt;
-
+	//충돌한 오브젝트 리스트
+	list<CObj*> m_listCollided;
 
 };
 

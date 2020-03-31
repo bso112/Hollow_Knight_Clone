@@ -53,6 +53,7 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 			}
 			else
 			{
+
 				//바꿔야됨. 충돌카운트 고려해서.. 만약 이미 충돌인 애들끼리 충돌한다면? -> 이경우는 신경쓸필요 없다. 어차피 몬스터랑 플레이어만 충돌처리할거니까.
 				if (Dst->Get_isCollided() && Src->Get_isCollided())
 				{
@@ -80,6 +81,17 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 
  			if (Check_Rect(Dst, Src, &fX, &fY))
 			{
+
+				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
+				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
+				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+
+				//반대도 마찬가지.
+				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
+
+
 				if(!Dst->Get_isCollided())
 					Dst->OnCollisionEnter(Src, fX, fY);
 				if(!Src->Get_isCollided())
@@ -118,6 +130,17 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 
 			if (Check_Sphere(Dst, Src))
 			{
+				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
+				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
+				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+					Dst->OnCollisionEnter(Src, fX, fY);
+
+				//반대도 마찬가지.
+				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+					Src->OnCollisionEnter(Dst, fX, fY);
+
+
+
 				if (!Dst->Get_isCollided())
 					Dst->OnCollisionEnter(Src, fX, fY);
 				if (!Src->Get_isCollided())

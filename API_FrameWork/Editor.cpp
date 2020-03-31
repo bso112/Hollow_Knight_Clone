@@ -43,12 +43,12 @@ void CEditor::Initialize()
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Fly/move.bmp", L"fly");
-	img = CAbstractFactory<CMyImage>::Create(0, 0, L"fly", 256, 256);
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"fly", 192, 192);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::FLY);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/Husk/move.bmp", L"husk");
-	img = CAbstractFactory<CMyImage>::Create(0, 0, L"husk", 256, 256);
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"husk", 192, 192);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::CHASER);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 
@@ -59,7 +59,7 @@ void CEditor::Initialize()
 
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/standby.bmp", L"huskGaurd");
-	img = CAbstractFactory<CMyImage>::Create(0, 0, L"huskGaurd", 1024, 640);
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"huskGaurd", 768, 480);
 	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::HUSKGAURD);
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 

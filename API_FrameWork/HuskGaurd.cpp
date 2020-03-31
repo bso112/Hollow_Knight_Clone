@@ -37,7 +37,7 @@ void CHuskGaurd::Initialize()
 
 	m_fSpeed = SPEED;
 
-	m_fDeadWait = 10.f;
+	m_fDeadWait = 5.f;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/attack.bmp", L"huskGaurd_attack");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/dash.bmp", L"huskGaurd_dash");
@@ -441,9 +441,10 @@ void CHuskGaurd::Attack()
 		m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
 
 
+		//충돌박스 생성
 		int iCX = 200;
 		int iCY = 200;
-		float fX = dir == 1 ? (float)m_tRect.right + (iCX >> 1) : (float)m_tRect.left - (iCX >> 1);
+		float fX = (dir == 1) ? (float)m_tRect.right + (iCX >> 1) : (float)m_tRect.left - (iCX >> 1);
 		float fY = (float)m_tRect.bottom - (iCY >> 1);
 		weapon = CAbstractFactory<CWeapon>::Create(fX, fY);
 

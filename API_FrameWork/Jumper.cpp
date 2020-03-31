@@ -26,7 +26,7 @@ void CJumper::Initialize()
 	m_curJumpVelo = m_JumpVelo;
 
 	m_tInfo.iCX = 75;
-	m_tInfo.iCY = 110;
+	m_tInfo.iCY = 80;
 	m_tImgInfo.iCX = 200;
 	m_tImgInfo.iCY = 200;
 
@@ -46,6 +46,8 @@ void CJumper::Initialize()
 	m_fSpeed = 1.f;
 
 	m_eCurState = STATE::IDLE;
+
+	m_fDeadWait = 2.f;
 }
 
 int CJumper::Update()
@@ -76,11 +78,6 @@ int CJumper::Update()
 #pragma endregion
 
 
-
-
-
-	//기본상태
-	m_eCurState = STATE::IDLE;
 	CTileMgr::COLLISION collision = CTileMgr::END;
 	CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
@@ -139,6 +136,7 @@ int CJumper::Update()
 
 void CJumper::Render(HDC _DC)
 {
+
 	Update_Rect();
 
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
@@ -146,9 +144,19 @@ void CJumper::Render(HDC _DC)
 
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
-	GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
+	GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - 50
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameStart, m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
+
+#pragma region 디버그
+
+
+	TCHAR		szBuff[32] = L"";
+	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
+	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+
+
+#pragma endregion
 }
 
 void CJumper::Late_Update()
@@ -163,12 +171,13 @@ void CJumper::Release()
 
 void CJumper::Patrol()
 {
-
+	m_eCurState = STATE::IDLE;
 
 	//순찰범위를 벗어나면
 	if (m_tInfo.fX < m_PartolSpot.x - m_fPatrol
 		|| m_tInfo.fX > m_PartolSpot.x + m_fPatrol)
 	{
+		m_eCurState = STATE::WALK;
 		Vector2 dirToPatrol = Vector2((float)m_PartolSpot.x, (float)m_PartolSpot.y) - Vector2(m_tInfo.fX, m_tInfo.fY);
 		//순찰 장소와의 거리측정
 		float distToPatrol = dirToPatrol.magnitude();
@@ -221,8 +230,8 @@ void CJumper::Chase_Target()
 		m_curJumpVelo += m_Gravity;
 
 
-		m_tInfo.fX += m_curJumpVelo.fX * jumpDir * m_fDeltaTime;
-		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
+		m_tInfo.fX += m_curJumpVelo.fX * jumpDir * 0.15f;
+		m_tInfo.fY += m_curJumpVelo.fY * 0.15f;
 
 
 
@@ -232,7 +241,7 @@ void CJumper::Chase_Target()
 
 		if (collision == CTileMgr::BOTTOM)
 		{
-			m_eCurState = STATE::WALK;
+			m_eCurState = STATE::IDLE;
 			//점프 초기화
 			m_curJumpVelo = m_JumpVelo;
 			m_bJump = false;
