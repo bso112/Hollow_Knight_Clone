@@ -219,6 +219,8 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 	float minDist = FLT_MAX;
 	CObj* minTile = nullptr;
 
+	int searchRange = 450;
+
 	/*
 	문제: 타일의 크기가 작다보니 한번에 여러개의 타일과 충돌한다.
 	해결: 거리가 가장가까운 하나의 타일과만 충돌하자.
@@ -226,20 +228,29 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 	*/
 	//가장 거리가 가까운 타일을 구한다.
 	for (auto& tile : m_setCollTile)
-	{
-		float distX = abs(tile->Get_INFO().fX - _pObj->Get_INFO().fX);
-		float distY = abs(tile->Get_INFO().fY - _pObj->Get_INFO().fY);
-		float dist = sqrtf(distX * distX + distY * distY);
-		if (minDist > dist)
-		{
-			minDist = dist;
-			minTile = tile;
-		}
+	{	
+		//obj 주위에 있는 타일만
+		if(_pObj->Get_INFO().fX - searchRange <= tile->Get_INFO().fX && _pObj->Get_INFO().fX + searchRange >= tile->Get_INFO().fX)
+			if (_pObj->Get_INFO().fY - searchRange <= tile->Get_INFO().fY && _pObj->Get_INFO().fY + searchRange >= tile->Get_INFO().fY)
+			{
+				float distX = abs(tile->Get_INFO().fX - _pObj->Get_INFO().fX);
+				float distY = abs(tile->Get_INFO().fY - _pObj->Get_INFO().fY);
+				float dist = sqrtf(distX * distX + distY * distY);
+				if (minDist > dist)
+				{
+					minDist = dist;
+					minTile = tile;
+				}
+			}
 
 	}
 
 	float fX = 0.f;
 	float fY = 0.f;
+
+	//주변에 타일이 없으면 리턴
+	if (minTile == nullptr)
+		return false;
 
 	if (CCollisionMgr::Check_Rect(minTile, _pObj, &fX, &fY))
 	{
@@ -270,6 +281,8 @@ bool CTileMgr::Collision_Ex(CObj * _pObj, CTileMgr::COLLISION& _collision)
 			}
 
 		}
+
+		return true;
 	}
 	
 	

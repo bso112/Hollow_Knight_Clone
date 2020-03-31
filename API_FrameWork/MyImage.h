@@ -26,12 +26,15 @@ public:
 	const SAVEDATA::TAG& Get_Tag() { return m_eTag; }
 	void Set_Duration(float _fDuration) {  m_fDuration = _fDuration; }
 	void Play_Anim() { m_tFrame.dwFrameTime = GetTickCount(); }
+	void Set_Horizontal() { m_bHorizontal = true; }
 private:
 	SAVEDATA::TAG m_eTag;
 	//이미지가 살아있는 시간
 	float m_fDuration;
 	DWORD m_dwTimer;
 
+	//가로 스프라이트인가?
+	bool m_bHorizontal;
 
 };
 

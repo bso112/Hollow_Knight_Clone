@@ -47,7 +47,11 @@ void CStage::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/HP_INTRO.bmp", L"HP_INTRO");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/HP_DESTROY.bmp", L"HP_DESTROY");
 
-
+	//ÀÌÆåÆ® ÁØºñ
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/ballExplode.bmp", L"ballExplode");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/greyPuff.bmp", L"greyPuff");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/monsterEffect.bmp", L"monsterEffect");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/orangePuff.bmp", L"orangePuff");
 
 
 }
@@ -78,6 +82,8 @@ void CStage::Render(HDC _DC)
 	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_backlayer2");
 	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
 
+	//ÀÌÆåÆ® ·»´õ
+	CImageMgr::Get_Instance()->Render(_DC);
 	//¿ÀºêÁ§Æ® (ÇÃ·¹ÀÌ¾î, ¸ó½ºÅÍ µî ·»´õ)
 	CObjMgr::Get_Instance()->Render(_DC);
 
@@ -86,8 +92,6 @@ void CStage::Render(HDC _DC)
 	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
 
 
-	//ÀÌÆåÆ® ·»´õ
-	CImageMgr::Get_Instance()->Render(_DC);
 	CTileMgr::Get_Instance()->Render(_DC);
 
 	//UI ·»´õ

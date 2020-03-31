@@ -6,6 +6,7 @@
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
 #include "MyTime.h"
+#include "ImageMgr.h"
 
 CWeapon::CWeapon()
 	:m_eOwner(END), m_fDamage(0.f), m_fDuration(FLT_MAX),
@@ -92,12 +93,23 @@ void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 		dynamic_cast<CMonster*>(_pOther)->Take_Damage(m_fDamage);
 		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
 		dynamic_cast<CMonster*>(_pOther)->Add_Force(pushDir, 1000.f, 0.2f);
+		FRAME frame;
+		frame.iFrameStart = 0;
+		frame.iFrameEnd = 2;
+		frame.iFrameScene = 0;
+		frame.dwFrameTime = GetTickCount();
+		frame.dwFrameSpeed = 100;
+		frame.bLoop = false;
+		//ÀÌÆåÆ® »ý¼º
+		CObj* effect = CAbstractFactory<CMyImage>::Create(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY, L"monsterEffect", frame, 250, 150, 0.2f);
+		dynamic_cast<CMyImage*>(effect)->Set_Horizontal();
+		CImageMgr::Get_Instance()->Add_Image(effect);
+
 	}
 	else if (_pOther->Get_Tag() == OBJTAG::PLAYER && m_eOwner == OWNER::MONSTER)
 	{
 		dynamic_cast<CPlayer*>(_pOther)->Take_Damage(m_fDamage);
 		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
-		//dynamic_cast<CPlayer*>(_pOther)->Add_Force(pushDir, 1000.f, 0.2f);
 	}
 }
 

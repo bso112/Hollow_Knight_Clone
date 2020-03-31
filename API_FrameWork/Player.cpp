@@ -45,8 +45,8 @@ void CPlayer::Initialize()
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 7260.f;
-	m_tInfo.fY = 1793.f;
+	m_tInfo.fX = 400.f;
+	m_tInfo.fY = 1000.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -57,7 +57,7 @@ void CPlayer::Initialize()
 
 	m_fAngle = 0.f;
 
-	m_fSpeed = 7.f;
+	m_fSpeed = 6.f;
 
 	m_curJumpVelo = m_JumpVelo;
 	m_Gravity = Vector2(0, GRAVITY);
@@ -286,7 +286,7 @@ void CPlayer::Take_Damage(float _fDamage)
 void CPlayer::Add_Force(Vector2 _vDir, float _fForce, float _fTime)
 {
 	//히트타임 끝나고 밀려남
-	m_dwForceTimer = m_dwHitTimer + m_fHitTime * 1000;
+	m_dwForceTimer = m_dwHitTimer + (DWORD)m_fHitTime * 1000;
 	m_velocity = _vDir * _fForce;
 	m_fForceTime = _fTime;
 
@@ -761,6 +761,7 @@ void CPlayer::Jumping()
 			m_curJumpVelo = m_JumpVelo;
 			m_eJumpState = JUMP_STATE::LANDING;
 			m_bJump = false;
+
 
 		}
 		else if (m_curJumpVelo.fY > -15)

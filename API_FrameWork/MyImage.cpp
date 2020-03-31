@@ -4,7 +4,7 @@
 #include "ScrollMgr.h"
 #include "SceneMgr.h"
 CMyImage::CMyImage()
-	:m_eTag(SAVEDATA::END), m_fDuration(FLT_MAX)
+	:m_eTag(SAVEDATA::END), m_fDuration(FLT_MAX), m_bHorizontal(false)
 {
 }
 
@@ -54,10 +54,19 @@ void CMyImage::Render(HDC _DC)
 	Update_Rect();
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
-	
-	GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
-		, m_tInfo.iCX, m_tInfo.iCY, memDC, m_tInfo.iCX * m_tFrame.iFrameScene, m_tInfo.iCY *m_tFrame.iFrameStart, m_tInfo.iCX, m_tInfo.iCY
-		, RGB(30, 30, 30));
+	if (m_bHorizontal)
+	{
+		GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
+			, m_tInfo.iCX, m_tInfo.iCY, memDC, m_tInfo.iCX * m_tFrame.iFrameStart, m_tInfo.iCY *m_tFrame.iFrameScene, m_tInfo.iCX, m_tInfo.iCY
+			, RGB(30, 30, 30));
+	}
+	else
+	{
+
+		GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
+			, m_tInfo.iCX, m_tInfo.iCY, memDC, m_tInfo.iCX * m_tFrame.iFrameScene, m_tInfo.iCY *m_tFrame.iFrameStart, m_tInfo.iCX, m_tInfo.iCY
+			, RGB(30, 30, 30));
+	}
 }
 
 void CMyImage::Release()

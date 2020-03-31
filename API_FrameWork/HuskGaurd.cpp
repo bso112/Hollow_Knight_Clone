@@ -438,7 +438,6 @@ void CHuskGaurd::Jumping()
 					INFO info;
 					INFO imgInfo;
 					
-					frame.iFrameEnd -= i;
 
 					info.iCX = 50;
 					info.iCY = 100;
