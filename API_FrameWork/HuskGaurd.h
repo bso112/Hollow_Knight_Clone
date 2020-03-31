@@ -3,7 +3,7 @@
 #define __HUSKGAURD_H__
 
 #define SPEED 3.f
-#define JUMP_VELO Vector2(70.f, -70.f);
+#define JUMP_VELO Vector2(200.f, -100.f);
 #include "Monster.h"
 
 class CHuskGaurd : public CMonster
@@ -52,6 +52,9 @@ public:
 	Vector2			m_curJumpVelo;
 
 	float			m_fAttCoolDown;
+
+	//패턴 변화를 위한 공격카운트
+	int				m_iAttCnt;
 };
 
 #endif // !__HUSKGAURD_H__

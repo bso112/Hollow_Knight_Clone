@@ -8,7 +8,7 @@
 #include "ScrollMgr.h"
 
 CHuskGaurd::CHuskGaurd()
-	:m_bWaked(false), m_bJump(false)
+	:m_bWaked(false), m_bJump(false), m_iAttCnt(0)
 {
 }
 
@@ -19,9 +19,8 @@ CHuskGaurd::~CHuskGaurd()
 
 void CHuskGaurd::Initialize()
 {
-	m_fAttCoolDown = 0.2f;
+	m_fAttCoolDown = 0.7f;
 	m_curJumpVelo = JUMP_VELO;
-
 	m_tInfo.iCX = 159;
 	m_tInfo.iCY = 249;
 	m_tImgInfo.iCX = 768;
@@ -109,7 +108,7 @@ void CHuskGaurd::Scene_Change()
 			m_tFrame.iFrameScene = m_eFront;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 100;
-			m_tFrame.bLoop = true;
+			m_tFrame.bLoop = false;
 			break;
 		}
 		case CHuskGaurd::DASH:
@@ -301,18 +300,19 @@ void CHuskGaurd::Process()
 		}
 		case CHuskGaurd::ATTACK:
 		{
-			Attack();
+			if (!m_bJump)
+				Attack();
 			break;
 		}
 		case CHuskGaurd::DASH:
 		{
-			m_fSpeed += 3;
+			m_fSpeed += 1;
 			Chase_Target();
 			break;
 		}
 		case CHuskGaurd::JUMP:
 		{
-			Jumping();
+			m_bJump = true;
 			break;
 		}
 		case CHuskGaurd::END:
@@ -321,6 +321,7 @@ void CHuskGaurd::Process()
 			break;
 		}
 	}
+	Jumping();
 
 
 }
@@ -339,22 +340,40 @@ void CHuskGaurd::Update_State()
 
 	if (m_bWaked)
 	{
-		//타깃이 공격범위 밖이면
-		if (abs(m_vToTarget.fX) > m_fAttRange)
+		//타깃이 공격범위 밖이고, 현재 공격중이 아니면
+		if (abs(m_vToTarget.fX) > m_fAttRange && m_eCurState != STATE::ATTACK)
 		{
-			m_eCurState = STATE::WALK;
-			
-			//원거리 공격
-			if (abs(m_vToTarget.fX) > m_fAttRange + 100)
-				m_eCurState = STATE::JUMP;
-			if (abs(m_vToTarget.fX) > m_fAttRange + 200)
-				m_eCurState = STATE::DASH;
+			//m_eCurState = STATE::WALK;
+
+			//if (abs(m_vToTarget.fX) > m_fAttRange + 100)
+				m_eCurState = STATE::WALK;
 
 		}
 		//근접공격
 		else
 		{
-			m_eCurState = STATE::ATTACK;
+			//6번 공격중 한번 점프공격
+			//if (m_iAttCnt % 6 == 0)
+				//m_eCurState = STATE::JUMP;
+			//else
+
+			//1.5초 간격으로 추격
+			static DWORD timer = GetTickCount();
+			//1.5초에 한번씩 뒤바뀌는 락
+			static bool lock = false;
+			if (timer + m_fAttCoolDown * 1600 < GetTickCount())
+			{
+				lock = !lock;
+				timer = GetTickCount();
+			}
+
+			if (lock)
+				m_eCurState = STATE::ATTACK;
+			else
+				m_eCurState = STATE::END;
+
+				
+
 		}
 	}
 
@@ -388,6 +407,7 @@ void CHuskGaurd::Jumping()
 			//점프 초기화 
 			m_curJumpVelo = JUMP_VELO;
 			m_bJump = false;
+			++m_iAttCnt;
 
 #pragma region 이펙트생성
 
@@ -451,10 +471,13 @@ void CHuskGaurd::Attack()
 		if (weapon)
 		{
 			weapon->Set_Size(iCX, iCY);
-			dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.05f);
+			dynamic_cast<CWeapon*>(weapon)->Set_Duration(0.0001f);
 			dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::MONSTER);
 			CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
+
 		}
+
+		++m_iAttCnt;
 	}
 
 }

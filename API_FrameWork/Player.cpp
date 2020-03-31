@@ -37,13 +37,16 @@ void CPlayer::Initialize()
 	m_fAttCoolDown = 0.5f;
 	m_ComboWait = 0.8f;
 
+
 	m_fHitTime = 1.f;
+	//무적시간. HitTime 포함이라서 사실상 1초
+	m_fInvincibleTime = 2.f;
 
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 400.f;
-	m_tInfo.fY = 1000.f;
+	m_tInfo.fX = 7260.f;
+	m_tInfo.fY = 1793.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -54,7 +57,7 @@ void CPlayer::Initialize()
 
 	m_fAngle = 0.f;
 
-	m_fSpeed = 5.f;
+	m_fSpeed = 7.f;
 
 	m_curJumpVelo = m_JumpVelo;
 	m_Gravity = Vector2(0, GRAVITY);
@@ -113,6 +116,19 @@ int CPlayer::Update()
 	}
 
 #pragma endregion
+
+#pragma region 무적시간 세기
+
+	if (m_bInvincible)
+	{
+		//m_fInvincibleTime만큼 지나면 무적을 false로 바꿈
+		if (timerForInvincible + m_fInvincibleTime * 1000 < GetTickCount())
+		{
+			m_bInvincible = false;
+		}
+	}
+#pragma endregion
+
 
 #pragma region 중력적용, 델타타임
 	//델타타임 구하기
@@ -248,6 +264,13 @@ void CPlayer::Release()
 
 void CPlayer::Take_Damage(float _fDamage)
 {
+	if (m_bInvincible)
+		return;
+
+	m_bInvincible = true;
+	//무적타이머 ON
+	timerForInvincible = GetTickCount();
+
 	m_tStat.m_fHp -= _fDamage;
 	if (m_tStat.m_fHp < 0)
 	{
@@ -374,7 +397,7 @@ void CPlayer::Attack()
 
 		info.fX = m_tInfo.fX + ((m_tInfo.iCX >> 1) + margin) * iDir;
 		info.fY = m_tInfo.fY;
-		info.iCX = 160;
+		info.iCX = 150;
 		info.iCY = 90;
 		imgInfo.iCX = 192;
 		imgInfo.iCY = 96;

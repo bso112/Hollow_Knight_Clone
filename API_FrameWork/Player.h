@@ -126,6 +126,11 @@ private:
 	float			m_fAttCoolDown;
 	CTileMgr::COLLISION m_eCollision;
 
+	//무적상태인가
+	bool			m_bInvincible;
+	//무적시간
+	float			m_fInvincibleTime;
+	DWORD			timerForInvincible;
 };
 
 

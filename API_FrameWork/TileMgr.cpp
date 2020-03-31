@@ -99,7 +99,7 @@ void CTileMgr::UnPiking_Tile(POINT& _pt)
 }
 
 
-CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO _info, RECT& _rc)
+CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO& _info, RECT& _rc)
 {
 	//점을 움직일 속도(정확도)
 	float fSpeed = 2.f;
@@ -179,10 +179,12 @@ CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO
 				//만약 타일이 아래에 있으면 밟고 있는것이다.
 				if (minTile->Get_Rect().top <= rc.bottom)
 				{
+					_info.fY -= iCY;
 					return COLLISION::BOTTOM;
 				}
 				else
 				{
+					_info.fY += iCY;
 					return COLLISION::TOP;
 				}
 			}
@@ -191,10 +193,17 @@ CTileMgr::COLLISION CTileMgr::Collision_Tile(Vector2 _origin, Vector2 _dst, INFO
 			{
 				//타일이 왼쪽에 있으면
 				if (minTile->Get_Rect().right <= rc.left)
+				{
+					_info.fX += iCX;
 					return COLLISION::LEFT;
+				}
 				//오른쪽에 있으면
 				else
+				{
+
+					_info.fX -= iCX;
 					return COLLISION::RIGHT;
+				}
 			}
 		}
 	}
