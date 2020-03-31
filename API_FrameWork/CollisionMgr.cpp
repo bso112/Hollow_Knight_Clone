@@ -26,26 +26,20 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 		{
 			if (IntersectRect(&rc, &Dst->Get_Rect(), &Src->Get_Rect()))
 			{
-				
-				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
-				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
-				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+				//만약 서로 충돌한 적이 없으면 서로의 충돌리스트에 서로를 추가한다.
+				if (!Dst->Contain_Collided(Src))
+				{
+					Dst->Add_Collided(Src);
+					Dst->Set_isCollided(true);
 					Dst->OnCollisionEnter(Src, fX, fY);
-
-				//반대도 마찬가지.
-				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+				}
+				if (!Src->Contain_Collided(Dst))
+				{
+					Src->Add_Collided(Dst);
+					Src->Set_isCollided(true);
 					Src->OnCollisionEnter(Dst, fX, fY);
-				
+				}
 
-				//충돌이고 충돌했으면 false면 충돌진입상태
-				if (!Dst->Get_isCollided())
-					Dst->OnCollisionEnter(Src, fX, fY);
-				if (!Src->Get_isCollided())
-					Src->OnCollisionEnter(Dst, fX, fY);
-
-
-				Dst->Set_isCollided(true);
-				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
 				Src->OnCollisionStay(Dst, fX, fY);
@@ -53,16 +47,21 @@ bool CCollisionMgr::Collision_Rect(list<CObj*> _Dst, list<CObj*> _Src)
 			}
 			else
 			{
+				//만약 상대방이 전에 충돌한 리스트에 있으면 삭제한다.
+				Dst->Erase_Collided(Src);
+				Src->Erase_Collided(Dst);
 
-				//바꿔야됨. 충돌카운트 고려해서.. 만약 이미 충돌인 애들끼리 충돌한다면? -> 이경우는 신경쓸필요 없다. 어차피 몬스터랑 플레이어만 충돌처리할거니까.
-				if (Dst->Get_isCollided() && Src->Get_isCollided())
+				//충돌리스트가 비었고, 전에 충돌한적이 있으면 collisionExit을 실행한다.
+				if (Dst->Get_CollidedSize() == 0 && Dst->Get_isCollided())
 				{
-					Dst->OnCollisionExit(Src, fX, fY);
 					Dst->Set_isCollided(false);
-					Src->OnCollisionExit(Dst, fX, fY);
-					Src->Set_isCollided(false);
+					Dst->OnCollisionExit(Src, fX, fY);
 				}
-
+				if (Src->Get_CollidedSize() == 0 && Src->Get_isCollided())
+				{
+					Src->Set_isCollided(false);
+					Src->OnCollisionExit(Dst, fX, fY);
+				}
 			}
 		}
 	}
@@ -79,26 +78,22 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 		{
 			float fX = 0.f, fY = 0.f;
 
- 			if (Check_Rect(Dst, Src, &fX, &fY))
+			if (Check_Rect(Dst, Src, &fX, &fY))
 			{
-
-				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
-				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
-				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+				//만약 서로 충돌한 적이 없으면 서로의 충돌리스트에 서로를 추가한다.
+				if (!Dst->Contain_Collided(Src))
+				{
+					Dst->Add_Collided(Src);
+					Dst->Set_isCollided(true);
 					Dst->OnCollisionEnter(Src, fX, fY);
-
-				//반대도 마찬가지.
-				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+				}
+				if (!Src->Contain_Collided(Dst))
+				{
+					Src->Add_Collided(Dst);
+					Src->Set_isCollided(true);
 					Src->OnCollisionEnter(Dst, fX, fY);
+				}
 
-
-				if(!Dst->Get_isCollided())
-					Dst->OnCollisionEnter(Src, fX, fY);
-				if(!Src->Get_isCollided())
-					Src->OnCollisionEnter(Dst, fX, fY);
-
-				Dst->Set_isCollided(true);
-				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
 				Src->OnCollisionStay(Dst, fX, fY);
@@ -106,14 +101,21 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 			}
 			else
 			{
-				if (Dst->Get_isCollided() && Src->Get_isCollided())
-				{
-					Dst->OnCollisionExit(Src, fX, fY);
-					Dst->Set_isCollided(false);
-					Src->OnCollisionExit(Dst, fX, fY);
-					Src->Set_isCollided(false);
-				}
+				//만약 상대방이 전에 충돌한 리스트에 있으면 삭제한다.
+				Dst->Erase_Collided(Src);
+				Src->Erase_Collided(Dst);
 
+				//충돌리스트가 비었고, 전에 충돌한적이 있으면 collisionExit을 실행한다.
+				if (Dst->Get_CollidedSize() == 0 && Dst->Get_isCollided())
+				{
+					Dst->Set_isCollided(false);
+					Dst->OnCollisionExit(Src, fX, fY);
+				}
+				if (Src->Get_CollidedSize() == 0 && Src->Get_isCollided())
+				{
+					Src->Set_isCollided(false);
+					Src->OnCollisionExit(Dst, fX, fY);
+				}
 			}
 		}
 	}
@@ -130,24 +132,20 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 
 			if (Check_Sphere(Dst, Src))
 			{
-				//Dst가 충돌상태이고, src가 충돌이 아닌 상태여도 Dst의 온콜리전엔터 실행
-				//Dst충돌 중에도 src가 새로 와서 충돌해도 콜리전 엔터니까.
-				if (Dst->Get_isCollided() && !Src->Get_isCollided())
+				//만약 서로 충돌한 적이 없으면 서로의 충돌리스트에 서로를 추가한다.
+				if (!Dst->Contain_Collided(Src))
+				{
+					Dst->Add_Collided(Src);
+					Dst->Set_isCollided(true);
 					Dst->OnCollisionEnter(Src, fX, fY);
-
-				//반대도 마찬가지.
-				if (!Dst->Get_isCollided() && Src->Get_isCollided())
+				}
+				if (!Src->Contain_Collided(Dst))
+				{
+					Src->Add_Collided(Dst);
+					Src->Set_isCollided(true);
 					Src->OnCollisionEnter(Dst, fX, fY);
+				}
 
-
-
-				if (!Dst->Get_isCollided())
-					Dst->OnCollisionEnter(Src, fX, fY);
-				if (!Src->Get_isCollided())
-					Src->OnCollisionEnter(Dst, fX, fY);
-
-				Dst->Set_isCollided(true);
-				Src->Set_isCollided(true);
 
 				Dst->OnCollisionStay(Src, fX, fY);
 				Src->OnCollisionStay(Dst, fX, fY);
@@ -155,14 +153,21 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dst, list<CObj*> _Src)
 			}
 			else
 			{
-				if (Dst->Get_isCollided() && Src->Get_isCollided())
-				{
-					Dst->OnCollisionExit(Src, fX, fY);
-					Dst->Set_isCollided(false);
-					Src->OnCollisionExit(Dst, fX, fY);
-					Src->Set_isCollided(false);
-				}
+				//만약 상대방이 전에 충돌한 리스트에 있으면 삭제한다.
+				Dst->Erase_Collided(Src);
+				Src->Erase_Collided(Dst);
 
+				//충돌리스트가 비었고, 전에 충돌한적이 있으면 collisionExit을 실행한다.
+				if (Dst->Get_CollidedSize() == 0 && Dst->Get_isCollided())
+				{
+					Dst->Set_isCollided(false);
+					Dst->OnCollisionExit(Src, fX, fY);
+				}
+				if (Src->Get_CollidedSize() == 0 && Src->Get_isCollided())
+				{
+					Src->Set_isCollided(false);
+					Src->OnCollisionExit(Dst, fX, fY);
+				}
 			}
 		}
 	}
