@@ -428,6 +428,7 @@ void CPlayer::Attack()
 void CPlayer::Hit()
 {
 
+
 	CSoundMgr::Get_Instance()->PlaySound(L"Hero_damage.wav", CSoundMgr::CHANNELID::PLAYER);
 	m_eCurState = STATE::HIT;
 	m_dwHitTimer = GetTickCount();
@@ -441,6 +442,7 @@ void CPlayer::Hit()
 	CObj* pEffect = CAbstractFactory<CMyImage>::Create(m_tInfo.fX, m_tInfo.fY, L"hero_hit_eff", frame, 800, 300);
 	dynamic_cast<CMyImage*>(pEffect)->Set_Duration(1.f);
 	CImageMgr::Get_Instance()->Add_Image(pEffect);
+
 }
 
 

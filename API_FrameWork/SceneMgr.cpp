@@ -4,6 +4,7 @@
 #include "MyMenu.h"
 #include "Stage.h"
 #include "Editor.h"
+#include "ScrollMgr.h"
 
 CSceneMgr* CSceneMgr::m_pInstance = nullptr;
 
@@ -48,6 +49,7 @@ void CSceneMgr::Scene_Change(SCENEID _eID)
 
 void CSceneMgr::Update()
 {
+	CScrollMgr::Get_Instance()->Update();
 	m_pScene->Update();
 }
 

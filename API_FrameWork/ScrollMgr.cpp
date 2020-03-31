@@ -4,13 +4,35 @@
 CScrollMgr* CScrollMgr::m_pInstance = nullptr;
 
 CScrollMgr::CScrollMgr()
-	: m_fScrollX(0.f), m_fScrollY(0.f)
+	: m_fScrollX(0.f), m_fScrollY(0.f), m_dwShakeTimer(0), m_fShakeTime(0.f)
 {
 }
 
 
 CScrollMgr::~CScrollMgr()
 {
+}
+
+void CScrollMgr::Update()
+{
+	if (m_dwShakeTimer + m_fShakeTime * 1000 > GetTickCount())
+	{
+		//0.1초에 한번씩 움직임
+		if (m_dwShakeTermTimer + 25 < GetTickCount())
+		{
+			//카메라 흔듦
+			Set_Scroll_X(m_fShakeIntencity);
+			m_fShakeIntencity = -m_fShakeIntencity;
+			m_dwShakeTermTimer = GetTickCount();
+		}
+	}
+	else
+	{
+		m_dwShakeTimer = 0;
+		m_fShakeTime = 0.f;
+		m_dwShakeTermTimer = 0;
+	}
+
 }
 
 
@@ -35,4 +57,12 @@ void CScrollMgr::Scroll_Lock()
 	//캐릭터가 아래로 이동할때 락
 	if (-1970 > m_fScrollY)
 		m_fScrollY = -1970;
+}
+
+void CScrollMgr::Shake_Camera(float _fIntencity, float _fTime)
+{
+	m_fShakeIntencity = _fIntencity;
+	m_fShakeTime = _fTime;
+	m_dwShakeTimer = GetTickCount();
+	m_dwShakeTermTimer = GetTickCount();
 }

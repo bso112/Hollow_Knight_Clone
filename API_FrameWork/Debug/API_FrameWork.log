@@ -1,4 +1,6 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   HuskGaurd.cpp
+c:\users\bso11\desktop\jusin\my_hollow_knight\my_hollow_knight\api_framework\huskgaurd.cpp(435): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+cl : 명령줄 warning D9028: 최소 다시 빌드에 실패했습니다. 정상 빌드로 되돌립니다.
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\My_Hollow_Knight\Debug\HollowKnight.exe
   API_FrameWork.vcxproj -> C:\Users\bso11\Desktop\jusin\My_Hollow_Knight\My_Hollow_Knight\Debug\HollowKnight.pdb (Full PDB)

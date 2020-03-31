@@ -10,6 +10,9 @@ private:
 	CScrollMgr();
 	~CScrollMgr();
 
+
+public:
+	void Update();
 public:
 	void Set_Scroll_X(float _x) { m_fScrollX += _x; }
 	void Set_Scroll_Y(float _y) { m_fScrollY += _y; }
@@ -20,6 +23,9 @@ public:
 		
 public:
 	void Scroll_Lock();
+
+public:
+	void Shake_Camera(float _fIntencity, float _fTime);
 public:
 	static CScrollMgr* Get_Instance()
 	{
@@ -36,6 +42,13 @@ private:
 	static CScrollMgr*	m_pInstance;
 	float				m_fScrollX;
 	float				m_fScrollY;
+
+	DWORD				m_dwShakeTimer;
+	float				m_fShakeTime;
+	float				m_fShakeIntencity;
+	//»ÁµÂ¥¬ ≈“¿ª ¿ß«— ≈∏¿Ã∏”
+	DWORD				m_dwShakeTermTimer;
+	
 };
 
 

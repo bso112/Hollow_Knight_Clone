@@ -6,6 +6,7 @@
 #include "Weapon.h"
 #include "ObjMgr.h"
 #include "ScrollMgr.h"
+#include "SoundMgr.h"
 
 CHuskGaurd::CHuskGaurd()
 	:m_bWaked(false), m_bJump(false), m_iAttCnt(0)
@@ -30,7 +31,7 @@ void CHuskGaurd::Initialize()
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(300);
+	m_tStat = STAT(200);
 	m_fRadius = 500.f;
 	m_fAttRange = 400.f;
 
@@ -45,7 +46,7 @@ void CHuskGaurd::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/move.bmp", L"huskGaurd_move");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/standby.bmp", L"huskGaurd_standby");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/wakeup.bmp", L"huskGaurd_wakeup");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/jump_effect/jump_eff.bmp", L"jump_eff");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/HuskGaurd/jump_effect/jump_eff2.bmp", L"jump_eff");
 
 	memcpy(m_pFrameKey, L"huskGaurd_standby", DIR_LEN);
 
@@ -223,6 +224,7 @@ void CHuskGaurd::Render(HDC _DC)
 		state = L"죽음";
 		break;
 	case CHuskGaurd::END:
+		state = L"NONE";
 		break;
 	default:
 		break;
@@ -341,38 +343,41 @@ void CHuskGaurd::Update_State()
 	if (m_bWaked)
 	{
 		//타깃이 공격범위 밖이고, 현재 공격중이 아니면
-		if (abs(m_vToTarget.fX) > m_fAttRange && m_eCurState != STATE::ATTACK)
+		if (abs(m_vToTarget.fX) > m_fAttRange && m_eCurState != STATE::ATTACK && m_eCurState != STATE::JUMP)
 		{
-			//m_eCurState = STATE::WALK;
+			m_eCurState = STATE::WALK;
 
-			//if (abs(m_vToTarget.fX) > m_fAttRange + 100)
-				m_eCurState = STATE::WALK;
+			if (abs(m_vToTarget.fX) > m_fAttRange + 100)
+				m_eCurState = STATE::DASH;
 
 		}
 		//근접공격
 		else
 		{
-			//6번 공격중 한번 점프공격
-			//if (m_iAttCnt % 6 == 0)
-				//m_eCurState = STATE::JUMP;
-			//else
-
-			//1.5초 간격으로 추격
-			static DWORD timer = GetTickCount();
-			//1.5초에 한번씩 뒤바뀌는 락
-			static bool lock = false;
-			if (timer + m_fAttCoolDown * 1600 < GetTickCount())
+			//16번 공격중 한번 점프공격
+			if (m_iAttCnt % 16 == 0)
+				m_eCurState = STATE::JUMP;
+			else
 			{
-				lock = !lock;
-				timer = GetTickCount();
+				//1.5초 간격으로 추격
+				static DWORD timer = GetTickCount();
+				//1.5초에 한번씩 뒤바뀌는 락
+				static bool lock = false;
+				if (timer + m_fAttCoolDown * 1600 < GetTickCount())
+				{
+					lock = !lock;
+					timer = GetTickCount();
+				}
+
+				if (lock)
+					m_eCurState = STATE::ATTACK;
+				else
+					m_eCurState = STATE::END;
 			}
 
-			if (lock)
-				m_eCurState = STATE::ATTACK;
-			else
-				m_eCurState = STATE::END;
 
-				
+
+
 
 		}
 	}
@@ -402,6 +407,7 @@ void CHuskGaurd::Jumping()
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
 
+
 		if (collision == CTileMgr::BOTTOM)
 		{
 			//점프 초기화 
@@ -411,39 +417,47 @@ void CHuskGaurd::Jumping()
 
 #pragma region 이펙트생성
 
-			CObj* weapon = nullptr;
-			FRAME frame;
+				CObj* weapon = nullptr;
+				FRAME frame;
 
-			frame.iFrameStart = 0;
-			frame.iFrameEnd = 5;
-			frame.iFrameScene = m_eFront;
-			frame.dwFrameTime = GetTickCount();
-			frame.dwFrameSpeed = 400;
-			frame.bLoop = false;
+				frame.iFrameStart = 0;
+				frame.iFrameEnd = 5;
+				frame.iFrameScene = m_eFront;
+				frame.dwFrameTime = GetTickCount();
+				frame.dwFrameSpeed = 400;
+				frame.bLoop = false;
 
-			INFO info;
-			INFO imgInfo;
 
-			int dir = 0;
-			m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
+				int dir = 0;
+				m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
 
-			int margin = (m_tInfo.iCX >> 1) * dir;
+				int effectCnt = 6;
+				int margin = 0.f;
+				for (int i = 0; i < effectCnt; ++i)
+				{
+					INFO info;
+					INFO imgInfo;
+					
+					frame.iFrameEnd -= i;
 
-			info.iCX = 112;
-			info.iCY = 100;
-			info.fX = m_tInfo.fX + margin;
-			info.fY = (float)m_tRect.bottom - (info.iCY >> 1);
-			imgInfo.iCX = 128;
-			imgInfo.iCY = 256;
+					info.iCX = 50;
+					info.iCY = 100;
+					info.fX = m_tInfo.fX + ((m_tInfo.iCX >> 1) + margin) * dir;
+					info.fY = (float)m_tRect.bottom - (info.iCY >> 1);
+					imgInfo.iCX = 128;
+					imgInfo.iCY = 256;
 
-			weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"jump_eff", frame);
-			CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
-			dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.5f);
-			dynamic_cast<CWeapon*>(weapon)->Add_Force(Vector2((float)dir, 0), 400, 2.5f);
-			dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::MONSTER);
+					weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"jump_eff", frame);
+					CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
+					dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.5f);
+					dynamic_cast<CWeapon*>(weapon)->Add_Force(Vector2((float)dir, 0), 700, 6.f);
+					dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::MONSTER);
+
+					margin += 30;
+				}
+
 
 #pragma endregion
-
 
 		}
 
@@ -456,6 +470,10 @@ void CHuskGaurd::Attack()
 	//어택모션 중간쯤오면 충돌박스 생성
 	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 4)
 	{
+		//카메라 흔들기
+		//CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);
+		CSoundMgr::Get_Instance()->PlaySoundW(L"Fknight_groundatt.wav", CSoundMgr::EFFECT);
+
 		CObj* weapon = nullptr;
 		int dir = 0;
 		m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
