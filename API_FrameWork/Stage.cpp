@@ -82,10 +82,10 @@ void CStage::Render(HDC _DC)
 	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_backlayer2");
 	GdiTransparentBlt(_DC, 0 + iScrollX, 0 + iScrollY, 9448, 2160, memDC, 0, 0, 9448, 2160, RGB(30, 30, 30));
 
-	//ÀÌÆåÆ® ·»´õ
-	CImageMgr::Get_Instance()->Render(_DC);
 	//¿ÀºêÁ§Æ® (ÇÃ·¹ÀÌ¾î, ¸ó½ºÅÍ µî ·»´õ)
 	CObjMgr::Get_Instance()->Render(_DC);
+	//ÀÌÆåÆ® ·»´õ
+	CImageMgr::Get_Instance()->Render(_DC);
 
 	//Æ÷±×¶ó¿îµå ·»´õ
 	memDC = CBmpMgr::Get_Instance()->Find_Image(L"tutorial_mainlayer");
