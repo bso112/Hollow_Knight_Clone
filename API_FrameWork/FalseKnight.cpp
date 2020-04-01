@@ -26,7 +26,7 @@ void CFalseKnight::Initialize()
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(600);
+	m_tStat = STAT(800);
 	
 
 	m_fSpeed = 2.f;

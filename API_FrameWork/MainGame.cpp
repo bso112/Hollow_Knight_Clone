@@ -33,7 +33,7 @@ void CMainGame::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BackBuffer.bmp", L"BackBuffer");
 	
 	CMyTime::Get_Instance()->Initalize();
-	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_STAGE);
+	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_LOGO);
 	m_pCursor = CAbstractFactory<CMouse>::Create();
 }
 
@@ -67,14 +67,14 @@ void CMainGame::Render()
 	m_pCursor->Render(hBackBuffer);
 
 #pragma region 출력
-	// 스크롤 출력
-	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
-	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
-	TCHAR		szBuff[32] = L"";
-	swprintf_s(szBuff, L"ScrollX: %d", iScrollX);
-	TextOut(hBackBuffer, 50, 50, szBuff, lstrlen(szBuff));
-	swprintf_s(szBuff, L"ScrollY: %d", iScrollY);
-	TextOut(hBackBuffer, 50, 100, szBuff, lstrlen(szBuff));
+	//// 스크롤 출력
+	//int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
+	//int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
+	//TCHAR		szBuff[32] = L"";
+	//swprintf_s(szBuff, L"ScrollX: %d", iScrollX);
+	//TextOut(hBackBuffer, 50, 50, szBuff, lstrlen(szBuff));
+	//swprintf_s(szBuff, L"ScrollY: %d", iScrollY);
+	//TextOut(hBackBuffer, 50, 100, szBuff, lstrlen(szBuff));
 
 
 	// FPS 출력

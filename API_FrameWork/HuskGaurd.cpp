@@ -31,7 +31,7 @@ void CHuskGaurd::Initialize()
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(200);
+	m_tStat = STAT(300);
 	m_fRadius = 500.f;
 	m_fAttRange = 400.f;
 
@@ -196,44 +196,44 @@ void CHuskGaurd::Render(HDC _DC)
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
 
-#pragma region 디버그
-
-	TCHAR		szBuff[32] = L"상태: ";
-	TCHAR*		state = nullptr;
-	switch (m_eCurState)
-	{
-	case CHuskGaurd::IDLE:
-		state = L"휴식";
-		break;
-	case CHuskGaurd::WAKEUP:
-		state = L"깸";
-		break;
-	case CHuskGaurd::WALK:
-		state = L"걷기";
-		break;
-	case CHuskGaurd::ATTACK:
-		state = L"공격";
-		break;
-	case CHuskGaurd::DASH:
-		state = L"대시";
-		break;
-	case CHuskGaurd::JUMP:
-		state = L"점프";
-		break;
-	case CHuskGaurd::DEAD:
-		state = L"죽음";
-		break;
-	case CHuskGaurd::END:
-		state = L"NONE";
-		break;
-	default:
-		break;
-	}
-	lstrcat(szBuff, state);
-	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
-
-
-#pragma endregion
+//#pragma region 디버그
+//
+//	TCHAR		szBuff[32] = L"상태: ";
+//	TCHAR*		state = nullptr;
+//	switch (m_eCurState)
+//	{
+//	case CHuskGaurd::IDLE:
+//		state = L"휴식";
+//		break;
+//	case CHuskGaurd::WAKEUP:
+//		state = L"깸";
+//		break;
+//	case CHuskGaurd::WALK:
+//		state = L"걷기";
+//		break;
+//	case CHuskGaurd::ATTACK:
+//		state = L"공격";
+//		break;
+//	case CHuskGaurd::DASH:
+//		state = L"대시";
+//		break;
+//	case CHuskGaurd::JUMP:
+//		state = L"점프";
+//		break;
+//	case CHuskGaurd::DEAD:
+//		state = L"죽음";
+//		break;
+//	case CHuskGaurd::END:
+//		state = L"NONE";
+//		break;
+//	default:
+//		break;
+//	}
+//	lstrcat(szBuff, state);
+//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+//
+//
+//#pragma endregion
 
 }
 
@@ -346,9 +346,6 @@ void CHuskGaurd::Update_State()
 		if (abs(m_vToTarget.fX) > m_fAttRange && m_eCurState != STATE::ATTACK && m_eCurState != STATE::JUMP)
 		{
 			m_eCurState = STATE::WALK;
-
-			if (abs(m_vToTarget.fX) > m_fAttRange + 100)
-				m_eCurState = STATE::DASH;
 
 		}
 		//근접공격

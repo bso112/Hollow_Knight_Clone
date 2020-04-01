@@ -45,7 +45,7 @@ void CMonster::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 
 		dynamic_cast<CPlayer*>(_pOther)->Take_Damage(20);
 		Vector2 pushDir = (Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
-		dynamic_cast<CPlayer*>(_pOther)->Add_Force(pushDir, 500.f, 0.2f);
+		//dynamic_cast<CPlayer*>(_pOther)->Add_Force(pushDir, 500.f, 0.2f);
 
 	}
 }
@@ -63,15 +63,15 @@ void CMonster::Render(HDC _DC)
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
 
-#pragma region 디버그
-
-
-	TCHAR		szBuff[32] = L"";
-	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
-	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
-
-
-#pragma endregion
+//#pragma region 디버그
+//
+//
+//	TCHAR		szBuff[32] = L"";
+//	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
+//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+//
+//
+//#pragma endregion
 
 }
 

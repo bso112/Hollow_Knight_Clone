@@ -189,9 +189,6 @@
     <ClInclude Include="Stage.h">
       <Filter>소스 파일\04.Scene\02.Stage</Filter>
     </ClInclude>
-    <ClInclude Include="MenuPointer.h">
-      <Filter>소스 파일\01.Obj\07.MenuPointer</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>소스 파일\04.Scene\03.Edit</Filter>
     </ClInclude>
@@ -292,9 +289,6 @@
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>소스 파일\04.Scene\02.Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuPointer.cpp">
-      <Filter>소스 파일\01.Obj\07.MenuPointer</Filter>
     </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>소스 파일\04.Scene\03.Edit</Filter>

@@ -206,47 +206,47 @@ void CPlayer::Render(HDC _DC)
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, hMemDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
 
-#pragma region DEBUG
-
-	switch (m_eCurState)
-	{
-	case CPlayer::IDLE:
-		m_debug = L"ÈÞ½Ä";
-		break;
-	case CPlayer::WALK:
-		m_debug = L"°È±â";
-		break;
-	case CPlayer::ATTACK:
-		m_debug = L"°ø°Ý";
-		break;
-	case CPlayer::HIT:
-		m_debug = L"ÇÇ°Ý";
-		break;
-	case CPlayer::JUMP:
-		m_debug = L"Á¡ÇÁ";
-		break;
-	case CPlayer::FALL:
-		m_debug = L"Ãß¶ô";
-		break;
-	case CPlayer::DEAD:
-		m_debug = L"Á×À½";
-		break;
-	case CPlayer::END:
-		m_debug = L"³¡";
-		break;
-	default:
-		break;
-	}
-	TCHAR		szBuff[32] = L"»óÅÂ : ";
-	lstrcat(szBuff, m_debug);
-	TextOut(_DC, 500, 200, szBuff, lstrlen(szBuff));
-
-	TCHAR		szBuff2[32] = L"ÁÂÇ¥ : ";
-	swprintf_s(szBuff, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
-	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
-
-
-#pragma endregion
+//#pragma region DEBUG
+//
+//	switch (m_eCurState)
+//	{
+//	case CPlayer::IDLE:
+//		m_debug = L"ÈÞ½Ä";
+//		break;
+//	case CPlayer::WALK:
+//		m_debug = L"°È±â";
+//		break;
+//	case CPlayer::ATTACK:
+//		m_debug = L"°ø°Ý";
+//		break;
+//	case CPlayer::HIT:
+//		m_debug = L"ÇÇ°Ý";
+//		break;
+//	case CPlayer::JUMP:
+//		m_debug = L"Á¡ÇÁ";
+//		break;
+//	case CPlayer::FALL:
+//		m_debug = L"Ãß¶ô";
+//		break;
+//	case CPlayer::DEAD:
+//		m_debug = L"Á×À½";
+//		break;
+//	case CPlayer::END:
+//		m_debug = L"³¡";
+//		break;
+//	default:
+//		break;
+//	}
+//	TCHAR		szBuff[32] = L"»óÅÂ : ";
+//	lstrcat(szBuff, m_debug);
+//	TextOut(_DC, 500, 200, szBuff, lstrlen(szBuff));
+//
+//	TCHAR		szBuff2[32] = L"ÁÂÇ¥ : ";
+//	swprintf_s(szBuff, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
+//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+//
+//
+//#pragma endregion
 #pragma region UI
 
 
