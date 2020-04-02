@@ -1,5 +1,8 @@
 #pragma once
 #include "Monster.h"
+
+#define JUMP_VELO Vector2(200.f, -100.f);
+
 class CFalseKnight : public CMonster
 {
 public:
@@ -7,16 +10,19 @@ public:
 	virtual ~CFalseKnight();
 
 public:
-	enum STATE { IDLE, ATTACK, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, END };
+	enum STATE { IDLE, ATTACK, JUMP, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, END };
 
 public:
 	// CMonster을(를) 통해 상속됨
 	virtual void Initialize() override;
 	virtual int Update() override;
 	virtual void Late_Update() override;
-	virtual void Render(HDC _DC)override;
 	virtual void Release() override;
 	
+private:
+	void Process();
+	void Update_State();
+
 protected:
 	virtual void Patrol() override;
 	virtual void Chase_Target() override;
@@ -24,11 +30,20 @@ protected:
 	virtual void OnDead() override;
 	virtual void OnTakeDamage() override;
 
-
+private:
+	void Jumping();
+	void Attack();
 
 public:
 	STATE			m_eCurState;
 	STATE			m_ePrvState;
+
+	bool			m_bJump;
+	Vector2			m_curJumpVelo;
+	Vector2			m_vToTarget;
+	float			m_fDistToTarget;
+
+	int				m_iAttCnt;
 
 
 
