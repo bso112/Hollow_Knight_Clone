@@ -148,7 +148,7 @@ void CImageMgr::Save_Image()
 
 
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Image Save", L"Success", MB_OK);
+	//MessageBox(g_hWnd, L"Image Save", L"Success", MB_OK);
 }
 
 void CImageMgr::Load_Image()
@@ -235,6 +235,6 @@ void CImageMgr::Load_Image()
 
 	}
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Image Load", L"Success", MB_OK);
+	//MessageBox(g_hWnd, L"Image Load", L"Success", MB_OK);
 
 }

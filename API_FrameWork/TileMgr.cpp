@@ -312,7 +312,7 @@ void CTileMgr::Save_Tile()
 
 	}
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Tile Save", L"Success", MB_OK);
+	//MessageBox(g_hWnd, L"Tile Save", L"Success", MB_OK);
 }
 
 void CTileMgr::Load_Tile()
@@ -352,5 +352,5 @@ void CTileMgr::Load_Tile()
 
 	}
 	CloseHandle(hFile);
-	MessageBox(g_hWnd, L"Tile Load", L"Success", MB_OK);
+	//MessageBox(g_hWnd, L"Tile Load", L"Success", MB_OK);
 }

@@ -464,7 +464,7 @@ void CHuskGaurd::Jumping()
 void CHuskGaurd::Attack()
 {
 	//어택모션 중간쯤오면 충돌박스 생성
-	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 4)
+	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 2)
 	{
 		//카메라 흔들기
 		//CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);

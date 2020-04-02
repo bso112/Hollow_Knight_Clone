@@ -45,8 +45,8 @@ void CPlayer::Initialize()
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 400.f;
-	m_tInfo.fY = 1000.f;
+	m_tInfo.fX = 7260.f;
+	m_tInfo.fY = 1793.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -746,9 +746,14 @@ void CPlayer::Jumping()
 		//중력적용
 		m_curJumpVelo += m_Gravity;
 
+		//가속도 제한
+		float drag = m_curJumpVelo.fY * 0.15f;
+		if (drag > 15)
+			drag = 15.f;
+			
 		// * m_fDeltaTime을 해주면 1초에 m_curJumpVelo만큼 이동한다.
 		m_tInfo.fX += m_curJumpVelo.fX * 0.15f;
-		m_tInfo.fY += m_curJumpVelo.fY * 0.15f;
+		m_tInfo.fY += drag;
 
 		//점프상태이고, 바닥과 충돌이면 점프해제
 		CTileMgr::COLLISION collision = CTileMgr::END;
@@ -769,6 +774,8 @@ void CPlayer::Jumping()
 			//추락중
 			m_eJumpState = JUMP_STATE::FALLING;
 		}
+
+		
 
 	}
 
