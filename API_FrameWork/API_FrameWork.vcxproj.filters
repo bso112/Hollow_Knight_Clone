@@ -76,9 +76,6 @@
     <Filter Include="소스 파일\01.Obj\06.Tile">
       <UniqueIdentifier>{65e1f702-4a99-403d-9214-c69bdf47a45d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.Obj\07.MenuPointer">
-      <UniqueIdentifier>{3650772d-bef7-4343-b164-24c67903905d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\01.Obj\02.Monster\00.PillBug">
       <UniqueIdentifier>{e2c424bb-a7ea-4f07-9297-319cde5c9735}</UniqueIdentifier>
     </Filter>

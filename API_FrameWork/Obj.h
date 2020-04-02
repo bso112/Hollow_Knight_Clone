@@ -49,32 +49,18 @@ public:
 	bool Get_isCollided() { return m_bCollided; }
 	void Set_isCollided(bool _bCollided) { m_bCollided = _bCollided; }
 	//충돌한 오브젝트를 저장한다.
-	void Add_Collided(CObj* _pColided) { m_listCollided.insert(_pColided); }
+	void Add_Collided(CObj* _pColided) { m_setCollided.insert(_pColided); }
 	//충돌한 오브젝트 셋의 사이즈를 가져온다.
-	int Get_CollidedSize() { return m_listCollided.size(); }
+	int Get_CollidedSize() { return m_setCollided.size(); }
 	//충돌한 오브젝트 셋에 _pCollied가 있는지 검사한다.
 	bool Contain_Collided(CObj* _pCollided) 
 	{
-		for (auto& colided : m_listCollided)
-			if (_pCollided == colided)
-				return true;
-		return false;
+		return m_setCollided.find(_pCollided) != m_setCollided.end();
 	}
 
 	bool Erase_Collided(CObj* _pCollided)
 	{
-		auto& iter = m_listCollided.begin();
-		for (; iter != m_listCollided.end();)
-		{
-			if (*iter == _pCollided)
-			{
-				iter = m_listCollided.erase(iter);
-				return true;
-			}
-			else
-				++iter;
-		}
-		return false;
+		return m_setCollided.erase(_pCollided);
 	}
 
 
@@ -107,7 +93,7 @@ private:
 	//충돌했나
 	bool	m_bCollided;
 	//충돌한 오브젝트 셋
-	set<CObj*> m_listCollided;
+	set<CObj*> m_setCollided;
 
 };
 
