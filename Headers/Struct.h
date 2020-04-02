@@ -140,5 +140,13 @@ typedef struct tagVector2
 }Vector2;
 
 
+typedef struct tagLine
+{
+	Vector2 src;
+	Vector2 dst;
 
+	tagLine() {};
+	tagLine(Vector2 _src, Vector2 _dst) { src = _src; dst = _dst; }
+	
+}LINE;
 #endif // !__STRUCT_H__

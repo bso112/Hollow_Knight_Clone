@@ -45,8 +45,8 @@ void CPlayer::Initialize()
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 7260.f;
-	m_tInfo.fY = 1793.f;
+	m_tInfo.fX = 600.f;
+	m_tInfo.fY = 1200.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -791,13 +791,11 @@ void CPlayer::OffSet()
 
 	if (iOffSetX < (m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
-	if (iOffSetX > (m_tInfo.fX + iScrollX))
+	if (iOffSetX >(m_tInfo.fX + iScrollX))
 		CScrollMgr::Get_Instance()->Set_Scroll_X(iOffSetX - (m_tInfo.fX + iScrollX));
 
 	if (iOffSetY < (m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
-	if (iOffSetY > (m_tInfo.fY + iScrollY))
+	if (iOffSetY >(m_tInfo.fY + iScrollY))
 		CScrollMgr::Get_Instance()->Set_Scroll_Y(iOffSetY - (m_tInfo.fY + iScrollY));
 }
-
-

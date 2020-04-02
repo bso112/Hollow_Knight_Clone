@@ -10,7 +10,7 @@
 #include "Jumper.h"
 #include "Fly.h"
 #include "HuskGaurd.h"
-
+#include "Trap.h"
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
 {
@@ -215,6 +215,11 @@ void CImageMgr::Load_Image()
 			case SAVEDATA::HUSKGAURD:
 			{
 				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CHuskGaurd>::Create(tInfo.fX, tInfo.fY));
+				break;
+			}
+			case SAVEDATA::SPIKE:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::TRAP, CAbstractFactory<CTrap>::Create(tInfo.fX, tInfo.fY, L"spike", 256, 97));
 				break;
 			}
 			case SAVEDATA::END:

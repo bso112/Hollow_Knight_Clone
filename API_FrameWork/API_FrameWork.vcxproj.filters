@@ -118,6 +118,9 @@
     <Filter Include="소스 파일\98.Manager\09.SoundMgr">
       <UniqueIdentifier>{399e6d3c-0b91-4c5c-b35c-01226a45a275}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Obj\10.Trap">
+      <UniqueIdentifier>{e73d870d-18a2-42a2-b2c7-f8a82f523ad8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -225,6 +228,9 @@
     <ClInclude Include="SoundMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Trap.h">
+      <Filter>소스 파일\01.Obj\10.Trap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -328,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="SoundMgr.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>소스 파일\01.Obj\10.Trap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

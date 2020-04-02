@@ -31,8 +31,10 @@ public:
 	//bool RayCast_Down_Tile(CObj* _pObj, float & _fY, float _maxdist);
 	////타일과 충돌처리. 충돌한 타일의 렉트정보를 넘겨준다.
 	//COLLISION Collision_Tile(CObj* _pObj, RECT& _rc);
-	COLLISION Collision_Tile(Vector2 _origin, Vector2 _dst, INFO& _info, RECT& _rc);
+	//COLLISION Collision_Tile(Vector2 _origin, Vector2 _dst, INFO& _info, RECT& _rc);
 
+	//타일을 통과해했는가?
+	bool IsGoThroughTile(Vector2 _vPrvPos, Vector2 _vCurPos, CObj* _pObj, CTileMgr::COLLISION& _collision);
 	bool Collision_Ex(CObj* _pObj, CTileMgr::COLLISION& _collision);
 
 public:

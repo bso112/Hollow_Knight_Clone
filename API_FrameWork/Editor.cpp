@@ -36,6 +36,12 @@ void CEditor::Initialize()
 
 	CObj* img;
 
+	//장애물
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Editor/spike.bmp", L"spike");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"spike", 256, 97);
+	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::SPIKE);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+
 	//몬스터
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/PillBug/move.bmp", L"pillBug");
 	img = CAbstractFactory<CMyImage>::Create(0, 0, L"pillBug", 256, 256);

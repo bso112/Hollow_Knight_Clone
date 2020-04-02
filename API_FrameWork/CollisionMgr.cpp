@@ -235,3 +235,60 @@ bool CCollisionMgr::Check_Rect(CObj* _Dst, CObj* _Src, float* _x, float* _y)
 	return false;
 
 }
+
+
+bool CCollisionMgr::Check_Rect(INFO _Dst, INFO _Src, float* _x, float* _y)
+{
+	// 중점 간의 길이
+	float fX = abs(_Dst.fX - _Src.fX);
+	float fY = abs(_Dst.fY - _Src.fY);
+
+	// 반지름의 합
+	int iCX = (_Dst.iCX + _Src.iCX) >> 1;
+	int iCY = (_Dst.iCY + _Src.iCY) >> 1;
+
+	if (iCX > fX && iCY > fY)
+	{
+		*_x = iCX - fX;
+		*_y = iCY - fY;
+		return true;
+	}
+
+	return false;
+
+}
+bool CCollisionMgr::Intersect_LIne(const LINE _line1, const LINE _line2, Vector2& _result)
+{
+
+	Vector2 p0 = _line1.src;
+	Vector2 p1 = _line1.dst;
+	Vector2 p2 = _line2.src;
+	Vector2 p3 = _line2.dst;
+
+
+	float a1 = p1.fY - p0.fY;
+	float b1 = p0.fX - p1.fX;
+	float c1 = a1 * p0.fX + b1 * p0.fY;
+	float a2 = p3.fY - p2.fY;
+	float b2 = p2.fX - p3.fX;
+	float c2 = a2 * p2.fX + b2 * p2.fY;
+	float denominator = a1 * b2 - a2 * b1;
+
+	float intersectX = (b2 * c1 - b1 * c2) / denominator;
+	float intersectY = (a1 * c2 - a2 * c1) / denominator;
+
+	float distX0 = (intersectX - p0.fX) / (p1.fX - p0.fX);
+	float distY0 = (intersectY - p0.fY) / (p1.fY - p0.fY);
+	float distX1 = (intersectX - p2.fX) / (p3.fX - p2.fX);
+	float distY1 = (intersectY - p2.fY) / (p3.fY - p2.fY);
+
+	if ( ((distX0 >= 0 && distX0 <= 1) || (distY0 >= 0 && distY0 <= 1))
+		&& ((distX1 >= 0 && distX1 <= 1) || (distY1 >= 0 && distY1 <= 1)))
+	{
+		_result.fX = intersectX;
+		_result.fY = intersectY;
+		return true;
+	}
+
+	return false;
+}

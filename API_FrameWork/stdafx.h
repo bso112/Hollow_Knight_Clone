@@ -26,6 +26,10 @@
 #include <functional>
 #include <set>
 
+#include "Include.h"
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h> // _CrtDumpMemoryLeaks() 사용하기위해
 
 // 사운드
 #include <io.h>
@@ -38,7 +42,3 @@
 #pragma comment (lib, "Vfw32.lib")
 
 using namespace std;
-#include "Include.h"
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h> // _CrtDumpMemoryLeaks() 사용하기위해

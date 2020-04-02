@@ -60,6 +60,12 @@ int CObjMgr::Update()
 	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::MONSTER]);
 	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::MONSTER]);
 	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::PLAYER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::PLAYER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::WEAPON]);
+
+
+
 
 
 

@@ -26,6 +26,8 @@ void CWeapon::Initialize()
 
 	m_fDamage = 15.f;
 	m_dwTimer = GetTickCount();
+
+	m_eTag = OBJTAG::WEAPON;
 }
 
 int CWeapon::Update()
