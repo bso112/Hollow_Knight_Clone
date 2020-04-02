@@ -26,6 +26,7 @@
 #include <functional>
 #include <set>
 
+
 // 사운드
 #include <io.h>
 #include "fmod.h"
@@ -38,3 +39,6 @@
 
 using namespace std;
 #include "Include.h"
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h> // _CrtDumpMemoryLeaks() 사용하기위해
