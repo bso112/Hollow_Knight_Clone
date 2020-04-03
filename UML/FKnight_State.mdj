@@ -159,7 +159,11 @@
 									"font": "Arial;13;0",
 									"left": 274,
 									"top": 282,
+<<<<<<< HEAD
 									"width": 66.015625,
+=======
+									"width": 65.7490234375,
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 									"height": 13,
 									"text": "Groggy_Hit",
 									"wordWrap": true
@@ -168,7 +172,11 @@
 							"font": "Arial;13;0",
 							"left": 264,
 							"top": 272,
+<<<<<<< HEAD
 							"width": 86.015625,
+=======
+							"width": 85.7490234375,
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 							"height": 33,
 							"nameLabel": {
 								"$ref": "AAAAAAFxO6cdn5LKKvU="
@@ -429,9 +437,15 @@
 										"$ref": "AAAAAAFxO6noApMtS9s="
 									},
 									"font": "Arial;13;0",
+<<<<<<< HEAD
 									"left": 128.974853515625,
 									"top": 195.5,
 									"width": 49.94970703125,
+=======
+									"left": 128.25,
+									"top": 195.5,
+									"width": 48.5,
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 									"height": 39,
 									"text": "Armor가 3/1만큼 감소",
 									"wordWrap": true
@@ -440,7 +454,11 @@
 							"font": "Arial;13;0",
 							"left": 104,
 							"top": 176,
+<<<<<<< HEAD
 							"width": 99.8994140625,
+=======
+							"width": 97,
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 							"height": 78,
 							"nameLabel": {
 								"$ref": "AAAAAAFxO6noApMuAJk="
@@ -902,6 +920,55 @@
 						},
 						{
 							"_type": "FCFlowView",
+<<<<<<< HEAD
+=======
+							"_id": "AAAAAAFxO7H5OJQLbB8=",
+							"_parent": {
+								"$ref": "AAAAAAFxO6bklpKqX9M="
+							},
+							"model": {
+								"$ref": "AAAAAAFxO7H5OJQJhpI="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAFxO7H5OJQMWmg=",
+									"_parent": {
+										"$ref": "AAAAAAFxO7H5OJQLbB8="
+									},
+									"model": {
+										"$ref": "AAAAAAFxO7H5OJQJhpI="
+									},
+									"font": "Arial;13;0",
+									"left": 368,
+									"top": 347,
+									"width": 16.6181640625,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAFxO7H5OJQLbB8="
+									},
+									"edgePosition": 1,
+									"text": "No"
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAFxO7Gd4JP8+ME="
+							},
+							"tail": {
+								"$ref": "AAAAAAFxO6vPAZNh3T0="
+							},
+							"lineStyle": 2,
+							"points": "361:368;392:368",
+							"nameLabel": {
+								"$ref": "AAAAAAFxO7H5OJQMWmg="
+							}
+						},
+						{
+							"_type": "FCFlowView",
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 							"_id": "AAAAAAFxO7JiyZQb/Kg=",
 							"_parent": {
 								"$ref": "AAAAAAFxO6bklpKqX9M="
@@ -1298,6 +1365,7 @@
 							"nameLabel": {
 								"$ref": "AAAAAAFxO8gFDZSi87w="
 							}
+<<<<<<< HEAD
 						},
 						{
 							"_type": "FCFlowView",
@@ -1343,6 +1411,8 @@
 							"nameLabel": {
 								"$ref": "AAAAAAFxPw6mTRWmH+U="
 							}
+=======
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 						}
 					]
 				},
@@ -1466,6 +1536,7 @@
 							"target": {
 								"$ref": "AAAAAAFxO6vPAJNfnPA="
 							}
+<<<<<<< HEAD
 						},
 						{
 							"_type": "FCFlow",
@@ -1479,6 +1550,8 @@
 							"target": {
 								"$ref": "AAAAAAFxO7Gd4JP6Jsc="
 							}
+=======
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 						}
 					]
 				},
@@ -1598,6 +1671,23 @@
 							"target": {
 								"$ref": "AAAAAAFxO6cdn5LHV9M="
 							}
+<<<<<<< HEAD
+=======
+						},
+						{
+							"_type": "FCFlow",
+							"_id": "AAAAAAFxO7H5OJQJhpI=",
+							"_parent": {
+								"$ref": "AAAAAAFxO6vPAJNfnPA="
+							},
+							"name": "No",
+							"source": {
+								"$ref": "AAAAAAFxO6vPAJNfnPA="
+							},
+							"target": {
+								"$ref": "AAAAAAFxO7Gd4JP6Jsc="
+							}
+>>>>>>> 1dbe5cf6b4cbecebc80661e0a55103806533fb0b
 						}
 					]
 				},

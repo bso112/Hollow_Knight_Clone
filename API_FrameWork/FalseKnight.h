@@ -10,6 +10,7 @@ public:
 	virtual ~CFalseKnight();
 
 public:
+
 	enum STATE { IDLE, ATTACK, REMOTE_ATTACK, JUMP, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, END };
 
 public:
@@ -34,8 +35,10 @@ protected:
 private:
 	void Jumping();
 	void Attack();
+
 	void RemoteAttack();
 	void Swing_Around();
+
 
 public:
 	STATE			m_eCurState;
@@ -47,6 +50,7 @@ public:
 	float			m_fDistToTarget;
 
 	int				m_iAttCnt;
+
 
 
 	bool			m_bHit;

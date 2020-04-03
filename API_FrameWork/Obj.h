@@ -60,7 +60,9 @@ public:
 
 	bool Erase_Collided(CObj* _pCollided)
 	{
+
 		return m_setCollided.erase(_pCollided) ? true : false;
+
 	}
 
 

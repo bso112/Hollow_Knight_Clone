@@ -21,6 +21,7 @@ CFalseKnight::~CFalseKnight()
 void CFalseKnight::Initialize()
 {
 
+
 	memcpy(m_pFrameKey, L"knight_idle", DIR_LEN);
 	m_tInfo.iCX = 256;
 	m_tInfo.iCY = 189;
@@ -34,6 +35,7 @@ void CFalseKnight::Initialize()
 	m_ePrvState = STATE::END;
 
 	m_tStat = STAT(600);
+
 
 
 	m_fSpeed = 2.f;
@@ -280,7 +282,6 @@ int CFalseKnight::Update()
 			m_bDead = true;
 	}
 
-
 	Move_Frame();
 	Scene_Change();
 
@@ -385,11 +386,15 @@ void CFalseKnight::Late_Update()
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
 	}
+
 }
+
 
 void CFalseKnight::Release()
 {
 }
+
+
 
 void CFalseKnight::Process()
 {
@@ -454,6 +459,7 @@ void CFalseKnight::Update_State()
 {
 	//	enum STATE { IDLE, ATTACK, JUMP, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, END };
 
+
 	float fill = m_tStat.m_fHp / m_tStat.m_fMaxHp;
 	static int tmp = 0;
 	if ((int(fill * 10) == 8 || int(fill * 10) == 6 || int(fill * 10) == 3)
@@ -462,6 +468,7 @@ void CFalseKnight::Update_State()
 		tmp = int(fill * 10);
 		m_eCurState = STATE::DOWN;
 	}
+
 
 	//다운애니메이션이 끝나면
 	if (m_ePrvState == STATE::DOWN && m_tFrame.bEnd)
@@ -535,6 +542,7 @@ void CFalseKnight::Update_State()
 		&& m_tFrame.bEnd)
 		m_eCurState = STATE::IDLE;
 
+
 }
 
 void CFalseKnight::Jumping()
@@ -560,7 +568,9 @@ void CFalseKnight::Jumping()
 
 
 		// * m_fDeltaTime을 해주면 1초에 m_curJumpVelo만큼 이동한다.
+
 		m_tInfo.fX += m_curJumpVelo.fX * fDir * m_fDeltaTime;
+
 		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
 
 		//점프상태이고, 바닥과 충돌이면 점프해제
@@ -571,7 +581,9 @@ void CFalseKnight::Jumping()
 
 		if (collision == CTileMgr::BOTTOM)
 		{
+
 			CSoundMgr::Get_Instance()->PlaySoundW(L"Fknight_landing.wav", CSoundMgr::CHANNELID::MONSTER_EFFECT);
+
 			//점프 초기화 
 			m_curJumpVelo = JUMP_VELO;
 			m_bJump = false;
@@ -585,6 +597,7 @@ void CFalseKnight::Jumping()
 }
 
 void CFalseKnight::Attack()
+
 {
 	//어택모션 중간쯤오면 충돌박스 생성
 	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 2)
@@ -750,6 +763,7 @@ void CFalseKnight::Swing_Around()
 
 		info.iCX = 73;
 		info.iCY = 85;
+		//화면의 left top 맞나?
 		info.fX = -CScrollMgr::Get_Instance()->Get_Scroll_X() + ranNum * 10;
 		info.fY = -CScrollMgr::Get_Instance()->Get_Scroll_Y();
 		imgInfo.iCX = 103;
@@ -759,6 +773,7 @@ void CFalseKnight::Swing_Around()
 		dynamic_cast<CWeapon*>(ball)->Add_Force(Vector2(0, 1), 100.f, 6.f);
 		dynamic_cast<CWeapon*>(ball)->Set_Duration(6.f);
 		dynamic_cast<CWeapon*>(ball)->Set_Horizontal();
+		dynamic_cast<CWeapon*>(ball)->Set_Owner(CWeapon::OWNER::NONE);
 		CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, ball);
 		timer = GetTickCount();
 	}

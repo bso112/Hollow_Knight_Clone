@@ -13,7 +13,7 @@ public:
 	~CWeapon();
 
 public:
-	enum OWNER { PLAYER, MONSTER, END };
+	enum OWNER { PLAYER, MONSTER, NONE, END };
 
 	// CObj을(를) 통해 상속됨
 	virtual void Initialize() override;

@@ -123,7 +123,7 @@ void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
 	}
 	//무차별 데미지
-	else
+	else if(m_eOwner == OWNER::NONE)
 	{
 		if(_pOther->Get_Tag() == OBJTAG::MONSTER)
 			dynamic_cast<CMonster*>(_pOther)->Take_Damage(m_fDamage);
