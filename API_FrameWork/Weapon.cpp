@@ -10,7 +10,7 @@
 
 CWeapon::CWeapon()
 	:m_eOwner(END), m_fDamage(0.f), m_fDuration(FLT_MAX),
-	m_dwForceTimer(MAXDWORD), m_fForceTime(0.f)
+	m_dwForceTimer(MAXDWORD), m_fForceTime(0.f), m_bHorizontal(false)
 {
 }
 
@@ -77,9 +77,18 @@ void CWeapon::Render(HDC _DC)
 		HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
 
-		GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
-			, m_tImgInfo.iCX, m_tImgInfo.iCY, hMemDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
-			, RGB(30, 30, 30));
+		if (m_bHorizontal)
+		{
+			GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
+				, m_tImgInfo.iCX, m_tImgInfo.iCY, hMemDC, m_tImgInfo.iCX * m_tFrame.iFrameStart, m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
+				, RGB(30, 30, 30));
+		}
+		else {
+			GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
+				, m_tImgInfo.iCX, m_tImgInfo.iCY, hMemDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
+				, RGB(30, 30, 30));
+
+		}
 	}
 }
 
@@ -112,6 +121,15 @@ void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 	{
 		dynamic_cast<CPlayer*>(_pOther)->Take_Damage(m_fDamage);
 		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
+	}
+	//무차별 데미지
+	else
+	{
+		if(_pOther->Get_Tag() == OBJTAG::MONSTER)
+			dynamic_cast<CMonster*>(_pOther)->Take_Damage(m_fDamage);
+		else if(_pOther->Get_Tag() == OBJTAG::PLAYER)
+			dynamic_cast<CPlayer*>(_pOther)->Take_Damage(m_fDamage);
+		m_bDead = true;
 	}
 }
 

@@ -11,6 +11,7 @@
 #include "Fly.h"
 #include "HuskGaurd.h"
 #include "Trap.h"
+#include "FalseKnight.h"
 CImageMgr* CImageMgr::m_pInstance = nullptr;
 CImageMgr::CImageMgr()
 {
@@ -148,7 +149,7 @@ void CImageMgr::Save_Image()
 
 
 	CloseHandle(hFile);
-	//MessageBox(g_hWnd, L"Image Save", L"Success", MB_OK);
+	MessageBox(g_hWnd, L"Image Save", L"Success", MB_OK);
 }
 
 void CImageMgr::Load_Image()
@@ -222,6 +223,11 @@ void CImageMgr::Load_Image()
 				CObjMgr::Get_Instance()->Add_Object(OBJID::TRAP, CAbstractFactory<CTrap>::Create(tInfo.fX, tInfo.fY, L"spike", 256, 97));
 				break;
 			}
+			case SAVEDATA::FALSE_KNIGHT:
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CFalseKnight>::Create(tInfo.fX, tInfo.fY));
+				break;
+			}
 			case SAVEDATA::END:
 				break;
 			default:
@@ -240,6 +246,6 @@ void CImageMgr::Load_Image()
 
 	}
 	CloseHandle(hFile);
-	//MessageBox(g_hWnd, L"Image Load", L"Success", MB_OK);
+	MessageBox(g_hWnd, L"Image Load", L"Success", MB_OK);
 
 }

@@ -70,6 +70,11 @@ void CEditor::Initialize()
 	CImageMgr::Get_Instance()->Add_EditImage(img);
 
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/idle.bmp", L"FalseKnight");
+	img = CAbstractFactory<CMyImage>::Create(0, 0, L"FalseKnight", 750, 450);
+	dynamic_cast<CMyImage*>(img)->Set_Tag(SAVEDATA::FALSE_KNIGHT);
+	CImageMgr::Get_Instance()->Add_EditImage(img);
+
 	
 
 

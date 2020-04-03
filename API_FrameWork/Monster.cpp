@@ -63,15 +63,15 @@ void CMonster::Render(HDC _DC)
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
 
-//#pragma region 디버그
-//
-//
-//	TCHAR		szBuff[32] = L"";
-//	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
-//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
-//
-//
-//#pragma endregion
+#pragma region 디버그
+
+
+	TCHAR		szBuff[32] = L"";
+	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
+	TextOut(_DC, m_tRect.right + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+
+
+#pragma endregion
 
 }
 

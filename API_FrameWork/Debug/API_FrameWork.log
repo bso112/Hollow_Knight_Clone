@@ -1,9 +1,4 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (API_FrameWork.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Editor.cpp
-  TileMgr.cpp
-e:\my_hollow_knight\api_framework\tilemgr.cpp(232): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-e:\my_hollow_knight\api_framework\tilemgr.cpp(233): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-e:\my_hollow_knight\api_framework\tilemgr.cpp(234): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-e:\my_hollow_knight\api_framework\tilemgr.cpp(235): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Weapon.cpp
   API_FrameWork.vcxproj -> E:\My_Hollow_Knight\Debug\HollowKnight.exe
   API_FrameWork.vcxproj -> E:\My_Hollow_Knight\Debug\HollowKnight.pdb (Full PDB)

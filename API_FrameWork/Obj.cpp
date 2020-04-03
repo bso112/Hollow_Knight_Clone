@@ -4,7 +4,7 @@
 
 CObj::CObj()
 	: m_fSpeed(0.f), m_bDead(false), m_fAngle(0.f), m_eTag(OBJTAG::END),
-	m_bCollided(false)
+	m_bCollided(false), m_iCurrLoopCnt(0)
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
@@ -28,9 +28,18 @@ void CObj::Move_Frame()
 		if (m_tFrame.iFrameStart < m_tFrame.iFrameEnd)
 		{
 			++m_tFrame.iFrameStart;
+			m_tFrame.bEnd = false;
 		}
 		else
 		{
+			if (m_iCurrLoopCnt >= m_tFrame.iLoopCnt)
+			{
+				m_tFrame.bEnd = true;
+				m_iCurrLoopCnt = 0;
+			}
+			else
+				++m_iCurrLoopCnt;
+
 			if (m_tFrame.bLoop)
 			{
 				m_tFrame.iFrameStart = 0;

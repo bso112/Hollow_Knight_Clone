@@ -45,8 +45,8 @@ void CPlayer::Initialize()
 	m_tStat.m_fMaxHp = 100;
 	m_tStat.m_fHp = m_tStat.m_fMaxHp;
 
-	m_tInfo.fX = 600.f;
-	m_tInfo.fY = 1200.f;
+	m_tInfo.fX = 7000.f;
+	m_tInfo.fY = 1793.f;
 	m_tInfo.iCX = 56;
 	m_tInfo.iCY = 97;
 
@@ -241,9 +241,9 @@ void CPlayer::Render(HDC _DC)
 //	lstrcat(szBuff, m_debug);
 //	TextOut(_DC, 500, 200, szBuff, lstrlen(szBuff));
 //
-//	TCHAR		szBuff2[32] = L"ÁÂÇ¥ : ";
-//	swprintf_s(szBuff, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
-//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+	TCHAR		szBuff2[32] = L"ÁÂÇ¥ : ";
+	swprintf_s(szBuff2, L"X: %d  Y: %d", (int)m_tInfo.fX, (int)m_tInfo.fY);
+	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff2, lstrlen(szBuff2));
 //
 //
 //#pragma endregion

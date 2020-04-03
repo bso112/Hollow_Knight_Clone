@@ -29,6 +29,10 @@ typedef struct tagFrame
 	DWORD		dwFrameTime;
 	//루프유무
 	bool		bLoop;
+	//애니메이션이 끝났냐
+	bool		bEnd; 
+	//루프횟수
+	int			iLoopCnt = 0;
 
 	tagFrame() :bLoop(true) {};
 

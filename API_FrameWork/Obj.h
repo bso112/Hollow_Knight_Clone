@@ -60,7 +60,7 @@ public:
 
 	bool Erase_Collided(CObj* _pCollided)
 	{
-		return m_setCollided.erase(_pCollided);
+		return m_setCollided.erase(_pCollided) ? true : false;
 	}
 
 
@@ -95,6 +95,7 @@ private:
 	//충돌한 오브젝트 셋
 	set<CObj*> m_setCollided;
 
+	int		m_iCurrLoopCnt;
 };
 
 

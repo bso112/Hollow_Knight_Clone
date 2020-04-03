@@ -159,7 +159,7 @@
 									"font": "Arial;13;0",
 									"left": 274,
 									"top": 282,
-									"width": 65.7490234375,
+									"width": 66.015625,
 									"height": 13,
 									"text": "Groggy_Hit",
 									"wordWrap": true
@@ -168,7 +168,7 @@
 							"font": "Arial;13;0",
 							"left": 264,
 							"top": 272,
-							"width": 85.7490234375,
+							"width": 86.015625,
 							"height": 33,
 							"nameLabel": {
 								"$ref": "AAAAAAFxO6cdn5LKKvU="
@@ -429,9 +429,9 @@
 										"$ref": "AAAAAAFxO6noApMtS9s="
 									},
 									"font": "Arial;13;0",
-									"left": 128.25,
+									"left": 128.974853515625,
 									"top": 195.5,
-									"width": 48.5,
+									"width": 49.94970703125,
 									"height": 39,
 									"text": "Armor가 3/1만큼 감소",
 									"wordWrap": true
@@ -440,7 +440,7 @@
 							"font": "Arial;13;0",
 							"left": 104,
 							"top": 176,
-							"width": 97,
+							"width": 99.8994140625,
 							"height": 78,
 							"nameLabel": {
 								"$ref": "AAAAAAFxO6noApMuAJk="
@@ -902,52 +902,6 @@
 						},
 						{
 							"_type": "FCFlowView",
-							"_id": "AAAAAAFxO7H5OJQLbB8=",
-							"_parent": {
-								"$ref": "AAAAAAFxO6bklpKqX9M="
-							},
-							"model": {
-								"$ref": "AAAAAAFxO7H5OJQJhpI="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFxO7H5OJQMWmg=",
-									"_parent": {
-										"$ref": "AAAAAAFxO7H5OJQLbB8="
-									},
-									"model": {
-										"$ref": "AAAAAAFxO7H5OJQJhpI="
-									},
-									"font": "Arial;13;0",
-									"left": 368,
-									"top": 347,
-									"width": 16.6181640625,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAFxO7H5OJQLbB8="
-									},
-									"edgePosition": 1,
-									"text": "No"
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAFxO7Gd4JP8+ME="
-							},
-							"tail": {
-								"$ref": "AAAAAAFxO6vPAZNh3T0="
-							},
-							"lineStyle": 2,
-							"points": "361:368;392:368",
-							"nameLabel": {
-								"$ref": "AAAAAAFxO7H5OJQMWmg="
-							}
-						},
-						{
-							"_type": "FCFlowView",
 							"_id": "AAAAAAFxO7JiyZQb/Kg=",
 							"_parent": {
 								"$ref": "AAAAAAFxO6bklpKqX9M="
@@ -1344,6 +1298,51 @@
 							"nameLabel": {
 								"$ref": "AAAAAAFxO8gFDZSi87w="
 							}
+						},
+						{
+							"_type": "FCFlowView",
+							"_id": "AAAAAAFxPw6mTRWlQkE=",
+							"_parent": {
+								"$ref": "AAAAAAFxO6bklpKqX9M="
+							},
+							"model": {
+								"$ref": "AAAAAAFxPw6mTBWjD1Q="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAFxPw6mTRWmH+U=",
+									"_parent": {
+										"$ref": "AAAAAAFxPw6mTRWlQkE="
+									},
+									"model": {
+										"$ref": "AAAAAAFxPw6mTBWjD1Q="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 316,
+									"top": 395,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAFxPw6mTRWlQkE="
+									},
+									"edgePosition": 1
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAFxO7Gd4JP8+ME="
+							},
+							"tail": {
+								"$ref": "AAAAAAFxO6cht5LZiLk="
+							},
+							"lineStyle": 2,
+							"points": "185:376;185:416;448:416;448:395",
+							"nameLabel": {
+								"$ref": "AAAAAAFxPw6mTRWmH+U="
+							}
 						}
 					]
 				},
@@ -1467,6 +1466,19 @@
 							"target": {
 								"$ref": "AAAAAAFxO6vPAJNfnPA="
 							}
+						},
+						{
+							"_type": "FCFlow",
+							"_id": "AAAAAAFxPw6mTBWjD1Q=",
+							"_parent": {
+								"$ref": "AAAAAAFxO6chtpLXlBU="
+							},
+							"source": {
+								"$ref": "AAAAAAFxO6chtpLXlBU="
+							},
+							"target": {
+								"$ref": "AAAAAAFxO7Gd4JP6Jsc="
+							}
 						}
 					]
 				},
@@ -1585,20 +1597,6 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFxO6cdn5LHV9M="
-							}
-						},
-						{
-							"_type": "FCFlow",
-							"_id": "AAAAAAFxO7H5OJQJhpI=",
-							"_parent": {
-								"$ref": "AAAAAAFxO6vPAJNfnPA="
-							},
-							"name": "No",
-							"source": {
-								"$ref": "AAAAAAFxO6vPAJNfnPA="
-							},
-							"target": {
-								"$ref": "AAAAAAFxO7Gd4JP6Jsc="
 							}
 						}
 					]
