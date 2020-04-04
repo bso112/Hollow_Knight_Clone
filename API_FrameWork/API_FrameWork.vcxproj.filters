@@ -118,6 +118,9 @@
     <Filter Include="소스 파일\01.Obj\10.Trap">
       <UniqueIdentifier>{e73d870d-18a2-42a2-b2c7-f8a82f523ad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\98.Manager\10.Spwaner">
+      <UniqueIdentifier>{02ea95a4-1c14-4502-afdd-c94e70b99abf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="Trap.h">
       <Filter>소스 파일\01.Obj\10.Trap</Filter>
     </ClInclude>
+    <ClInclude Include="Spwaner.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_FrameWork.cpp">
@@ -334,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="Trap.cpp">
       <Filter>소스 파일\01.Obj\10.Trap</Filter>
+    </ClCompile>
+    <ClCompile Include="Spwaner.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

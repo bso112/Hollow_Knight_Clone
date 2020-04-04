@@ -80,6 +80,15 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dst, list<CObj*> _Src)
 
 			if (Check_Rect(Dst, Src, &fX, &fY))
 			{
+
+				//상대방이 죽은경우, 충돌처리를 하지 않는다.
+				if (Src->Get_Dead())
+					Dst->Erase_Collided(Src);
+				if (Dst->Get_Dead())
+					Src->Erase_Collided(Dst);
+				if (Src->Get_Dead() || Dst->Get_Dead())
+					continue;
+
 				//만약 서로 충돌한 적이 없으면 서로의 충돌리스트에 서로를 추가한다.
 				if (!Dst->Contain_Collided(Src))
 				{

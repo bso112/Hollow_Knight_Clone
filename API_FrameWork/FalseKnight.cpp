@@ -7,6 +7,8 @@
 #include "SoundMgr.h"
 #include "Weapon.h"
 #include "ObjMgr.h"
+#include "ImageMgr.h"
+#include "MyImage.h"
 
 CFalseKnight::CFalseKnight()
 	:m_bWasGroggy(false), m_bHit(false)
@@ -28,13 +30,15 @@ void CFalseKnight::Initialize()
 	m_tImgInfo.iCX = 750;
 	m_tImgInfo.iCY = 450;
 
+	m_tInfo.fY -= 600.f;
 
 
 	m_eFront = FRONT::LEFT;
-	m_eCurState = STATE::IDLE;
+	m_eCurState = STATE::JUMP;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(600);
+	m_tStat = STAT(1000);
+	m_fRadius = 800.f;
 
 
 
@@ -50,7 +54,7 @@ void CFalseKnight::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy.bmp", L"knight_groggy");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy_hit.bmp", L"knight_groggy_hit");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy_stand.bmp", L"knight_groggy_stand");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/die.bmp", L"knight_die");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/Body.bmp", L"knight_die_body");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/jump.bmp", L"knight_jump");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/att_normal_left.bmp", L"knight_att_normal_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/att_swing_around_left.bmp", L"knight_att_swing_around_left");
@@ -59,9 +63,20 @@ void CFalseKnight::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy_left.bmp", L"knight_groggy_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy_hit_left.bmp", L"knight_groggy_hit_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/groggy_stand_left.bmp", L"knight_groggy_stand_left");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/die_left.bmp", L"knight_die_left");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/Body_left.bmp", L"knight_die_body_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/jump_left.bmp", L"knight_jump_left");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/effect/crush.bmp", L"knight_effect_crush");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/die.bmp", L"knight_die");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/die_left.bmp", L"knight_die_left");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/FknightAmourPiece/0.bmp", L"FknightAmourPiece1");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Monster/FalseKnight/FknightAmourPiece/1.bmp", L"FknightAmourPiece2");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Effect/groundHit.bmp", L"groundHit");
+
+
+
 
 }
 
@@ -235,12 +250,30 @@ void CFalseKnight::Scene_Change()
 		}
 		case CFalseKnight::DEAD:
 		{
-			TCHAR* frameKey = L"knight_die";
+
+			TCHAR* frameKey = L"knight_groggy_hit";
 			if (m_eFront == FRONT::LEFT)
-				frameKey = L"knight_die_left";
+				frameKey = L"knight_groggy_hit_left";
 			memcpy(m_pFrameKey, frameKey, DIR_LEN);
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameTime = GetTickCount();
+			m_tFrame.dwFrameSpeed = 50;
+			m_tFrame.bLoop = true;
+			m_tFrame.bEnd = false;
+			m_tFrame.iLoopCnt = 0;
+			break;
+		}
+		case CFalseKnight::EMPTY:
+		{
+
+			TCHAR* frameKey = L"knight_die_body";
+			if (m_eFront == FRONT::LEFT)
+				frameKey = L"knight_die_body_left";
+			memcpy(m_pFrameKey, frameKey, DIR_LEN);
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_tFrame.dwFrameSpeed = 200;
@@ -271,17 +304,20 @@ int CFalseKnight::Update()
 		//타깃으로 가는 방향벡터
 		m_vToTarget = Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY);
 		m_fDistToTarget = m_vToTarget.magnitude();
-		Update_State();
-		Process();
 
 	}
 	else //죽었으면
 	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+		CSoundMgr::Get_Instance()->PlaySoundW(L"Boss Defeat.wav", CSoundMgr::CHANNELID::MONSTER);
+
 		//일정시간후 파괴
 		if (m_dwDeadTimer + m_fDeadWait * 1000 < GetTickCount())
 			m_bDead = true;
 	}
 
+	Update_State();
+	Process();
 	Move_Frame();
 	Scene_Change();
 
@@ -303,13 +339,13 @@ void CFalseKnight::Render(HDC _DC)
 
 	if (m_eFront == FRONT::LEFT)
 	{
-		GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - 100
+		GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - 90
 			, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * (m_tFrame.iFrameEnd - m_tFrame.iFrameStart), m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
 			, RGB(30, 30, 30));
 	}
 	else
 	{
-		GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - 100
+		GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - 90
 			, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameStart, m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
 			, RGB(30, 30, 30));
 
@@ -352,6 +388,9 @@ void CFalseKnight::Render(HDC _DC)
 		break;
 	case CFalseKnight::END:
 		state = L"엔드";
+		break;
+	case CFalseKnight::EMPTY:
+		state = L"빈껍데기";
 		break;
 	default:
 		break;
@@ -398,6 +437,18 @@ void CFalseKnight::Release()
 
 void CFalseKnight::Process()
 {
+
+
+	if (m_fDistToTarget < m_fRadius)
+	{
+		static bool lock_BGM = false;
+		if (!lock_BGM)
+		{
+			CSoundMgr::Get_Instance()->PlayBGM(L"FalseKnight_Battle.wav");
+			lock_BGM = true;
+		}
+	}
+
 	switch (m_eCurState)
 	{
 	case CFalseKnight::IDLE:
@@ -421,6 +472,7 @@ void CFalseKnight::Process()
 	}
 	case CFalseKnight::SWING_AROUND:
 	{
+		CSoundMgr::Get_Instance()->PlaySoundW(L"FKnight_Rage.wav", CSoundMgr::CHANNELID::MONSTER);
 		Swing_Around();
 		break;
 	}
@@ -428,9 +480,10 @@ void CFalseKnight::Process()
 	{
 		//다운되는 소리 재생
 		CSoundMgr::Get_Instance()->PlaySoundW(L"boss_stun.wav", CSoundMgr::CHANNELID::MONSTER_EFFECT);
-		break;
+
 	}
 	case CFalseKnight::GROGGY:
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::MONSTER);
 		break;
 	case CFalseKnight::GROGGY_STAND:
 		break;
@@ -439,12 +492,48 @@ void CFalseKnight::Process()
 		TCHAR* sounds[5] = { L"Fknight_hit_01.wav", L"Fknight_hit_02.wav", L"Fknight_hit_03.wav", L"Fknight_hit_04.wav", L"Fknight_hit_05.wav" };
 		int ranNum = rand() % 5;
 		CSoundMgr::Get_Instance()->PlaySoundW(sounds[ranNum], CSoundMgr::CHANNELID::MONSTER);
-		if (m_tFrame.bEnd)
-			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::MONSTER);
 		break;
 	}
 	case CFalseKnight::DEAD:
+	{
+		static bool lock_sound = false;
+		if (!lock_sound)
+		{
+			CSoundMgr::Get_Instance()->PlaySoundW(L"FKnight_Death.wav", CSoundMgr::CHANNELID::MONSTER);
+			lock_sound = true;
+		}
 		break;
+
+	}
+	case CFalseKnight::EMPTY:
+	{
+		static bool lock_dead = false;
+		if (!lock_dead)
+		{
+
+			FRAME frame;
+			frame.iFrameStart = 0;
+			frame.iFrameEnd = 5;
+			frame.iFrameScene = 0;
+			frame.dwFrameTime = GetTickCount();
+			frame.dwFrameSpeed = 200.f;
+			frame.bLoop = false;
+			frame.iLoopCnt = 0;
+			frame.bEnd = false;
+
+			CObj* img = nullptr;
+			if (m_eFront == FRONT::RIGHT)
+				img = CAbstractFactory<CMyImage>::Create(m_tRect.top, m_tRect.right, L"knight_die", frame, 200, 119, 5.f);
+			else
+				img = CAbstractFactory<CMyImage>::Create(m_tRect.top, m_tRect.right, L"knight_die_left", frame, 200, 119, 5.f);
+
+			dynamic_cast<CMyImage*>(img)->Set_Horizontal();
+			CImageMgr::Get_Instance()->Add_Image(img);
+
+
+			lock_dead = true;
+		}
+	}
 	case CFalseKnight::END:
 		break;
 	default:
@@ -462,7 +551,7 @@ void CFalseKnight::Update_State()
 
 	float fill = m_tStat.m_fHp / m_tStat.m_fMaxHp;
 	static int tmp = 0;
-	if ((int(fill * 10) == 8 || int(fill * 10) == 6 || int(fill * 10) == 3)
+	if ((int(fill * 10) == 8 || int(fill * 10) == 6 || int(fill * 10) == 2)
 		&& tmp != int(fill * 10))
 	{
 		tmp = int(fill * 10);
@@ -481,9 +570,22 @@ void CFalseKnight::Update_State()
 			m_dwDownTimer = GetTickCount();
 			m_bWasGroggy = true;
 		}
+		else
+			m_dwDownTimer = MAXDWORD;
+
+
 	}
 
+	//그로기 상태이고 체력이 0이면
+	if (m_ePrvState == STATE::GROGGY && m_tStat.m_fHp == 0)
+	{
+		m_eCurState = STATE::DEAD;
 
+	}
+
+	//죽고나면 일정시간후 껍데기만 남음
+	if (m_dwDeadTimer + m_fDeadWait * 500 < GetTickCount())
+		m_eCurState = STATE::EMPTY;
 
 	//그로기 상태이고 맞았으면,
 	if (m_ePrvState == STATE::GROGGY && m_bHit)
@@ -491,9 +593,6 @@ void CFalseKnight::Update_State()
 		m_eCurState = STATE::GROGGY_HIT;
 		m_bHit = false;
 
-		//만약 그로기에서 맞았고, 체력이 0이하가 되면
-		if (m_tStat.m_fHp <= 0)
-			m_eCurState = STATE::DEAD;
 	}
 
 	//맞는 애니메이션이 끝났으면
@@ -503,7 +602,7 @@ void CFalseKnight::Update_State()
 	}
 
 	//그로기 상태이며 4초가 지났으면
-	if (m_ePrvState == STATE::GROGGY && m_dwDownTimer + 4000 < GetTickCount())
+	if (m_ePrvState == STATE::GROGGY && m_dwDownTimer + 4000 < GetTickCount() && m_tStat.m_fHp > 20.f)
 	{
 		m_eCurState = STATE::GROGGY_STAND;
 	}
@@ -543,17 +642,27 @@ void CFalseKnight::Update_State()
 		m_eCurState = STATE::IDLE;
 
 
+
+
+
 }
 
 void CFalseKnight::Jumping()
 {
 	if (m_bJump)
 	{
+		static bool lock_jump = false;
+		static int fDir = 1.f;
+		if (!lock_jump)
+		{
+			Vector2 vDir;
+			vDir = m_vToTarget.Nomalize();
+			fDir = vDir.fX < 0 ? -1 : 1;
+			lock_jump = true;
+		}
 
 		//중력적용
 		m_curJumpVelo += m_Gravity;
-		Vector2 vDir = m_vToTarget.Nomalize();
-		int fDir = vDir.fX < 0 ? -1 : 1;
 
 
 		m_fDeltaTime = CMyTime::Get_Instance()->Get_DeltaTime();
@@ -578,7 +687,6 @@ void CFalseKnight::Jumping()
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
 
-
 		if (collision == CTileMgr::BOTTOM)
 		{
 
@@ -588,7 +696,7 @@ void CFalseKnight::Jumping()
 			m_curJumpVelo = JUMP_VELO;
 			m_bJump = false;
 			++m_iAttCnt;
-
+			lock_jump = false;
 
 		}
 
@@ -708,7 +816,7 @@ void CFalseKnight::RemoteAttack()
 void CFalseKnight::Swing_Around()
 {
 	//어택모션 중간쯤오면 충돌박스 생성
-	if (m_eCurState == STATE::ATTACK && (m_tFrame.iFrameStart == 3 || m_tFrame.iFrameStart == 7))
+	if (m_eCurState == STATE::SWING_AROUND && (m_tFrame.iFrameStart == 3 || m_tFrame.iFrameStart == 7))
 	{
 		//카메라 흔들기
 		//CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);
@@ -799,19 +907,22 @@ void CFalseKnight::Chase_Target()
 
 void CFalseKnight::OnDead()
 {
-	m_eCurState = STATE::DEAD;
-	memcpy(m_pFrameKey, L"knight_die", DIR_LEN);
+	if (m_ePrvState != STATE::DEAD && m_ePrvFront != STATE::EMPTY && m_ePrvFront != STATE::GROGGY)
+		m_eCurState = STATE::DOWN;
 	m_dwDeadTimer = GetTickCount();
 }
 
 void CFalseKnight::OnTakeDamage()
 {
+
 	if (m_ePrvState == STATE::GROGGY)
 	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::MONSTER);
 		m_bHit = true;
 	}
 	else
 	{
+
 		m_bHit = false;
 	}
 }

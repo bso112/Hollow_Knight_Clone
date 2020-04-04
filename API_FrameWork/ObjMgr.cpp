@@ -32,6 +32,15 @@ void CObjMgr::Add_Object(OBJID::ID _eID, CObj * _pObj)
 
 int CObjMgr::Update()
 {
+
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::PLAYER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::PLAYER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::WEAPON]);
+
+
 	for (int i = 0; i < OBJID::END; ++i)
 	{
 		auto& iter = m_listObj[i].begin();
@@ -57,12 +66,7 @@ int CObjMgr::Update()
 	}
 
 
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::PLAYER], m_listObj[OBJID::MONSTER]);
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::MONSTER]);
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::WEAPON], m_listObj[OBJID::PLAYER]);
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::PLAYER]);
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::MONSTER]);
-	CCollisionMgr::Collision_RectEx(m_listObj[OBJID::TRAP], m_listObj[OBJID::WEAPON]);
+
 
 
 

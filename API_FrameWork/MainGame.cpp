@@ -33,7 +33,7 @@ void CMainGame::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BackBuffer.bmp", L"BackBuffer");
 	
 	CMyTime::Get_Instance()->Initalize();
-	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_STAGE);
+	CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENEID::SCENE_LOGO);
 	m_pCursor = CAbstractFactory<CMouse>::Create();
 }
 

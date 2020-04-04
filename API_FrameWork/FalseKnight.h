@@ -1,7 +1,7 @@
 #pragma once
 #include "Monster.h"
 
-#define JUMP_VELO Vector2(200.f, -100.f);
+#define JUMP_VELO Vector2(250.f, -150.f);
 
 class CFalseKnight : public CMonster
 {
@@ -11,7 +11,7 @@ public:
 
 public:
 
-	enum STATE { IDLE, ATTACK, REMOTE_ATTACK, JUMP, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, END };
+	enum STATE { IDLE, ATTACK, REMOTE_ATTACK, JUMP, SWING_AROUND, DOWN, GROGGY, GROGGY_STAND, GROGGY_HIT, DEAD, EMPTY, END };
 
 public:
 	// CMonster을(를) 통해 상속됨

@@ -27,6 +27,7 @@ public:
 	void Set_Duration(float _fDuration) {  m_fDuration = _fDuration; }
 	void Play_Anim() { m_tFrame.dwFrameTime = GetTickCount(); }
 	void Set_Horizontal() { m_bHorizontal = true; }
+	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 private:
 	SAVEDATA::TAG m_eTag;
 	//이미지가 살아있는 시간
@@ -35,6 +36,12 @@ private:
 
 	//가로 스프라이트인가?
 	bool m_bHorizontal;
+
+	Vector2 m_velocity;
+	//힘 타이머
+	DWORD			m_dwForceTimer;
+	//힘을 주는 시간
+	float			m_fForceTime;
 
 };
 

@@ -119,6 +119,19 @@ typedef struct tagVector2
 		return tagVector2(fX  -_scalar, fY - _scalar);
 	}
 
+	tagVector2& nomalize()
+	{
+		float mag = magnitude();
+		// 0으로는 나눌 수 없다.
+		if (mag > 0)
+		{
+			fX = fX / mag;
+			fY = fY / mag;
+			return *this;
+		}
+
+		return *this;
+	}
 
 	//임시객체를 리턴만 할뿐, 자기자신의 값을 변경하지는 않음
 	tagVector2 Nomalize()

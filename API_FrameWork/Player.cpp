@@ -274,7 +274,7 @@ void CPlayer::Take_Damage(float _fDamage)
 	m_tStat.m_fHp -= _fDamage;
 	if (m_tStat.m_fHp < 0)
 	{
-		m_bDead = true;
+		//m_bDead = true;
 		m_tStat.m_fHp = 0;
 	}
 

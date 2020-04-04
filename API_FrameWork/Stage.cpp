@@ -9,6 +9,7 @@
 #include "ImageMgr.h"
 #include "MyImage.h"
 #include "SoundMgr.h"
+#include "Spwaner.h"
 
 CStage::CStage()
 {
@@ -61,6 +62,7 @@ void CStage::Update()
 	CObjMgr::Get_Instance()->Update();
 	CTileMgr::Get_Instance()->Update();
 	CImageMgr::Get_Instance()->Update();
+	Spwaner::Get_Instance()->Update();
 }
 
 void CStage::Late_Update()
@@ -124,6 +126,7 @@ void CStage::Release()
 {
 	CTileMgr::Destroy_Instance();
 	CImageMgr::Destroy_Instance();
+	Spwaner::Destroy_Instance();
 
 
 }

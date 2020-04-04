@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "HuskGaurd.h"
 #include "MyTime.h"
 #include "BmpMgr.h"
@@ -7,7 +7,8 @@
 #include "ObjMgr.h"
 #include "ScrollMgr.h"
 #include "SoundMgr.h"
-
+#include "Spwaner.h"
+#include "FalseKnight.h"
 CHuskGaurd::CHuskGaurd()
 	:m_bWaked(false), m_bJump(false), m_iAttCnt(0)
 {
@@ -31,7 +32,7 @@ void CHuskGaurd::Initialize()
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(300);
+	m_tStat = STAT(200);
 	m_fRadius = 500.f;
 	m_fAttRange = 400.f;
 
@@ -56,10 +57,10 @@ void CHuskGaurd::Initialize()
 void CHuskGaurd::Scene_Change()
 {
 
-	//°Å¸®°¡ ³Ê¹« °¡±î¿öÁö¸é Á¤½Å¾øÀÌ ¹Ù²ñ
+	//ê±°ë¦¬ê°€ ë„ˆë¬´ ê°€ê¹Œì›Œì§€ë©´ ì •ì‹ ì—†ì´ ë°”ë€œ
 	if (m_fDistToTarget > 1.f)
 	{
-		//ÀÌµ¿“‡Ç× Á¤ÇØÁÖ±â
+		//ì´ë™Â“Â‡í•­ ì •í•´ì£¼ê¸°
 		m_vToTarget.fX > 0 ? m_eFront = FRONT::RIGHT : m_eFront = FRONT::LEFT;
 	}
 
@@ -167,11 +168,14 @@ int CHuskGaurd::Update()
 		Process();
 
 	}
-	else //Á×¾úÀ¸¸é
+	else //ì£½ì—ˆìœ¼ë©´
 	{
-		//ÀÏÁ¤½Ã°£ÈÄ ÆÄ±«
+		//ì¼ì •ì‹œê°„í›„ íŒŒê´´
 		if (m_dwDeadTimer + m_fDeadWait * 1000 < GetTickCount())
+		{
 			m_bDead = true;
+			Spwaner::Get_Instance()->Spwan(CAbstractFactory<CFalseKnight>::Create(m_tInfo.fX, m_tInfo.fY), OBJID::MONSTER, 0.5f);
+		}
 	}
 
 	Move_Frame();
@@ -189,61 +193,61 @@ void CHuskGaurd::Render(HDC _DC)
 
 	HDC memDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 
-	//±×¸²ÀÇ Áß½É¼±ÀÌ ¾È¸Â¾Æ¼­ ±×¸±¶§ º¸Á¤ÇØÁØ´Ù.
+	//ê·¸ë¦¼ì˜ ì¤‘ì‹¬ì„ ì´ ì•ˆë§ì•„ì„œ ê·¸ë¦´ë•Œ ë³´ì •í•´ì¤€ë‹¤.
 	int offSet = 37;
 
 	GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY - offSet
 		, m_tImgInfo.iCX, m_tImgInfo.iCY, memDC, m_tImgInfo.iCX * m_tFrame.iFrameScene, m_tImgInfo.iCY *m_tFrame.iFrameStart, m_tImgInfo.iCX, m_tImgInfo.iCY
 		, RGB(30, 30, 30));
 
-//#pragma region µğ¹ö±×
-//
-//	TCHAR		szBuff[32] = L"»óÅÂ: ";
-//	TCHAR*		state = nullptr;
-//	switch (m_eCurState)
-//	{
-//	case CHuskGaurd::IDLE:
-//		state = L"ÈŞ½Ä";
-//		break;
-//	case CHuskGaurd::WAKEUP:
-//		state = L"±ş";
-//		break;
-//	case CHuskGaurd::WALK:
-//		state = L"°È±â";
-//		break;
-//	case CHuskGaurd::ATTACK:
-//		state = L"°ø°İ";
-//		break;
-//	case CHuskGaurd::DASH:
-//		state = L"´ë½Ã";
-//		break;
-//	case CHuskGaurd::JUMP:
-//		state = L"Á¡ÇÁ";
-//		break;
-//	case CHuskGaurd::DEAD:
-//		state = L"Á×À½";
-//		break;
-//	case CHuskGaurd::END:
-//		state = L"NONE";
-//		break;
-//	default:
-//		break;
-//	}
-//	lstrcat(szBuff, state);
-//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
-//
-//
-//#pragma endregion
+	//#pragma region ë””ë²„ê·¸
+	//
+	//	TCHAR		szBuff[32] = L"ìƒíƒœ: ";
+	//	TCHAR*		state = nullptr;
+	//	switch (m_eCurState)
+	//	{
+	//	case CHuskGaurd::IDLE:
+	//		state = L"íœ´ì‹";
+	//		break;
+	//	case CHuskGaurd::WAKEUP:
+	//		state = L"ê¹¸";
+	//		break;
+	//	case CHuskGaurd::WALK:
+	//		state = L"ê±·ê¸°";
+	//		break;
+	//	case CHuskGaurd::ATTACK:
+	//		state = L"ê³µê²©";
+	//		break;
+	//	case CHuskGaurd::DASH:
+	//		state = L"ëŒ€ì‹œ";
+	//		break;
+	//	case CHuskGaurd::JUMP:
+	//		state = L"ì í”„";
+	//		break;
+	//	case CHuskGaurd::DEAD:
+	//		state = L"ì£½ìŒ";
+	//		break;
+	//	case CHuskGaurd::END:
+	//		state = L"NONE";
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//	lstrcat(szBuff, state);
+	//	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+	//
+	//
+	//#pragma endregion
 
 }
 
 void CHuskGaurd::Late_Update()
 {
-	//»ó½ÃÁß·Â
+	//ìƒì‹œì¤‘ë ¥
 	if (!m_bJump)
 	{
 		m_tInfo.fY += m_Gravity.fY;
-		//Á¡ÇÁÀÏ¶§´Â µû·Î Äİ¸®Àü Ã¼Å©ÇØÁÜ
+		//ì í”„ì¼ë•ŒëŠ” ë”°ë¡œ ì½œë¦¬ì „ ì²´í¬í•´ì¤Œ
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
@@ -283,7 +287,7 @@ void CHuskGaurd::OnTakeDamage()
 void CHuskGaurd::Process()
 {
 
-	//Å¸±êÀ¸·Î °¡´Â ¹æÇâº¤ÅÍ
+	//íƒ€ê¹ƒìœ¼ë¡œ ê°€ëŠ” ë°©í–¥ë²¡í„°
 	m_vToTarget = Vector2(m_pTarget->Get_INFO().fX, m_pTarget->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY);
 	m_fDistToTarget = m_vToTarget.magnitude();
 
@@ -331,34 +335,34 @@ void CHuskGaurd::Process()
 void CHuskGaurd::Update_State()
 {
 
-	//Å¸°ÙÀÌ ÀÎ½Ä¹üÀ§¾È¿¡ µé¾î¿À¸é ±ú±â
+	//íƒ€ê²Ÿì´ ì¸ì‹ë²”ìœ„ì•ˆì— ë“¤ì–´ì˜¤ë©´ ê¹¨ê¸°
 	if (m_fDistToTarget < m_fRadius && !m_bWaked)
 	{
 		m_eCurState = STATE::WAKEUP;
-		//³î¶ó´Â ¾Ö´Ï¸ŞÀÌ¼Ç ³¡³µÀ¸¸é ´ÙÀ½ Çàµ¿À¸·Î
+		//ë†€ë¼ëŠ” ì• ë‹ˆë©”ì´ì…˜ ëë‚¬ìœ¼ë©´ ë‹¤ìŒ í–‰ë™ìœ¼ë¡œ
 		if (m_tFrame.iFrameEnd != 0 && m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 			m_bWaked = true;
 	}
 
 	if (m_bWaked)
 	{
-		//Å¸±êÀÌ °ø°İ¹üÀ§ ¹ÛÀÌ°í, ÇöÀç °ø°İÁßÀÌ ¾Æ´Ï¸é
+		//íƒ€ê¹ƒì´ ê³µê²©ë²”ìœ„ ë°–ì´ê³ , í˜„ì¬ ê³µê²©ì¤‘ì´ ì•„ë‹ˆë©´
 		if (abs(m_vToTarget.fX) > m_fAttRange && m_eCurState != STATE::ATTACK && m_eCurState != STATE::JUMP)
 		{
 			m_eCurState = STATE::WALK;
 
 		}
-		//±ÙÁ¢°ø°İ
+		//ê·¼ì ‘ê³µê²©
 		else
 		{
-			//16¹ø °ø°İÁß ÇÑ¹ø Á¡ÇÁ°ø°İ
+			//16ë²ˆ ê³µê²©ì¤‘ í•œë²ˆ ì í”„ê³µê²©
 			if (m_iAttCnt % 16 == 0)
 				m_eCurState = STATE::JUMP;
 			else
 			{
-				//1.5ÃÊ °£°İÀ¸·Î Ãß°İ
+				//1.5ì´ˆ ê°„ê²©ìœ¼ë¡œ ì¶”ê²©
 				static DWORD timer = GetTickCount();
-				//1.5ÃÊ¿¡ ÇÑ¹ø¾¿ µÚ¹Ù²î´Â ¶ô
+				//1.5ì´ˆì— í•œë²ˆì”© ë’¤ë°”ë€ŒëŠ” ë½
 				static bool lock = false;
 				if (timer + m_fAttCoolDown * 1600 < GetTickCount())
 				{
@@ -385,7 +389,7 @@ void CHuskGaurd::Jumping()
 {
 	if (m_bJump)
 	{
-		//Áß·ÂÀû¿ë
+		//ì¤‘ë ¥ì ìš©
 		m_curJumpVelo += m_Gravity;
 		Vector2 vDir = m_vToTarget.Nomalize();
 		int fDir = vDir.fX < 0 ? -1 : 1;
@@ -395,11 +399,11 @@ void CHuskGaurd::Jumping()
 		if (m_fDeltaTime > 0.15f)
 			m_fDeltaTime = 0.15f;
 
-		// * m_fDeltaTimeÀ» ÇØÁÖ¸é 1ÃÊ¿¡ m_curJumpVelo¸¸Å­ ÀÌµ¿ÇÑ´Ù.
+		// * m_fDeltaTimeì„ í•´ì£¼ë©´ 1ì´ˆì— m_curJumpVeloë§Œí¼ ì´ë™í•œë‹¤.
 		m_tInfo.fX += m_curJumpVelo.fX * -fDir * m_fDeltaTime;
 		m_tInfo.fY += m_curJumpVelo.fY * m_fDeltaTime;
 
-		//Á¡ÇÁ»óÅÂÀÌ°í, ¹Ù´Ú°ú Ãæµ¹ÀÌ¸é Á¡ÇÁÇØÁ¦
+		//ì í”„ìƒíƒœì´ê³ , ë°”ë‹¥ê³¼ ì¶©ëŒì´ë©´ ì í”„í•´ì œ
 		CTileMgr::COLLISION collision = CTileMgr::END;
 		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
 
@@ -407,50 +411,50 @@ void CHuskGaurd::Jumping()
 
 		if (collision == CTileMgr::BOTTOM)
 		{
-			//Á¡ÇÁ ÃÊ±âÈ­ 
+			//ì í”„ ì´ˆê¸°í™” 
 			m_curJumpVelo = JUMP_VELO;
 			m_bJump = false;
 			++m_iAttCnt;
 
-#pragma region ÀÌÆåÆ®»ı¼º
+#pragma region ì´í™íŠ¸ìƒì„±
 
-				CObj* weapon = nullptr;
-				FRAME frame;
+			CObj* weapon = nullptr;
+			FRAME frame;
 
-				frame.iFrameStart = 0;
-				frame.iFrameEnd = 5;
-				frame.iFrameScene = m_eFront;
-				frame.dwFrameTime = GetTickCount();
-				frame.dwFrameSpeed = 400;
-				frame.bLoop = false;
+			frame.iFrameStart = 0;
+			frame.iFrameEnd = 5;
+			frame.iFrameScene = m_eFront;
+			frame.dwFrameTime = GetTickCount();
+			frame.dwFrameSpeed = 400;
+			frame.bLoop = false;
 
 
-				int dir = 0;
-				m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
+			int dir = 0;
+			m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
 
-				int effectCnt = 6;
-				int margin = 0.f;
-				for (int i = 0; i < effectCnt; ++i)
-				{
-					INFO info;
-					INFO imgInfo;
-					
+			int effectCnt = 6;
+			int margin = 0.f;
+			for (int i = 0; i < effectCnt; ++i)
+			{
+				INFO info;
+				INFO imgInfo;
 
-					info.iCX = 50;
-					info.iCY = 100;
-					info.fX = m_tInfo.fX + ((m_tInfo.iCX >> 1) + margin) * dir;
-					info.fY = (float)m_tRect.bottom - (info.iCY >> 1);
-					imgInfo.iCX = 128;
-					imgInfo.iCY = 256;
 
-					weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"jump_eff", frame);
-					CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
-					dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.5f);
-					dynamic_cast<CWeapon*>(weapon)->Add_Force(Vector2((float)dir, 0), 700, 6.f);
-					dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::MONSTER);
+				info.iCX = 50;
+				info.iCY = 100;
+				info.fX = m_tInfo.fX + ((m_tInfo.iCX >> 1) + margin) * dir;
+				info.fY = (float)m_tRect.bottom - (info.iCY >> 1);
+				imgInfo.iCX = 128;
+				imgInfo.iCY = 256;
 
-					margin += 30;
-				}
+				weapon = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"jump_eff", frame);
+				CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, weapon);
+				dynamic_cast<CWeapon*>(weapon)->Set_Duration(2.5f);
+				dynamic_cast<CWeapon*>(weapon)->Add_Force(Vector2((float)dir, 0), 700, 6.f);
+				dynamic_cast<CWeapon*>(weapon)->Set_Owner(CWeapon::OWNER::MONSTER);
+
+				margin += 30;
+			}
 
 
 #pragma endregion
@@ -463,10 +467,10 @@ void CHuskGaurd::Jumping()
 
 void CHuskGaurd::Attack()
 {
-	//¾îÅÃ¸ğ¼Ç Áß°£Âë¿À¸é Ãæµ¹¹Ú½º »ı¼º
-	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 2)
+	//ì–´íƒëª¨ì…˜ ì¤‘ê°„ì¯¤ì˜¤ë©´ ì¶©ëŒë°•ìŠ¤ ìƒì„±
+	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 4)
 	{
-		//Ä«¸Ş¶ó Èçµé±â
+		//ì¹´ë©”ë¼ í”ë“¤ê¸°
 		//CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);
 		CSoundMgr::Get_Instance()->PlaySoundW(L"Fknight_groundatt.wav", CSoundMgr::EFFECT);
 
@@ -475,7 +479,7 @@ void CHuskGaurd::Attack()
 		m_vToTarget.fX > 0 ? dir = 1 : dir = -1;
 
 
-		//Ãæµ¹¹Ú½º »ı¼º
+		//ì¶©ëŒë°•ìŠ¤ ìƒì„±
 		int iCX = 200;
 		int iCY = 200;
 		float fX = (dir == 1) ? (float)m_tRect.right + (iCX >> 1) : (float)m_tRect.left - (iCX >> 1);
@@ -493,6 +497,4 @@ void CHuskGaurd::Attack()
 
 		++m_iAttCnt;
 	}
-
 }
-
