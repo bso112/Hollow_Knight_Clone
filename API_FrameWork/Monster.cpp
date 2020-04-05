@@ -66,9 +66,9 @@ void CMonster::Render(HDC _DC)
 #pragma region 디버그
 
 
-	TCHAR		szBuff[32] = L"";
-	swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
-	TextOut(_DC, m_tRect.right + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+	//TCHAR		szBuff[32] = L"";
+	//swprintf_s(szBuff, L"체력: %d", (int)m_tStat.m_fHp);
+	//TextOut(_DC, m_tRect.right + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
 
 
 #pragma endregion

@@ -43,6 +43,7 @@ private:
 	//힘을 주는 시간
 	float			m_fForceTime;
 
+
 };
 
 #endif

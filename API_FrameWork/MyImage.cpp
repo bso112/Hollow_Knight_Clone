@@ -33,6 +33,7 @@ int CMyImage::Update()
 	if (m_bDead)
 		return OBJ_DEAD;
 
+
 	//이동
 	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
 	{
@@ -54,6 +55,9 @@ int CMyImage::Update()
 
 void CMyImage::Late_Update()
 {
+
+
+
 	if (CSceneMgr::Get_Instance()->Get_CurrentScene() == CSceneMgr::SCENEID::SCENE_EDIT)
 		return;
 	//지속시간동안 생존
@@ -63,6 +67,7 @@ void CMyImage::Late_Update()
 
 void CMyImage::Render(HDC _DC)
 {
+
 	int iScrollX = (int)CScrollMgr::Get_Instance()->Get_Scroll_X();
 	int iScrollY = (int)CScrollMgr::Get_Instance()->Get_Scroll_Y();
 

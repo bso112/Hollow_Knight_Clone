@@ -396,12 +396,12 @@ void CFalseKnight::Render(HDC _DC)
 		break;
 	}
 	lstrcat(szBuff, state);
-	TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
+	//TextOut(_DC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, szBuff, lstrlen(szBuff));
 
 
-	TCHAR		szBuff2[32] = L"";
-	swprintf_s(szBuff2, L"체력: %d", (int)m_tStat.m_fHp);
-	TextOut(_DC, m_tRect.right + iScrollX, m_tRect.top + iScrollY, szBuff2, lstrlen(szBuff2));
+	//TCHAR		szBuff2[32] = L"";
+	//swprintf_s(szBuff2, L"체력: %d", (int)m_tStat.m_fHp);
+	//TextOut(_DC, m_tRect.right + iScrollX, m_tRect.top + iScrollY, szBuff2, lstrlen(szBuff2));
 
 
 
@@ -521,14 +521,37 @@ void CFalseKnight::Process()
 			frame.iLoopCnt = 0;
 			frame.bEnd = false;
 
+
+			INFO info;
+			INFO imgInfo;
+
+
+			info.iCX = 115;
+			info.iCY = 115;
+			info.fX = m_eFront == FRONT::RIGHT ? m_tInfo.fX + (m_tInfo.iCX >> 1) : m_tInfo.fX - (m_tInfo.iCX >> 1);
+			info.fY = m_tInfo.fY;
+			imgInfo.iCX = 400;
+			imgInfo.iCY = 240;
+
+
 			CObj* img = nullptr;
 			if (m_eFront == FRONT::RIGHT)
-				img = CAbstractFactory<CMyImage>::Create(m_tRect.top, m_tRect.right, L"knight_die", frame, 200, 119, 5.f);
+			{
+				img = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"knight_die", frame);
+			}
 			else
-				img = CAbstractFactory<CMyImage>::Create(m_tRect.top, m_tRect.right, L"knight_die_left", frame, 200, 119, 5.f);
+			{
+				info.fX = m_tInfo.fX - (m_tInfo.iCX >> 1);
+				img = CAbstractFactory<CWeapon>::Create(info, imgInfo, L"knight_die_left", frame);
 
-			dynamic_cast<CMyImage*>(img)->Set_Horizontal();
-			CImageMgr::Get_Instance()->Add_Image(img);
+			}
+			dynamic_cast<CWeapon*>(img)->Set_Horizontal();
+			dynamic_cast<CWeapon*>(img)->Set_Duration(20.f);
+			dynamic_cast<CWeapon*>(img)->Set_Gravity();
+			Vector2 dir = m_eFront == FRONT::RIGHT ? Vector2(1, -5).nomalize() : Vector2(-1, -5).nomalize();
+			dynamic_cast<CWeapon*>(img)->Add_Force(dir, 200.f, 3.f);
+			dynamic_cast<CWeapon*>(img)->Set_Owner(CWeapon::OWNER::MONSTER);
+			CObjMgr::Get_Instance()->Add_Object(OBJID::WEAPON, img);
 
 
 			lock_dead = true;
@@ -711,7 +734,8 @@ void CFalseKnight::Attack()
 	if (m_eCurState == STATE::ATTACK && m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 2)
 	{
 		//카메라 흔들기
-		//CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);
+		CScrollMgr::Get_Instance()->Shake_Camera(2.f, 0.5f);
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
 		CSoundMgr::Get_Instance()->PlaySoundW(L"Fknight_groundatt.wav", CSoundMgr::EFFECT);
 
 		CObj* weapon = nullptr;
@@ -914,7 +938,7 @@ void CFalseKnight::OnDead()
 
 void CFalseKnight::OnTakeDamage()
 {
-
+	
 	if (m_ePrvState == STATE::GROGGY)
 	{
 		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::CHANNELID::MONSTER);

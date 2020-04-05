@@ -7,10 +7,11 @@
 #include "BmpMgr.h"
 #include "MyTime.h"
 #include "ImageMgr.h"
+#include "TileMgr.h"
 
 CWeapon::CWeapon()
 	:m_eOwner(END), m_fDamage(0.f), m_fDuration(FLT_MAX),
-	m_dwForceTimer(MAXDWORD), m_fForceTime(0.f), m_bHorizontal(false)
+	m_dwForceTimer(MAXDWORD), m_fForceTime(0.f), m_bHorizontal(false), m_bGravity(false)
 {
 }
 
@@ -39,16 +40,34 @@ int CWeapon::Update()
 	//이동
 	if (m_dwForceTimer + m_fForceTime * 1000 > GetTickCount())
 	{
+
 		m_tInfo.fX += m_velocity.fX * CMyTime::Get_Instance()->Get_DeltaTime();
 		m_tInfo.fY += m_velocity.fY * CMyTime::Get_Instance()->Get_DeltaTime();
 	}
-	else
+	else if (!m_bGravity)
 	{
 		m_fForceTime = 0.f;
 		m_velocity.fX = 0;
 		m_velocity.fY = 0;
 	}
 
+	if (m_bGravity)
+	{
+		CTileMgr::COLLISION collision = CTileMgr::END;
+		CTileMgr::Get_Instance()->Collision_Ex(this, collision);
+
+		if (collision == CTileMgr::BOTTOM)
+		{
+			m_dwForceTimer = 0;
+			m_fForceTime = 0.f;
+			m_velocity.fX = 0;
+			m_velocity.fY = 0;
+		}
+		else
+		{
+			m_velocity.fY += GRAVITY;
+		}
+	}
 
 	Move_Frame();
 
@@ -79,7 +98,7 @@ void CWeapon::Render(HDC _DC)
 
 		if (m_bHorizontal)
 		{
-			GdiTransparentBlt(_DC, (int)m_tRect.left + iScrollX, (int)m_tRect.top + iScrollY
+			GdiTransparentBlt(_DC, (int)m_tImgRect.left + iScrollX, (int)m_tImgRect.top + iScrollY
 				, m_tImgInfo.iCX, m_tImgInfo.iCY, hMemDC, m_tImgInfo.iCX * m_tFrame.iFrameStart, m_tImgInfo.iCY *m_tFrame.iFrameScene, m_tImgInfo.iCX, m_tImgInfo.iCY
 				, RGB(30, 30, 30));
 		}
@@ -123,11 +142,11 @@ void CWeapon::OnCollisionEnter(CObj * _pOther, float _fX, float _fY)
 		Vector2 pushDir = (Vector2(_pOther->Get_INFO().fX, _pOther->Get_INFO().fY) - Vector2(m_tInfo.fX, m_tInfo.fY)).Nomalize();
 	}
 	//무차별 데미지
-	else if(m_eOwner == OWNER::NONE)
+	else if (m_eOwner == OWNER::NONE)
 	{
-		if(_pOther->Get_Tag() == OBJTAG::MONSTER)
+		if (_pOther->Get_Tag() == OBJTAG::MONSTER)
 			dynamic_cast<CMonster*>(_pOther)->Take_Damage(5);
-		else if(_pOther->Get_Tag() == OBJTAG::PLAYER)
+		else if (_pOther->Get_Tag() == OBJTAG::PLAYER)
 			dynamic_cast<CPlayer*>(_pOther)->Take_Damage(5);
 		m_bDead = true;
 	}

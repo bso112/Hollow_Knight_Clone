@@ -32,7 +32,7 @@ void CHuskGaurd::Initialize()
 	m_eCurState = STATE::IDLE;
 	m_ePrvState = STATE::END;
 
-	m_tStat = STAT(200);
+	m_tStat = STAT(1);
 	m_fRadius = 500.f;
 	m_fAttRange = 400.f;
 

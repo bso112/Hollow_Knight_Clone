@@ -33,6 +33,7 @@ public:
 	//vDir 방향으로 1초에 _fForce만큼이동하는 속력으로 _fTime 초만큼 이동한다.
 	void Add_Force(Vector2 _vDir, float _fForce, float _fTime);
 	void Set_Horizontal() { m_bHorizontal = true; }
+	void Set_Gravity() { m_bGravity = true; }
 
 private:
 	OWNER m_eOwner;
@@ -54,6 +55,8 @@ private:
 
 	//가로 스프라이트인가?
 	bool m_bHorizontal;
+	
+	bool m_bGravity;
 };
 
 #endif // !__WEAPON_H__
